@@ -1,0 +1,89 @@
+{
+  "expo": {
+    "name": "VictoryRevConnect Boaters",
+    "slug": "victoryrevconnect-boaters",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0A2240"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.victoryrevconnect.boaters",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow VictoryRevConnect Boaters to access your camera for the mechanic agent.",
+        "NSPhotoLibraryUsageDescription": "Allow VictoryRevConnect Boaters to access your photos for the mechanic agent.",
+        "NSMicrophoneUsageDescription": "Allow VictoryRevConnect Boaters to access your microphone for voice input."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0A2240"
+      },
+      "package": "com.victoryrevconnect.boaters",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-secure-store",
+        {
+          "faceIDPermission": "Allow VictoryRevConnect Boaters to access your Face ID biometric data."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow VictoryRevConnect Boaters to access your photos for the mechanic agent.",
+          "cameraPermission": "Allow VictoryRevConnect Boaters to access your camera for the mechanic agent."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow VictoryRevConnect Boaters to access your microphone for voice input."
+        }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "$(MAPBOX_SECRET_TOKEN)"
+        }
+      ],
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "",
+          "enableGooglePay": false
+        }
+      ]
+    ],
+    "scheme": "victoryrevconnectboaters",
+    "extra": {
+      "stripePublishableKey": "",
+      "eas": {
+        "projectId": "1faae198-7a16-4ea5-a170-cfd851d168fe"
+      },
+      "router": {
+        "origin": false
+      }
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

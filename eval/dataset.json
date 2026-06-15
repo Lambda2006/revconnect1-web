@@ -1,0 +1,1502 @@
+{
+  "version": "1.0",
+  "description": "VictoryRevConnect Boaters — Agent Eval Dataset. Minimum 10 queries per supported model. All queries have an expected_category field (for classifyQuery validation), an expected_contains array (substrings the response must include), and a severity flag for emergency cases.",
+  "models": [
+    {
+      "make": "MasterCraft",
+      "model": "X24",
+      "year": 2022,
+      "engine_type": "inboard",
+      "queries": [
+        {
+          "id": "mc-x24-001",
+          "query": "My MasterCraft X24 engine temperature gauge is climbing into the red while wake surfing. What should I do?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["overheat", "shut", "idle", "coolant"],
+          "notes": "Emergency — should hit cooling emergency cache"
+        },
+        {
+          "id": "mc-x24-002",
+          "query": "Water is coming into the bilge faster than the pump can handle on my X24. What are my steps?",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "Ch 16", "life", "bilge"],
+          "notes": "Emergency flood — should return immediate safety steps"
+        },
+        {
+          "id": "mc-x24-003",
+          "query": "My bilge pump stopped working on the X24. The float switch isn't activating.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "switch", "manual", "override"],
+          "notes": "Emergency bilge pump"
+        },
+        {
+          "id": "mc-x24-004",
+          "query": "I smell fuel inside the cabin of my X24 while underway. What do I do?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ignition", "ventilate", "shut", "fuel valve"],
+          "notes": "Fuel emergency — no ignition sources warning critical"
+        },
+        {
+          "id": "mc-x24-005",
+          "query": "There is smoke coming from the engine compartment of my MasterCraft X24.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon"],
+          "notes": "Fire emergency"
+        },
+        {
+          "id": "mc-x24-006",
+          "query": "My X24 steering feels very loose and unresponsive at speed.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "cable", "professional"],
+          "notes": "Loss of steering — safety critical"
+        },
+        {
+          "id": "mc-x24-007",
+          "query": "The X24 won't start. Battery is dead at the dock and we need to get out.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminals", "jump"],
+          "notes": "Battery no-start emergency"
+        },
+        {
+          "id": "mc-x24-008",
+          "query": "What is the recommended oil change interval for the Indmar engine in the MasterCraft X24?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["oil", "interval", "hours"],
+          "notes": "Routine maintenance query"
+        },
+        {
+          "id": "mc-x24-009",
+          "query": "How do I bleed the air out of the ballast system on my X24?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["ballast", "fill", "drain", "air"],
+          "notes": "Installation/setup query"
+        },
+        {
+          "id": "mc-x24-010",
+          "query": "My X24 surf system is producing a smaller wave than usual. Possible causes?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["ballast", "wave", "surf", "tabs"],
+          "notes": "General troubleshooting"
+        },
+        {
+          "id": "mc-x24-011",
+          "query": "What spark plugs are compatible with the Indmar 6.2L engine in the 2022 MasterCraft X24?",
+          "expected_category": "parts",
+          "severity": "routine",
+          "expected_contains": ["spark plug", "part", "compatible"],
+          "notes": "Parts query"
+        },
+        {
+          "id": "mc-x24-012",
+          "query": "The MasterCraft X24 is throwing a check engine light code P0128. What does that mean?",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["P0128", "coolant", "thermostat", "temperature"],
+          "notes": "Diagnostic code"
+        }
+      ]
+    },
+    {
+      "make": "MasterCraft",
+      "model": "NXT22",
+      "year": 2021,
+      "engine_type": "inboard",
+      "queries": [
+        {
+          "id": "mc-nxt22-001",
+          "query": "Engine temp is spiking on my NXT22 while towing wakeboarders. What should I do immediately?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["overheat", "shut", "idle"],
+          "notes": "Cooling emergency"
+        },
+        {
+          "id": "mc-nxt22-002",
+          "query": "I see water rising in the bilge of my NXT22 and can't find the source.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "mc-nxt22-003",
+          "query": "The bilge pump on my NXT22 is not running even though I can see water in the bilge.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual"],
+          "notes": "Bilge failure"
+        },
+        {
+          "id": "mc-nxt22-004",
+          "query": "Strong gasoline smell inside the NXT22 after fueling. Is it safe to start?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ventilate", "ignition", "blower", "4 minutes"],
+          "notes": "Fuel vapor — blower protocol important"
+        },
+        {
+          "id": "mc-nxt22-005",
+          "query": "Smoke is visible from the NXT22 engine hatch while we're tied to the dock.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon", "call"],
+          "notes": "Fire emergency"
+        },
+        {
+          "id": "mc-nxt22-006",
+          "query": "Steering on the NXT22 is very stiff today and feels like it's binding.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "professional"],
+          "notes": "Steering issue"
+        },
+        {
+          "id": "mc-nxt22-007",
+          "query": "NXT22 won't turn over. Battery meter shows voltage but engine won't crank.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminal"],
+          "notes": "No-start battery check"
+        },
+        {
+          "id": "mc-nxt22-008",
+          "query": "How often should I change the impeller on the NXT22?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["impeller", "season", "hours"],
+          "notes": "Maintenance schedule"
+        },
+        {
+          "id": "mc-nxt22-009",
+          "query": "What is the correct procedure for winterizing the Indmar engine on the NXT22?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["winterize", "antifreeze", "flush", "fogging"],
+          "notes": "Winterization"
+        },
+        {
+          "id": "mc-nxt22-010",
+          "query": "The NXT22 is making a rattling noise from the engine at idle. Any common causes?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["rattle", "idle", "mount", "belt"],
+          "notes": "Noise diagnosis"
+        },
+        {
+          "id": "mc-nxt22-011",
+          "query": "What transmission fluid does the NXT22 use and how do I check the level?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["transmission", "fluid", "dipstick"],
+          "notes": "Fluid check"
+        }
+      ]
+    },
+    {
+      "make": "MasterCraft",
+      "model": "XT23",
+      "year": 2023,
+      "engine_type": "inboard",
+      "queries": [
+        {
+          "id": "mc-xt23-001",
+          "query": "XT23 engine temperature alarm went off mid-lake. What are my immediate steps?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["shut", "overheat", "idle", "coolant"],
+          "notes": "Cooling emergency"
+        },
+        {
+          "id": "mc-xt23-002",
+          "query": "We hit something and water is flooding into the XT23 hull. What do we do?",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "Ch 16", "bilge", "life jacket"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "mc-xt23-003",
+          "query": "Bilge alarm is going off on the XT23 but the pump doesn't seem to be removing water.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["float switch", "fuse", "manual override"],
+          "notes": "Bilge pump failure"
+        },
+        {
+          "id": "mc-xt23-004",
+          "query": "Fuel is leaking from a line on the XT23 engine. What's the emergency procedure?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["shut", "valve", "ignition", "ventilate"],
+          "notes": "Fuel leak"
+        },
+        {
+          "id": "mc-xt23-005",
+          "query": "I see flames near the XT23 engine bay. What do I do?",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base of flame", "abandon"],
+          "notes": "Fire emergency"
+        },
+        {
+          "id": "mc-xt23-006",
+          "query": "XT23 steering wheel turns but the boat doesn't respond correctly.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "cable", "professional"],
+          "notes": "Steering failure"
+        },
+        {
+          "id": "mc-xt23-007",
+          "query": "The 2023 XT23 battery died out on the water. How do I get it started?",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "jump"],
+          "notes": "Battery dead on water"
+        },
+        {
+          "id": "mc-xt23-008",
+          "query": "What type of coolant does the XT23 Indmar engine require?",
+          "expected_category": "cooling",
+          "severity": "routine",
+          "expected_contains": ["coolant", "antifreeze", "mix"],
+          "notes": "Routine coolant type"
+        },
+        {
+          "id": "mc-xt23-009",
+          "query": "How do I set up the Gen 2 surf system on the XT23 for goofy-foot surfers?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["surf", "ballast", "tab", "side"],
+          "notes": "Surf system config"
+        },
+        {
+          "id": "mc-xt23-010",
+          "query": "XT23 is vibrating excessively at all speeds. Where should I start troubleshooting?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["prop", "shaft", "vibration", "balance"],
+          "notes": "Vibration diagnosis"
+        },
+        {
+          "id": "mc-xt23-011",
+          "query": "What are the torque specs for the XT23 exhaust manifold bolts?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["torque", "manifold", "ft-lb"],
+          "notes": "Torque spec query"
+        }
+      ]
+    },
+    {
+      "make": "Malibu Boats",
+      "model": "Wakesetter 23 LSV",
+      "year": 2022,
+      "engine_type": "inboard",
+      "queries": [
+        {
+          "id": "mb-lsv-001",
+          "query": "My Wakesetter 23 LSV engine is overheating while we're wake surfing. What should I do?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["shut", "overheat", "idle", "coolant"],
+          "notes": "Cooling emergency"
+        },
+        {
+          "id": "mb-lsv-002",
+          "query": "Water is getting into the hull of my LSV through what looks like a crack near the bow.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "mb-lsv-003",
+          "query": "The bilge pump on my Wakesetter isn't activating. There's water in the bilge.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual"],
+          "notes": "Bilge failure"
+        },
+        {
+          "id": "mb-lsv-004",
+          "query": "I smell gas on my Malibu LSV. The engine won't start and there's a strong fuel odor.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["blower", "ventilate", "ignition", "fuel valve"],
+          "notes": "Fuel vapor emergency"
+        },
+        {
+          "id": "mb-lsv-005",
+          "query": "Fire on board the Wakesetter. What do I do?",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon", "call"],
+          "notes": "Fire emergency — short urgent query"
+        },
+        {
+          "id": "mb-lsv-006",
+          "query": "The steering on my LSV locked up completely while on plane. How do I handle this?",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["throttle", "differential", "hydraulic", "professional"],
+          "notes": "Steering lockup at speed"
+        },
+        {
+          "id": "mb-lsv-007",
+          "query": "Wakesetter 23 LSV battery won't hold a charge and won't start the engine.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminal", "charge"],
+          "notes": "Battery failure"
+        },
+        {
+          "id": "mb-lsv-008",
+          "query": "How do I calibrate the Surf Gate on the 2022 Wakesetter 23 LSV?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["Surf Gate", "calibrate", "settings"],
+          "notes": "Surf Gate calibration"
+        },
+        {
+          "id": "mb-lsv-009",
+          "query": "What ballast setup do you recommend for a bigger surf wave on the 23 LSV?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["ballast", "weight", "fill", "wave"],
+          "notes": "Ballast tuning"
+        },
+        {
+          "id": "mb-lsv-010",
+          "query": "What is the Malibu Wakesetter 23 LSV engine oil capacity and recommended grade?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["oil", "quart", "grade", "SAE"],
+          "notes": "Oil spec query"
+        },
+        {
+          "id": "mb-lsv-011",
+          "query": "The screen on my Malibu Command Center is frozen and won't respond to touch.",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["reboot", "reset", "display", "power"],
+          "notes": "Electronics troubleshooting"
+        }
+      ]
+    },
+    {
+      "make": "Malibu Boats",
+      "model": "Response TXi",
+      "year": 2021,
+      "engine_type": "inboard",
+      "queries": [
+        {
+          "id": "mb-txi-001",
+          "query": "Engine temp alarm is going off on my Response TXi. What's the immediate action?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["shut", "overheat", "idle"],
+          "notes": "Cooling emergency"
+        },
+        {
+          "id": "mb-txi-002",
+          "query": "My TXi is sinking slowly. Water came over the transom. What do we do?",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "Ch 16", "bilge", "life jacket"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "mb-txi-003",
+          "query": "Bilge pump keeps cycling on and off on my Response TXi. It won't clear the water.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["float switch", "fuse", "manual", "backup"],
+          "notes": "Bilge pump cycling issue"
+        },
+        {
+          "id": "mb-txi-004",
+          "query": "There's a fuel smell in the engine bay of my TXi. Is it safe to run it?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ventilate", "ignition", "blower", "fuel valve"],
+          "notes": "Fuel smell concern"
+        },
+        {
+          "id": "mb-txi-005",
+          "query": "Smoke coming from the engine of my Response TXi. Engine is still running.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["shut", "extinguisher", "abandon"],
+          "notes": "Smoke — possible fire"
+        },
+        {
+          "id": "mb-txi-006",
+          "query": "The steering on my TXi is pulling hard to the left at all speeds.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "cable", "alignment", "professional"],
+          "notes": "Steering pull"
+        },
+        {
+          "id": "mb-txi-007",
+          "query": "My Response TXi shows 12.1V on the battery gauge but still won't crank.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminal", "voltage"],
+          "notes": "Low voltage no-start"
+        },
+        {
+          "id": "mb-txi-008",
+          "query": "How do I adjust the pitch on the prop of the Response TXi for better hole shot?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["prop", "pitch", "performance"],
+          "notes": "Propeller tuning"
+        },
+        {
+          "id": "mb-txi-009",
+          "query": "What is the correct belt tension for the alternator on the Malibu Response TXi?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["belt", "tension", "alternator"],
+          "notes": "Maintenance spec"
+        },
+        {
+          "id": "mb-txi-010",
+          "query": "My TXi ILMOR engine is making a knocking sound at low RPM. What should I check?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["knock", "RPM", "fuel", "timing"],
+          "notes": "Knock diagnosis"
+        },
+        {
+          "id": "mb-txi-011",
+          "query": "What fuel octane rating does the Malibu Response TXi ILMOR engine require?",
+          "expected_category": "fuel",
+          "severity": "routine",
+          "expected_contains": ["octane", "premium", "87", "91"],
+          "notes": "Fuel spec"
+        }
+      ]
+    },
+    {
+      "make": "Malibu Boats",
+      "model": "21 MLX",
+      "year": 2023,
+      "engine_type": "inboard",
+      "queries": [
+        {
+          "id": "mb-mlx-001",
+          "query": "The engine temperature gauge on my 21 MLX is in the red. What do I do now?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["shut", "overheat", "idle"],
+          "notes": "Cooling emergency"
+        },
+        {
+          "id": "mb-mlx-002",
+          "query": "21 MLX has water coming in through the transom drain plug area.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["bilge", "VHF", "plug", "life"],
+          "notes": "Flood — transom plug"
+        },
+        {
+          "id": "mb-mlx-003",
+          "query": "Bilge alarm went off on my 21 MLX and the pump isn't working.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "switch", "manual override"],
+          "notes": "Bilge failure"
+        },
+        {
+          "id": "mb-mlx-004",
+          "query": "Fuel vapors in the cabin of my 21 MLX. What's the procedure?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["blower", "ventilate", "ignition", "valve"],
+          "notes": "Fuel vapor"
+        },
+        {
+          "id": "mb-mlx-005",
+          "query": "There's a fire extinguisher in my 21 MLX. When should I use it and how?",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["base", "flame", "Type B", "abandon"],
+          "notes": "Fire extinguisher guidance"
+        },
+        {
+          "id": "mb-mlx-006",
+          "query": "Steering wheel on my 21 MLX is very loose and the boat isn't turning properly.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "professional"],
+          "notes": "Steering issue"
+        },
+        {
+          "id": "mb-mlx-007",
+          "query": "Battery is dead in my 21 MLX and I'm at anchor. How do I get back to the dock?",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["jump", "terminal", "kill switch", "neutral"],
+          "notes": "Battery at anchor"
+        },
+        {
+          "id": "mb-mlx-008",
+          "query": "How do I flush the closed-loop cooling system on the Malibu 21 MLX?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["flush", "coolant", "closed-loop", "distilled"],
+          "notes": "Cooling system flush"
+        },
+        {
+          "id": "mb-mlx-009",
+          "query": "The Malibu wake plate on my 21 MLX is stuck in the down position.",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["wake plate", "actuator", "hydraulic", "reset"],
+          "notes": "Wake plate issue"
+        },
+        {
+          "id": "mb-mlx-010",
+          "query": "What is the maximum ballast capacity of the 2023 Malibu 21 MLX?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["ballast", "lbs", "capacity", "pound"],
+          "notes": "Ballast capacity spec"
+        },
+        {
+          "id": "mb-mlx-011",
+          "query": "The speedometer on my 21 MLX shows a different speed than the GPS. What's wrong?",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["pitot", "speedo", "GPS", "calibrate"],
+          "notes": "Speedometer discrepancy"
+        }
+      ]
+    },
+    {
+      "make": "Boston Whaler",
+      "model": "270 Dauntless",
+      "year": 2022,
+      "engine_type": "outboard",
+      "queries": [
+        {
+          "id": "bw-270-001",
+          "query": "My Boston Whaler 270 Dauntless outboard is overheating. What should I check first?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["tell-tale", "water stream", "impeller", "overheat"],
+          "notes": "Outboard overheat — tell-tale water stream is key"
+        },
+        {
+          "id": "bw-270-002",
+          "query": "My 270 Dauntless is taking on water through the anchor locker. What do I do?",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "bw-270-003",
+          "query": "The bilge pump on my 270 Dauntless isn't activating even with water in the bilge.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual"],
+          "notes": "Bilge pump failure"
+        },
+        {
+          "id": "bw-270-004",
+          "query": "There's a strong gas smell coming from the engine well of my 270 Dauntless.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ventilate", "ignition", "fuel valve", "blower"],
+          "notes": "Fuel smell"
+        },
+        {
+          "id": "bw-270-005",
+          "query": "Fire in the engine well of my Whaler 270. What's the procedure?",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon"],
+          "notes": "Fire emergency"
+        },
+        {
+          "id": "bw-270-006",
+          "query": "The power steering on my 270 Dauntless feels jerky and inconsistent.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "cable", "professional"],
+          "notes": "Steering issue"
+        },
+        {
+          "id": "bw-270-007",
+          "query": "The Whaler 270 won't start. I've checked the kill switch and it's in place.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["neutral", "battery", "terminal", "jump"],
+          "notes": "No-start, kill switch already checked"
+        },
+        {
+          "id": "bw-270-008",
+          "query": "How do I change the lower unit gear oil on the outboard motors of my 270 Dauntless?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["gear oil", "lower unit", "drain", "fill"],
+          "notes": "Gear oil change"
+        },
+        {
+          "id": "bw-270-009",
+          "query": "What is the recommended annual service schedule for twin outboards on the 270 Dauntless?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["annual", "service", "outboard", "spark plug"],
+          "notes": "Service schedule"
+        },
+        {
+          "id": "bw-270-010",
+          "query": "My 270 Dauntless is making a clicking sound from the outboard when I try to start it.",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["solenoid", "starter", "relay", "battery"],
+          "notes": "Click no-start — solenoid"
+        },
+        {
+          "id": "bw-270-011",
+          "query": "How do I flush the outboard engines on my 270 Dauntless after saltwater use?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["flush", "fresh water", "muff", "earmuff"],
+          "notes": "Saltwater flushing"
+        }
+      ]
+    },
+    {
+      "make": "Boston Whaler",
+      "model": "330 Outrage",
+      "year": 2021,
+      "engine_type": "outboard",
+      "queries": [
+        {
+          "id": "bw-330-001",
+          "query": "Triple outboards on my 330 Outrage are showing overtemp warning. What should I do?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["tell-tale", "impeller", "overheat", "shut"],
+          "notes": "Triple outboard overheat"
+        },
+        {
+          "id": "bw-330-002",
+          "query": "330 Outrage bilge alarm is going off. Water is rising fast.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket", "breach"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "bw-330-003",
+          "query": "Both bilge pumps on my 330 Outrage failed. I have water in the bilge.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["manual", "backup", "fuse", "circuit"],
+          "notes": "Dual pump failure"
+        },
+        {
+          "id": "bw-330-004",
+          "query": "Smell of gasoline near the fuel tanks on my 330 Outrage offshore.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ventilate", "ignition", "shut", "fuel valve"],
+          "notes": "Fuel smell offshore"
+        },
+        {
+          "id": "bw-330-005",
+          "query": "Onboard fire extinguisher mounted on the 330 Outrage — how do I use it correctly?",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["PASS", "pull", "aim", "squeeze", "base"],
+          "notes": "Extinguisher use — PASS technique"
+        },
+        {
+          "id": "bw-330-006",
+          "query": "330 Outrage hydraulic steering is very hard to turn at low speed. Possible causes?",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic fluid", "pump", "professional"],
+          "notes": "Hydraulic steering hard to turn"
+        },
+        {
+          "id": "bw-330-007",
+          "query": "The center outboard on my 330 Outrage won't start. Port and starboard are fine.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "battery", "terminal"],
+          "notes": "Single engine no-start (triple)"
+        },
+        {
+          "id": "bw-330-008",
+          "query": "What is the correct oil type for the outboard engines on the 2021 330 Outrage?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["oil", "outboard", "TC-W3", "four-stroke"],
+          "notes": "Oil spec"
+        },
+        {
+          "id": "bw-330-009",
+          "query": "How do I trim the outboards on my 330 Outrage for best offshore performance?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["trim", "angle", "cavitation", "performance"],
+          "notes": "Trim adjustment"
+        },
+        {
+          "id": "bw-330-010",
+          "query": "The VHF radio on my 330 Outrage is not transmitting. Any troubleshooting steps?",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["VHF", "antenna", "squelch", "channel"],
+          "notes": "VHF radio issue"
+        },
+        {
+          "id": "bw-330-011",
+          "query": "What are the recommended torque specs for the rigging bolts on the 330 Outrage?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["torque", "bolt", "ft-lb", "rigging"],
+          "notes": "Torque spec"
+        }
+      ]
+    },
+    {
+      "make": "Boston Whaler",
+      "model": "Montauk 170",
+      "year": 2022,
+      "engine_type": "outboard",
+      "queries": [
+        {
+          "id": "bw-m170-001",
+          "query": "The outboard on my Montauk 170 overheated and shut down on the water.",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["tell-tale", "impeller", "overheat"],
+          "notes": "Outboard overheat shutdown"
+        },
+        {
+          "id": "bw-m170-002",
+          "query": "Water is coming into the Montauk 170 through the transom. What do I do?",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "bw-m170-003",
+          "query": "Bilge pump on my Montauk 170 isn't working and there's water in the boat.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual"],
+          "notes": "Bilge failure"
+        },
+        {
+          "id": "bw-m170-004",
+          "query": "Strong fuel smell on my Montauk 170 after a hard ride. Engine won't restart.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ventilate", "blower", "ignition", "fuel valve"],
+          "notes": "Fuel vapor"
+        },
+        {
+          "id": "bw-m170-005",
+          "query": "There's a small fire near the fuel tank on my Montauk 170. What do I do?",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon", "call"],
+          "notes": "Fuel fire"
+        },
+        {
+          "id": "bw-m170-006",
+          "query": "The outboard on my Montauk 170 is not steering. The cable feels loose.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["cable", "steering", "professional"],
+          "notes": "Cable steering failure"
+        },
+        {
+          "id": "bw-m170-007",
+          "query": "Montauk 170 outboard won't start even with a good battery. Kill switch is on.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminal"],
+          "notes": "No-start with kill switch on"
+        },
+        {
+          "id": "bw-m170-008",
+          "query": "How do I replace the spark plugs on the outboard motor of my Montauk 170?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["spark plug", "gap", "torque", "replace"],
+          "notes": "Spark plug replacement"
+        },
+        {
+          "id": "bw-m170-009",
+          "query": "What is the maximum HP rating for a motor on the 2022 Montauk 170?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["HP", "horsepower", "maximum", "rating"],
+          "notes": "Max HP spec"
+        },
+        {
+          "id": "bw-m170-010",
+          "query": "How often should I change the water pump impeller on the Montauk 170 outboard?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["impeller", "interval", "season", "year"],
+          "notes": "Impeller service interval"
+        },
+        {
+          "id": "bw-m170-011",
+          "query": "The fuel gauge on my Montauk 170 always reads full even with a nearly empty tank.",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["sender", "fuel gauge", "float", "ground"],
+          "notes": "Gauge sender issue"
+        }
+      ]
+    },
+    {
+      "make": "Grady-White",
+      "model": "Canyon 336",
+      "year": 2022,
+      "engine_type": "outboard",
+      "queries": [
+        {
+          "id": "gw-336-001",
+          "query": "Yamaha engines on my Canyon 336 are throwing overheat alarms offshore. What do I do?",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["tell-tale", "impeller", "overheat", "shut"],
+          "notes": "Offshore overheat — Yamaha outboards"
+        },
+        {
+          "id": "gw-336-002",
+          "query": "Canyon 336 is taking on water through a seacock that won't close. Offshore emergency.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "Ch 16", "bilge", "life jacket", "mayday"],
+          "notes": "Flood emergency offshore"
+        },
+        {
+          "id": "gw-336-003",
+          "query": "Both bilge pumps failed on my Canyon 336 during offshore use.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["manual", "backup", "fuse", "bucket"],
+          "notes": "Bilge pump dual failure offshore"
+        },
+        {
+          "id": "gw-336-004",
+          "query": "Fuel leak from a line on the Canyon 336 engine bay. We're 30 miles offshore.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["shut", "valve", "ventilate", "ignition"],
+          "notes": "Fuel leak offshore"
+        },
+        {
+          "id": "gw-336-005",
+          "query": "Engine room fire on my Canyon 336 30 miles offshore.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon", "mayday"],
+          "notes": "Fire offshore — mayday context"
+        },
+        {
+          "id": "gw-336-006",
+          "query": "Hydraulic steering failure on Canyon 336 at speed offshore. What do I do?",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["throttle", "differential", "hydraulic", "professional"],
+          "notes": "Steering failure offshore"
+        },
+        {
+          "id": "gw-336-007",
+          "query": "One of the Yamaha outboards on my Canyon 336 won't start offshore. Other two fine.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "battery", "terminal"],
+          "notes": "Single engine no-start offshore (triple engines)"
+        },
+        {
+          "id": "gw-336-008",
+          "query": "How do I set up the Canyon 336 outriggers for wahoo fishing?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["outrigger", "rigging", "line", "clip"],
+          "notes": "Outrigger setup"
+        },
+        {
+          "id": "gw-336-009",
+          "query": "What is the fuel capacity of the Grady-White Canyon 336?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["fuel", "gallon", "capacity", "tank"],
+          "notes": "Fuel capacity spec"
+        },
+        {
+          "id": "gw-336-010",
+          "query": "How do I maintain the raw water wash-down pump on my Canyon 336?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["wash-down", "pump", "impeller", "flush"],
+          "notes": "Wash-down pump maintenance"
+        },
+        {
+          "id": "gw-336-011",
+          "query": "The AC system on my Canyon 336 is blowing warm air. What should I check?",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["AC", "seacock", "strainer", "compressor"],
+          "notes": "Marine AC troubleshooting"
+        }
+      ]
+    },
+    {
+      "make": "Grady-White",
+      "model": "Freedom 235",
+      "year": 2023,
+      "engine_type": "outboard",
+      "queries": [
+        {
+          "id": "gw-235-001",
+          "query": "My Freedom 235 outboard temp alarm went off. The tell-tale stream stopped.",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["tell-tale", "impeller", "shut", "overheat"],
+          "notes": "Tell-tale stopped — impeller likely"
+        },
+        {
+          "id": "gw-235-002",
+          "query": "Water in the bilge of my Freedom 235 and it's rising quickly.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "gw-235-003",
+          "query": "Bilge pump on Freedom 235 won't turn on. Checked switch, still nothing.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual"],
+          "notes": "Bilge failure"
+        },
+        {
+          "id": "gw-235-004",
+          "query": "I smell gasoline coming from under the console of my Freedom 235.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ignition", "ventilate", "blower", "fuel valve"],
+          "notes": "Fuel vapor under console"
+        },
+        {
+          "id": "gw-235-005",
+          "query": "There is fire near the battery compartment on my Freedom 235.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon"],
+          "notes": "Battery fire"
+        },
+        {
+          "id": "gw-235-006",
+          "query": "Steering on my Freedom 235 is hard to move and feels binding at the helm.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "cable", "professional"],
+          "notes": "Stiff steering"
+        },
+        {
+          "id": "gw-235-007",
+          "query": "Freedom 235 Yamaha won't start. The engine clicks but doesn't crank.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["solenoid", "battery", "terminal", "kill switch"],
+          "notes": "Click no-crank"
+        },
+        {
+          "id": "gw-235-008",
+          "query": "What is the maximum trailer tongue weight for the 2023 Freedom 235?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["tongue weight", "trailer", "lbs", "spec"],
+          "notes": "Trailer spec"
+        },
+        {
+          "id": "gw-235-009",
+          "query": "How do I bleed the hydraulic steering system on my Freedom 235?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["bleed", "hydraulic", "steering", "fluid"],
+          "notes": "Steering bleed"
+        },
+        {
+          "id": "gw-235-010",
+          "query": "The livewell pump on my Freedom 235 isn't circulating water. How do I fix it?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["livewell", "pump", "strainer", "flow"],
+          "notes": "Livewell pump"
+        },
+        {
+          "id": "gw-235-011",
+          "query": "How do I remove and replace the fuel tank on the Grady-White Freedom 235?",
+          "expected_category": "installation",
+          "severity": "routine",
+          "expected_contains": ["fuel tank", "replace", "remove", "vent"],
+          "notes": "Fuel tank replacement"
+        }
+      ]
+    },
+    {
+      "make": "Grady-White",
+      "model": "Fisherman 236",
+      "year": 2022,
+      "engine_type": "outboard",
+      "queries": [
+        {
+          "id": "gw-236-001",
+          "query": "My Fisherman 236 Yamaha is overheating on the way back from a fishing trip.",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["tell-tale", "impeller", "overheat", "shut"],
+          "notes": "Cooling emergency"
+        },
+        {
+          "id": "gw-236-002",
+          "query": "Water is coming into the Fisherman 236 through the live well overflow. What do I do?",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["bilge", "VHF", "life jacket"],
+          "notes": "Flood via livewell overflow"
+        },
+        {
+          "id": "gw-236-003",
+          "query": "The high-water bilge alarm on my Fisherman 236 is going off and the pump isn't working.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual override"],
+          "notes": "High-water alarm + pump failure"
+        },
+        {
+          "id": "gw-236-004",
+          "query": "Fuel hose is cracked on the Fisherman 236 and leaking. What's my next step?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["shut", "fuel valve", "ignition", "ventilate"],
+          "notes": "Cracked fuel hose"
+        },
+        {
+          "id": "gw-236-005",
+          "query": "Flames visible near the engine cowling of my Fisherman 236. We are on the water.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon"],
+          "notes": "Engine fire"
+        },
+        {
+          "id": "gw-236-006",
+          "query": "The Fisherman 236 steering cable snapped. I have no steerage.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["cable", "throttle", "differential", "professional"],
+          "notes": "Cable snap — complete steerage loss"
+        },
+        {
+          "id": "gw-236-007",
+          "query": "Fisherman 236 won't turn over. I can hear the fuel pump prime but nothing cranks.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminal", "battery"],
+          "notes": "No-crank, fuel pump audible"
+        },
+        {
+          "id": "gw-236-008",
+          "query": "How do I adjust the trim tabs on my Fisherman 236 for better hole shot?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["trim tab", "adjust", "bow", "angle"],
+          "notes": "Trim tab adjustment"
+        },
+        {
+          "id": "gw-236-009",
+          "query": "What oil does the Yamaha outboard on the Fisherman 236 use?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["oil", "Yamaha", "grade", "four-stroke"],
+          "notes": "Yamaha oil spec"
+        },
+        {
+          "id": "gw-236-010",
+          "query": "How often should I service the trim/tilt system on the Fisherman 236?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["trim", "tilt", "service", "fluid"],
+          "notes": "Trim/tilt maintenance"
+        },
+        {
+          "id": "gw-236-011",
+          "query": "What is the beam width of the Grady-White Fisherman 236?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["beam", "width", "feet", "spec"],
+          "notes": "Dimensional spec"
+        }
+      ]
+    },
+    {
+      "make": "Sea Ray",
+      "model": "SPX 210",
+      "year": 2022,
+      "engine_type": "sterndrive",
+      "queries": [
+        {
+          "id": "sr-210-001",
+          "query": "My Sea Ray SPX 210 MerCruiser engine temp alarm is going off at high RPM.",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["overheat", "shut", "idle", "coolant", "impeller"],
+          "notes": "Sterndrive overheat"
+        },
+        {
+          "id": "sr-210-002",
+          "query": "Water is entering the SPX 210 through the bilge at the transom. It's rising fast.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket"],
+          "notes": "Flood emergency"
+        },
+        {
+          "id": "sr-210-003",
+          "query": "The bilge pump on my SPX 210 is not running when there's water present.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["fuse", "float switch", "manual"],
+          "notes": "Bilge pump not running"
+        },
+        {
+          "id": "sr-210-004",
+          "query": "I smell gasoline in the engine compartment of my SPX 210. What do I do?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["blower", "ventilate", "ignition", "fuel valve"],
+          "notes": "Fuel vapor in enclosed engine bay"
+        },
+        {
+          "id": "sr-210-005",
+          "query": "There's a fire inside the engine compartment of my SPX 210.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon", "call"],
+          "notes": "Engine compartment fire"
+        },
+        {
+          "id": "sr-210-006",
+          "query": "Steering on my Sea Ray SPX 210 is stiff and hard to turn at slow speed.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "cable", "professional"],
+          "notes": "Stiff steering"
+        },
+        {
+          "id": "sr-210-007",
+          "query": "SPX 210 MerCruiser won't start. Battery reads 12.4V but won't crank.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["kill switch", "neutral", "terminal", "battery"],
+          "notes": "No-start with low battery"
+        },
+        {
+          "id": "sr-210-008",
+          "query": "How do I change the impeller on the MerCruiser Alpha One drive on my SPX 210?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["impeller", "raw water", "remove", "replace"],
+          "notes": "Impeller replacement sterndrive"
+        },
+        {
+          "id": "sr-210-009",
+          "query": "What gear lube does the Alpha One sterndrive on the SPX 210 use?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["gear lube", "Alpha One", "SAE", "90W"],
+          "notes": "Sterndrive gear lube"
+        },
+        {
+          "id": "sr-210-010",
+          "query": "The SPX 210 is listing to one side while running. What could cause this?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["list", "trim", "weight", "ballast"],
+          "notes": "Listing/balance issue"
+        },
+        {
+          "id": "sr-210-011",
+          "query": "The throttle on my SPX 210 is stiff and hard to move from neutral.",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["throttle", "cable", "neutral lock", "lubricate"],
+          "notes": "Stiff throttle"
+        }
+      ]
+    },
+    {
+      "make": "Sea Ray",
+      "model": "SDX 270",
+      "year": 2022,
+      "engine_type": "sterndrive",
+      "queries": [
+        {
+          "id": "sr-270-001",
+          "query": "Engine temperature rising dangerously on my SDX 270 MerCruiser 6.2L. Help.",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["overheat", "shut", "idle", "coolant"],
+          "notes": "High displacement sterndrive overheat"
+        },
+        {
+          "id": "sr-270-002",
+          "query": "Water is flooding into the SDX 270 through a seam in the hull.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket", "mayday"],
+          "notes": "Hull seam flood"
+        },
+        {
+          "id": "sr-270-003",
+          "query": "SDX 270 bilge pump is running constantly but water keeps rising.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["backup pump", "manual", "breach", "VHF"],
+          "notes": "Continuous pump can't keep up"
+        },
+        {
+          "id": "sr-270-004",
+          "query": "Fuel is leaking from the engine bay of my SDX 270. Strong smell. What do I do?",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["shut", "valve", "ventilate", "ignition"],
+          "notes": "Fuel leak"
+        },
+        {
+          "id": "sr-270-005",
+          "query": "Fire on board the Sea Ray SDX 270. Small fire near the batteries.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["extinguisher", "base", "abandon", "call"],
+          "notes": "Battery fire"
+        },
+        {
+          "id": "sr-270-006",
+          "query": "Complete loss of steering on my SDX 270 while on plane. What are my options?",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["throttle", "differential", "hydraulic", "professional"],
+          "notes": "Complete steering loss at speed"
+        },
+        {
+          "id": "sr-270-007",
+          "query": "SDX 270 MerCruiser crank won't turn over. Battery shows 11.8V.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["charge", "jump", "terminal", "neutral"],
+          "notes": "Low voltage no-crank"
+        },
+        {
+          "id": "sr-270-008",
+          "query": "How do I service the bellows on the sterndrive of my SDX 270?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["bellows", "sterndrive", "replace", "grease"],
+          "notes": "Bellows service"
+        },
+        {
+          "id": "sr-270-009",
+          "query": "My SDX 270 is making a clunking noise when I shift into reverse.",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["clunk", "reverse", "drive", "shaft"],
+          "notes": "Reverse clunk"
+        },
+        {
+          "id": "sr-270-010",
+          "query": "What is the recommended service interval for the MerCruiser 6.2L in the SDX 270?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["service", "interval", "hours", "annual"],
+          "notes": "Service interval"
+        },
+        {
+          "id": "sr-270-011",
+          "query": "The sea water strainer on my SDX 270 is clogged. How do I clean it?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["strainer", "seacock", "raw water", "clean"],
+          "notes": "Raw water strainer cleaning"
+        }
+      ]
+    },
+    {
+      "make": "Sea Ray",
+      "model": "Sundancer 320",
+      "year": 2021,
+      "engine_type": "sterndrive",
+      "queries": [
+        {
+          "id": "sr-320-001",
+          "query": "One of the MerCruiser engines on my Sundancer 320 is overheating. Both were running fine earlier.",
+          "expected_category": "cooling",
+          "severity": "emergency",
+          "expected_contains": ["overheat", "shut", "idle", "impeller", "coolant"],
+          "notes": "One engine overheat on twin sterndrive cruiser"
+        },
+        {
+          "id": "sr-320-002",
+          "query": "Water in the cabin of my Sundancer 320 and it's rising. We're at anchor.",
+          "expected_category": "emergency_flood",
+          "severity": "emergency",
+          "expected_contains": ["VHF", "bilge", "life jacket", "breach"],
+          "notes": "Flood at anchor — cabin ingress"
+        },
+        {
+          "id": "sr-320-003",
+          "query": "Bilge alarm on Sundancer 320 going off. The bilge pump is running but alarm won't stop.",
+          "expected_category": "emergency_bilge",
+          "severity": "emergency",
+          "expected_contains": ["pump", "float switch", "backup", "VHF"],
+          "notes": "Alarm running with pump active"
+        },
+        {
+          "id": "sr-320-004",
+          "query": "I can smell fuel in the cabin of my Sundancer 320. We were just at anchor.",
+          "expected_category": "emergency_fuel",
+          "severity": "emergency",
+          "expected_contains": ["ignition", "ventilate", "blower", "fuel valve"],
+          "notes": "Fuel in enclosed cabin — high risk"
+        },
+        {
+          "id": "sr-320-005",
+          "query": "Fire in the engine room of my Sundancer 320. Automatic suppression system deployed.",
+          "expected_category": "emergency_fire",
+          "severity": "emergency",
+          "expected_contains": ["abandon", "call", "extinguisher", "hatch"],
+          "notes": "Fire with suppression — what next"
+        },
+        {
+          "id": "sr-320-006",
+          "query": "Hydraulic steering is leaking on my Sundancer 320. The wheel is very loose.",
+          "expected_category": "steering",
+          "severity": "emergency",
+          "expected_contains": ["hydraulic", "fluid", "leak", "professional"],
+          "notes": "Hydraulic steering leak"
+        },
+        {
+          "id": "sr-320-007",
+          "query": "Both batteries on my Sundancer 320 are dead. I'm at anchor 5 miles out.",
+          "expected_category": "emergency_battery",
+          "severity": "emergency",
+          "expected_contains": ["jump", "VHF", "terminal", "tow"],
+          "notes": "Both batteries dead at anchor"
+        },
+        {
+          "id": "sr-320-008",
+          "query": "What is the holding tank capacity on the 2021 Sea Ray Sundancer 320?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["holding tank", "gallon", "waste", "capacity"],
+          "notes": "Holding tank spec"
+        },
+        {
+          "id": "sr-320-009",
+          "query": "How do I flush and refill the freshwater system on the Sundancer 320?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["freshwater", "flush", "refill", "winterize"],
+          "notes": "Freshwater system maintenance"
+        },
+        {
+          "id": "sr-320-010",
+          "query": "The generator on my Sundancer 320 won't start. I need AC power at anchor.",
+          "expected_category": "electrical",
+          "severity": "routine",
+          "expected_contains": ["generator", "start", "fuel", "battery"],
+          "notes": "Generator no-start"
+        },
+        {
+          "id": "sr-320-011",
+          "query": "How do I adjust the trim tabs on the Sundancer 320 for flat running attitude?",
+          "expected_category": "general",
+          "severity": "routine",
+          "expected_contains": ["trim tab", "adjust", "attitude", "flat"],
+          "notes": "Trim tab adjustment cruiser"
+        },
+        {
+          "id": "sr-320-012",
+          "query": "What engine oil capacity does each MerCruiser in the Sundancer 320 require?",
+          "expected_category": "maintenance",
+          "severity": "routine",
+          "expected_contains": ["oil", "capacity", "quart", "MerCruiser"],
+          "notes": "Oil capacity twin sterndrives"
+        }
+      ]
+    }
+  ],
+  "scoring_rubric": {
+    "pass_threshold": 0.8,
+    "criteria": {
+      "category_match": {
+        "weight": 0.25,
+        "description": "classifyQuery() returns the expected_category for the query"
+      },
+      "expected_contains": {
+        "weight": 0.40,
+        "description": "Response text contains ALL expected_contains substrings (case-insensitive). Score = fraction of substrings present."
+      },
+      "source_cited": {
+        "weight": 0.15,
+        "description": "Response includes at least one citation from approved_sources for the boat make"
+      },
+      "no_hallucination": {
+        "weight": 0.10,
+        "description": "Response does not claim information beyond what sources provide; declines gracefully if sources are insufficient"
+      },
+      "professional_flag_on_safety": {
+        "weight": 0.10,
+        "description": "For emergency severity queries: recommendProfessional is true in the response JSON"
+      }
+    }
+  },
+  "statistics": {
+    "total_models": 15,
+    "total_queries": 165,
+    "queries_by_make": {
+      "MasterCraft": 34,
+      "Malibu Boats": 33,
+      "Boston Whaler": 33,
+      "Grady-White": 33,
+      "Sea Ray": 34
+    },
+    "emergency_queries": 105,
+    "routine_queries": 60,
+    "min_queries_per_model": 10,
+    "max_queries_per_model": 12
+  }
+}
