@@ -36,17 +36,26 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         return NextResponse.json({ error: `Unknown plan: ${hubPlan}` }, { status: 400 });
       }
 
-      const { error } = await supabaseAdmin
+      // Try UPDATE first; if no row exists yet, INSERT (requires users row to exist)
+      const { data: existing } = await supabaseAdmin
         .from("subscriptions")
-        .upsert(
-          {
-            user_id: userId,
-            plan: mapped.plan,
-            status: mapped.status,
-          },
-          { onConflict: "user_id" }
-        );
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+        .select("id")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (existing) {
+        const { error } = await supabaseAdmin
+          .from("subscriptions")
+          .update({ plan: mapped.plan, status: mapped.status })
+          .eq("user_id", userId);
+        if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      } else {
+        const { error } = await supabaseAdmin
+          .from("subscriptions")
+          .insert({ user_id: userId, plan: mapped.plan, status: mapped.status });
+        if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+
       return NextResponse.json({ ok: true });
     }
 
