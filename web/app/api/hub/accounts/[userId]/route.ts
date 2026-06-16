@@ -43,7 +43,6 @@ export async function PATCH(request: NextRequest, { params }: Params) {
             user_id: userId,
             plan: mapped.plan,
             status: mapped.status,
-            updated_at: new Date().toISOString(),
           },
           { onConflict: "user_id" }
         );
