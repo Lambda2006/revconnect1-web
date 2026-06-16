@@ -62,7 +62,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     case "promote_admin": {
       const { error } = await supabaseAdmin
         .from("admin_users")
-        .upsert({ user_id: userId }, { onConflict: "user_id", ignoreDuplicates: true });
+        .upsert({ user_id: userId, role: "admin" }, { onConflict: "user_id", ignoreDuplicates: true });
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
       return NextResponse.json({ ok: true });
     }
