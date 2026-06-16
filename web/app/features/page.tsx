@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "Full breakdown of VictoryRevConnect Boaters — meetup discovery, AI mechanic agent, voice input, and more.",
+    "Full breakdown of VictoryRevConnect Boaters — meetup discovery, AI mechanic agent, Boater's Blog, and more.",
 };
 
 const CONNECTIVITY = [
@@ -64,10 +64,10 @@ export default function FeaturesPage() {
       <section className="bg-[#0A2240] text-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-3">Features</p>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Two tools. One boat.</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Built for the serious boater.</h1>
           <p className="text-gray-300 text-xl max-w-2xl leading-relaxed">
-            VictoryRevConnect Boaters combines a connectivity platform for meetup discovery with an
-            AI-powered mechanic agent — both designed for the serious boater.
+            VictoryRevConnect Boaters combines a connectivity platform for meetup discovery, an
+            AI-powered mechanic agent, and a curated Boater&apos;s Blog — all in one app.
           </p>
         </div>
       </section>
@@ -110,6 +110,47 @@ export default function FeaturesPage() {
           </div>
           <div className="space-y-8">
             {AGENT.map((item) => (
+              <div key={item.title} className="flex gap-6 items-start">
+                <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-[#0A2240] font-bold text-lg mb-1">{item.title}</h3>
+                  <p className="text-gray-500 leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Boater's Blog */}
+      <section className="bg-white py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <span className="inline-block bg-[#0A2240] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+              Boater&apos;s Blog
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240]">
+              Tips, guides, and stories — written for boaters.
+            </h2>
+            <p className="text-gray-500 mt-4 max-w-2xl leading-relaxed">
+              The Boater&apos;s Blog is a curated editorial feed built into the app. Articles are AI-assisted and reviewed before publishing, covering maintenance tips, seasonal guides, meetup recaps, and waterway spotlights.
+            </p>
+          </div>
+          <div className="space-y-8">
+            {[
+              {
+                title: "In-App Reading Experience",
+                body: "Articles are available directly inside the app under the Blog tab — no external browser required. Each post includes a cover image, estimated read time, and a clean reading layout.",
+              },
+              {
+                title: "Contextual AI Guidance",
+                body: "The AI Mechanic agent pulls from published blog articles as additional context. A post on winterizing your outboard can surface directly inside a related agent session.",
+              },
+              {
+                title: "Curated & Reviewed",
+                body: "Every article passes through an editorial review queue before it goes live. Topics are planned around the boating calendar — spring commissioning, summer safety, fall layup, and more.",
+              },
+            ].map((item) => (
               <div key={item.title} className="flex gap-6 items-start">
                 <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
                 <div>
