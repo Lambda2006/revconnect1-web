@@ -12,6 +12,7 @@ import { VoiceInput } from "@/components/agent/VoiceInput";
 import { ImageAttach } from "@/components/agent/ImageAttach";
 import { parseAgentResponse } from "@/lib/agent/chain";
 import type { AgentMessage } from "@/lib/agent/chain";
+import { GearAvatar } from "@/components/agent/GearAvatar";
 
 export default function AgentPage() {
   const { boatId } = useParams<{ boatId: string }>();
@@ -102,9 +103,14 @@ export default function AgentPage() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3">
         {messages.length === 0 && (
-          <div className="text-center py-8 text-gray-400 text-sm">
-            <div className="text-3xl mb-2">🔧</div>
-            <p>Ask me anything about your boat.</p>
+          <div className="flex flex-col items-center py-8 text-gray-400 text-sm">
+            <div className="w-14 h-14 rounded-full bg-white border-2 border-[#0A2240] flex items-center justify-center mb-3">
+              <svg viewBox="-36 -36 72 72" width="34" height="34" aria-hidden="true">
+                <path d="M-12.124,-21.213L-7.954,-13.925A15,15 0 0,1 7.954,-13.925L12.124,-21.213L21.213,-12.124L13.925,-7.954A15,15 0 0,1 13.925,7.954L21.213,12.124L12.124,21.213L7.954,13.925A15,15 0 0,1 -7.954,13.925L-12.124,21.213L-21.213,12.124L-13.925,7.954A15,15 0 0,1 -13.925,-7.954L-21.213,-12.124ZM8.5,0 A8.5,8.5 0 1,1 -8.5,0 A8.5,8.5 0 1,1 8.5,0 Z" fill="#0A2240" fillRule="evenodd" />
+              </svg>
+            </div>
+            <p className="font-medium text-[#0A2240]">AI Mechanic</p>
+            <p className="mt-1">Ask me anything about your boat.</p>
             <p className="text-xs mt-1">I use manufacturer documentation specific to your model.</p>
           </div>
         )}
@@ -117,7 +123,8 @@ export default function AgentPage() {
           />
         ))}
         {sending && (
-          <div className="flex justify-start mb-3">
+          <div className="flex justify-start items-start gap-2 mb-3">
+            <GearAvatar />
             <div className="bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 text-sm text-gray-500 animate-pulse">
               Thinking...
             </div>

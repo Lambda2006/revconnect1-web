@@ -2,6 +2,7 @@
 
 import React from "react";
 import { SourceCitation } from "./SourceCitation";
+import { GearAvatar } from "./GearAvatar";
 import type { AgentResponsePayload } from "@/lib/agent/chain";
 
 interface ChatBubbleProps {
@@ -24,7 +25,8 @@ export function ChatBubble({ role, content, parsed }: ChatBubbleProps) {
   // Assistant bubble — render parsed response if available
   if (parsed) {
     return (
-      <div className="flex justify-start mb-3">
+      <div className="flex justify-start items-start gap-2 mb-3">
+        <GearAvatar />
         <div className="max-w-[85%] bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 text-sm text-gray-800 space-y-3">
           {parsed.safetyFlag && (
             <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-red-700 text-xs font-semibold">
@@ -63,7 +65,8 @@ export function ChatBubble({ role, content, parsed }: ChatBubbleProps) {
   }
 
   return (
-    <div className="flex justify-start mb-3">
+    <div className="flex justify-start items-start gap-2 mb-3">
+      <GearAvatar />
       <div className="max-w-[85%] bg-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 text-sm text-gray-800 leading-relaxed">
         {content}
       </div>
