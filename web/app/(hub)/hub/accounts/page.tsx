@@ -5,7 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 type Subscription = {
   plan: string;
   status: string;
-  trial_end: string | null;
+  trial_ends_at: string | null;
 };
 
 type User = {

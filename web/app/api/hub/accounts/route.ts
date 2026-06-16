@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
   const { data: subs } = await supabaseAdmin
     .from("subscriptions")
-    .select("user_id, plan, status, trial_end");
+    .select("user_id, plan, status, trial_ends_at");
   const subMap = new Map((subs ?? []).map((s) => [s.user_id, s]));
 
   const { data: admins } = await supabaseAdmin.from("admin_users").select("user_id");
