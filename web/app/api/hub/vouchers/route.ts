@@ -4,7 +4,7 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest) {
   const adminError = await requireAdmin(request);
-  if (adminError) return adminError;
+  if (adminError instanceof NextResponse) return adminError;
 
   const { data, error } = await supabaseAdmin
     .from("vouchers")
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const adminError = await requireAdmin(request);
-  if (adminError) return adminError;
+  if (adminError instanceof NextResponse) return adminError;
 
   const body = await request.json();
   const {
