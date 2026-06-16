@@ -14,6 +14,35 @@ export default function UpgradePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherLoading, setVoucherLoading] = useState(false);
+  const [voucherError, setVoucherError] = useState<string | null>(null);
+  const [voucherSuccess, setVoucherSuccess] = useState<string | null>(null);
+
+  const handleRedeemVoucher = async () => {
+    if (!voucherCode.trim()) return;
+    setVoucherLoading(true);
+    setVoucherError(null);
+    setVoucherSuccess(null);
+    const res = await fetch("/api/redeem-voucher", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: voucherCode }),
+    });
+    const data = await res.json();
+    setVoucherLoading(false);
+    if (!res.ok) {
+      setVoucherError(data.error ?? "Failed to redeem voucher.");
+    } else {
+      const fx = data.effectsApplied ?? {};
+      const parts: string[] = [];
+      if (fx.skippedOneTimeFee) parts.push("$4.99 fee removed");
+      if (fx.newTrialEnd) parts.push(`Trial extended to ${new Date(fx.newTrialEnd).toLocaleDateString()}`);
+      if (fx.upgradedToAgent) parts.push("Upgraded to App + Agent");
+      setVoucherSuccess(parts.length ? parts.join(", ") + "." : "Voucher applied.");
+      setVoucherCode("");
+    }
+  };
 
   const post = async (url: string, body: object) => {
     setLoading(true);
@@ -172,6 +201,30 @@ export default function UpgradePage() {
           >
             <Button variant="secondary" className="w-full">Update Payment Method</Button>
           </a>
+        </div>
+      )}
+
+      {/* Voucher redemption — available to any active/trialing subscriber */}
+      {(sub.status === "trialing" || sub.status === "active") && (
+        <div className="border border-gray-200 rounded-xl p-4 space-y-2">
+          <p className="text-sm font-semibold text-brand-navy">Redeem a Voucher</p>
+          <div className="flex gap-2">
+            <input
+              placeholder="Enter voucher code"
+              value={voucherCode}
+              onChange={(e) => { setVoucherCode(e.target.value.toUpperCase()); setVoucherError(null); setVoucherSuccess(null); }}
+              className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy font-mono"
+            />
+            <button
+              onClick={handleRedeemVoucher}
+              disabled={!voucherCode.trim() || voucherLoading}
+              className="px-3 py-2 text-sm font-medium bg-brand-navy text-white rounded-lg disabled:opacity-40 hover:bg-opacity-90 transition-colors"
+            >
+              {voucherLoading ? "…" : "Apply"}
+            </button>
+          </div>
+          {voucherError && <p className="text-brand-red text-xs">{voucherError}</p>}
+          {voucherSuccess && <p className="text-green-600 text-xs font-medium">✓ {voucherSuccess}</p>}
         </div>
       )}
     </div>

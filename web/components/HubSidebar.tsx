@@ -17,6 +17,12 @@ const NAV = [
       { label: "Users", href: "/hub/accounts" },
     ],
   },
+  {
+    section: "Promotions",
+    items: [
+      { label: "Vouchers", href: "/hub/vouchers" },
+    ],
+  },
 ];
 
 export default function HubSidebar() {

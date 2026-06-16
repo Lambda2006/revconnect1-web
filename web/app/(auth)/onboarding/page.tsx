@@ -22,10 +22,12 @@ type Step = "boat" | "plan" | "payment";
 // ─── Inner payment form (must be inside <Elements>) ───────────────────────────
 function PaymentForm({
   plan,
+  voucherCode,
   onSuccess,
   onBack,
 }: {
   plan: Plan;
+  voucherCode?: string;
   onSuccess: () => void;
   onBack: () => void;
 }) {
@@ -67,7 +69,7 @@ function PaymentForm({
     const res = await fetch("/api/confirm-subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: user.id, plan }),
+      body: JSON.stringify({ userId: user.id, plan, ...(voucherCode ? { voucherCode } : {}) }),
     });
 
     setSubmitting(false);
@@ -120,6 +122,13 @@ export default function OnboardingPage() {
     engine_type: "",
     is_primary: true,
   });
+  const [voucherCode, setVoucherCode] = useState("");
+  const [voucherStatus, setVoucherStatus] = useState<{
+    valid: boolean;
+    message: string;
+    effects?: { skipOneTimeFee: boolean; trialExtensionDays: number; freeMonths: number; upgradeToAgent: boolean };
+  } | null>(null);
+  const [voucherChecking, setVoucherChecking] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -183,6 +192,34 @@ export default function OnboardingPage() {
     setSetupIntentClientSecret(data.setupIntentClientSecret);
     sessionStorage.setItem("vrc_plan", selectedPlan);
     setStep("payment");
+  };
+
+  const checkVoucher = async () => {
+    if (!voucherCode.trim()) return;
+    setVoucherChecking(true);
+    setVoucherStatus(null);
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setVoucherChecking(false); return; }
+
+    const res = await fetch("/api/validate-voucher", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code: voucherCode, userId: user.id }),
+    });
+    const data = await res.json();
+    setVoucherChecking(false);
+
+    if (!res.ok) {
+      setVoucherStatus({ valid: false, message: data.error ?? "Invalid code." });
+    } else {
+      const parts: string[] = [];
+      if (data.effects.skipOneTimeFee) parts.push("$4.99 fee waived");
+      if (data.effects.trialExtensionDays > 0) parts.push(`+${data.effects.trialExtensionDays} trial days`);
+      if (data.effects.freeMonths > 0) parts.push(`${data.effects.freeMonths} free month${data.effects.freeMonths > 1 ? "s" : ""}`);
+      if (data.effects.upgradeToAgent) parts.push("upgraded to App + Agent");
+      setVoucherStatus({ valid: true, message: `Applied: ${parts.join(", ")}`, effects: data.effects });
+    }
   };
 
   const handlePaymentSuccess = useCallback(() => {
@@ -299,6 +336,32 @@ export default function OnboardingPage() {
                 </p>
               </button>
 
+              {/* Voucher code */}
+              <div className="border border-gray-200 rounded-xl p-3 space-y-2">
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Have a voucher code?</p>
+                <div className="flex gap-2">
+                  <input
+                    placeholder="Enter code"
+                    value={voucherCode}
+                    onChange={(e) => { setVoucherCode(e.target.value.toUpperCase()); setVoucherStatus(null); }}
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={checkVoucher}
+                    disabled={!voucherCode.trim() || voucherChecking}
+                    className="px-3 py-2 text-sm font-medium bg-brand-navy text-white rounded-lg disabled:opacity-40 hover:bg-opacity-90 transition-colors"
+                  >
+                    {voucherChecking ? "…" : "Apply"}
+                  </button>
+                </div>
+                {voucherStatus && (
+                  <p className={`text-xs font-medium ${voucherStatus.valid ? "text-green-600" : "text-brand-red"}`}>
+                    {voucherStatus.valid ? "✓ " : "✗ "}{voucherStatus.message}
+                  </p>
+                )}
+              </div>
+
               {error && <p className="text-brand-red text-sm">{error}</p>}
               <Button onClick={handlePlanNext} loading={loading} className="w-full">
                 Continue to Payment
@@ -335,6 +398,7 @@ export default function OnboardingPage() {
             >
               <PaymentForm
                 plan={selectedPlan}
+                voucherCode={voucherStatus?.valid ? voucherCode : undefined}
                 onSuccess={handlePaymentSuccess}
                 onBack={() => setStep("plan")}
               />
