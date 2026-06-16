@@ -4,6 +4,13 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 
 type Params = { params: Promise<{ userId: string }> };
 
+/** Maps hub-facing plan labels to the internal status+plan columns. */
+const HUB_PLAN_MAP: Record<string, { status: string; plan: string }> = {
+  free_trial: { status: "trialing", plan: "app_only" },
+  connect:    { status: "active",   plan: "app_only" },
+  subscribed: { status: "active",   plan: "app_and_agent" },
+};
+
 export async function PATCH(request: NextRequest, { params }: Params) {
   const admin = await requireAdmin(request);
   if (admin instanceof NextResponse) return admin;
@@ -21,12 +28,23 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   switch (action) {
 
     case "update_subscription": {
-      const { plan, status } = body;
-      if (!plan || !status) return NextResponse.json({ error: "plan and status required" }, { status: 400 });
+      const { plan: hubPlan } = body;
+      if (!hubPlan) return NextResponse.json({ error: "plan required" }, { status: 400 });
+
+      const mapped = HUB_PLAN_MAP[hubPlan];
+      if (!mapped) {
+        return NextResponse.json({ error: `Unknown plan: ${hubPlan}` }, { status: 400 });
+      }
+
       const { error } = await supabaseAdmin
         .from("subscriptions")
         .upsert(
-          { user_id: userId, plan, status, updated_at: new Date().toISOString() },
+          {
+            user_id: userId,
+            plan: mapped.plan,
+            status: mapped.status,
+            updated_at: new Date().toISOString(),
+          },
           { onConflict: "user_id" }
         );
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -67,7 +85,6 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     }
 
     case "delete": {
-      // Clean up dependent records first, then remove auth user
       await Promise.all([
         supabaseAdmin.from("admin_users").delete().eq("user_id", userId),
         supabaseAdmin.from("subscriptions").delete().eq("user_id", userId),
