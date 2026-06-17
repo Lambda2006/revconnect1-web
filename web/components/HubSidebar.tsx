@@ -23,6 +23,12 @@ const NAV = [
       { label: "Vouchers", href: "/hub/vouchers" },
     ],
   },
+  {
+    section: "Agent",
+    items: [
+      { label: "Response Cache", href: "/hub/cache" },
+    ],
+  },
 ];
 
 export default function HubSidebar() {
