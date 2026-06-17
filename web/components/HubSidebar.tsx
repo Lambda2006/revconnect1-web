@@ -20,7 +20,8 @@ const NAV = [
   {
     section: "Promotions",
     items: [
-      { label: "Vouchers", href: "/hub/vouchers" },
+      { label: "Vouchers",    href: "/hub/vouchers" },
+      { label: "Businesses",  href: "/hub/businesses" },
     ],
   },
   {
