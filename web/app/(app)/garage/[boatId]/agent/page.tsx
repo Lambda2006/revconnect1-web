@@ -60,7 +60,18 @@ export default function AgentPage() {
         throw new Error(data.error ?? `Server error ${res.status}`);
       }
       if (data.sessionId) setSessionId(data.sessionId);
-      const content = data.answer ?? data.raw ?? "";
+      // For cached responses, data.raw is not set — reconstruct a parseable JSON string
+      // so parseAgentResponse can hydrate steps, citations, etc. in ChatBubble.
+      const content = data.raw ?? (data.answer
+        ? JSON.stringify({
+            answer: data.answer,
+            steps: data.steps ?? [],
+            citations: data.citations ?? [],
+            partNumbers: data.partNumbers ?? [],
+            safetyFlag: data.safetyFlag ?? false,
+            recommendProfessional: data.recommendProfessional ?? false,
+          })
+        : "");
       if (!content) throw new Error("Empty response from agent");
       const assistantMsg: AgentMessage = { role: "assistant", content };
       setMessages((prev) => [...prev, assistantMsg]);
