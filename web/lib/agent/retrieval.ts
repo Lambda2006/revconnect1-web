@@ -57,6 +57,12 @@ export function classifyQuery(query: string): QueryCategory {
   return "general";
 }
 
+// Normalize boat make for cache lookups — strips spaces/hyphens and lowercases
+// so "Searay", "Sea Ray", and "sea-ray" all resolve to "searay"
+export function normalizeMake(make: string): string {
+  return make.toLowerCase().replace(/[\s\-_]/g, "");
+}
+
 export function hashQuery(query: string, boatMake: string, boatModel: string, boatYear: number): string {
   return crypto
     .createHash("sha256")
@@ -76,27 +82,40 @@ export async function checkCache(
 
   // Check emergency cache first (brand-level, matched by category)
   if (isEmergencyCategory) {
-    const { data } = await supabaseAdmin
+    const { data: emergencyRows } = await supabaseAdmin
       .from("cached_responses")
-      .select("response, source_urls, is_emergency")
-      .eq("boat_make", boatMake)
+      .select("id, boat_make, boat_model, response, source_urls, is_emergency")
       .eq("query_category", category)
-      .eq("is_emergency", true)
-      .or(`boat_model.eq."${boatModel.replace(/"/g, '\\"')}",boat_model.is.null`)
-      .order("boat_model", { nullsFirst: false }) // prefer model-specific
-      .limit(1)
-      .maybeSingle();
+      .eq("is_emergency", true);
 
-    if (data) {
+    // Normalize makes to handle casing/spacing mismatches (e.g. "Searay" vs "Sea Ray")
+    const normalizedMake = normalizeMake(boatMake);
+    const match = (emergencyRows ?? [])
+      .filter((r) => normalizeMake(r.boat_make) === normalizedMake)
+      .sort((a, b) => {
+        // Prefer model-specific entries over brand-level (null model) entries
+        if (a.boat_model === boatModel && b.boat_model !== boatModel) return -1;
+        if (b.boat_model === boatModel && a.boat_model !== boatModel) return 1;
+        return 0;
+      })
+      .find((r) => r.boat_model === boatModel || r.boat_model === null);
+
+    if (match) {
       // Increment hit count (fire-and-forget)
       supabaseAdmin
         .from("cached_responses")
-        .update({ hit_count: (data as Record<string, unknown>).hit_count ?? 1 })
-        .eq("boat_make", boatMake)
-        .eq("query_category", category)
-        .eq("is_emergency", true);
+        .select("hit_count")
+        .eq("id", match.id)
+        .single()
+        .then(({ data: row }) => {
+          supabaseAdmin
+            .from("cached_responses")
+            .update({ hit_count: ((row as Record<string, unknown>)?.hit_count as number ?? 0) + 1 })
+            .eq("id", match.id)
+            .then(() => {});
+        });
 
-      return data as CachedEntry;
+      return match as CachedEntry;
     }
   }
 
