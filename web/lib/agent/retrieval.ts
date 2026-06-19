@@ -82,7 +82,7 @@ export async function checkCache(
       .eq("boat_make", boatMake)
       .eq("query_category", category)
       .eq("is_emergency", true)
-      .or(`boat_model.eq.${boatModel},boat_model.is.null`)
+      .or(`boat_model.eq."${boatModel.replace(/"/g, '\\"')}",boat_model.is.null`)
       .order("boat_model", { nullsFirst: false }) // prefer model-specific
       .limit(1)
       .maybeSingle();
