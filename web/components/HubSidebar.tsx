@@ -5,9 +5,14 @@ import { usePathname } from "next/navigation";
 
 const NAV = [
   {
+    section: "Overview",
+    items: [
+      { label: "Dashboard", href: "/hub/home" },
+    ],
+  },
+  {
     section: "Blog",
     items: [
-      { label: "Dashboard",   href: "/hub/blog/home" },
       { label: "Topic Queue", href: "/hub/blog/queue" },
       { label: "Settings",    href: "/hub/blog/settings" },
     ],
