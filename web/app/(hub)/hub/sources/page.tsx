@@ -254,8 +254,8 @@ function SourceRow({
             source.is_active ? "bg-[#0A2240]" : "bg-gray-300"
           } ${toggling ? "opacity-50" : ""}`}
         >
-          <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
-            source.is_active ? "translate-x-4" : "translate-x-0.5"
+          <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
+            source.is_active ? "translate-x-[18px]" : "translate-x-0"
           }`} />
         </button>
 
