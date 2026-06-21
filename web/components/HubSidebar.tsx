@@ -7,6 +7,7 @@ const NAV = [
   {
     section: "Blog",
     items: [
+      { label: "Dashboard",   href: "/hub/blog/home" },
       { label: "Topic Queue", href: "/hub/blog/queue" },
       { label: "Settings",    href: "/hub/blog/settings" },
     ],
