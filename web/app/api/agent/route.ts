@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "@/lib/supabase/server";
 import { buildSystemPrompt, parseAgentResponse, persistSession } from "@/lib/agent/chain";
-import { checkCache, classifyQuery, hashQuery } from "@/lib/agent/retrieval";
+import { checkCache, checkEmergencyCache, classifyQuery, extractEngineBrand, hashQuery } from "@/lib/agent/retrieval";
 import { getApprovedSources, getRelevantBlogPosts } from "@/lib/agent/sources";
 import type { AgentMessage } from "@/lib/agent/chain";
 import type { Boat } from "@/lib/hooks/useGarage";
@@ -108,9 +108,24 @@ export async function POST(request: NextRequest) {
     const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
     const query = lastUserMsg?.content ?? "";
 
-    // Step 3: Cache check
+    // Step 3a: Emergency cache — three-layer lookup, never calls the API
+    const emergencyResult = await checkEmergencyCache(query, boat.make, boat.model, boat.engine_type);
+    if (emergencyResult) {
+      return NextResponse.json({
+        isLayered: true,
+        cached: true,
+        sessionId,
+        universal: emergencyResult.universal,
+        boat: emergencyResult.boat,
+        boatLabel: emergencyResult.boat ? boat.make : null,
+        engine: emergencyResult.engine,
+        engineLabel: emergencyResult.engine ? extractEngineBrand(boat.engine_type) : null,
+      });
+    }
+
+    // Step 3b: Regular query-hash cache
     const cached = await checkCache(query, boat.make, boat.model, boat.year);
-    if (cached?.is_emergency) {
+    if (cached) {
       return NextResponse.json({
         ...cached.response,
         sessionId,

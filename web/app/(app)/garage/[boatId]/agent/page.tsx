@@ -60,18 +60,22 @@ export default function AgentPage() {
         throw new Error(data.error ?? `Server error ${res.status}`);
       }
       if (data.sessionId) setSessionId(data.sessionId);
-      // For cached responses, data.raw is not set — reconstruct a parseable JSON string
-      // so parseAgentResponse can hydrate steps, citations, etc. in ChatBubble.
-      const content = data.raw ?? (data.answer
-        ? JSON.stringify({
-            answer: data.answer,
-            steps: data.steps ?? [],
-            citations: data.citations ?? [],
-            partNumbers: data.partNumbers ?? [],
-            safetyFlag: data.safetyFlag ?? false,
-            recommendProfessional: data.recommendProfessional ?? false,
-          })
-        : "");
+      // Layered emergency responses: store the full object as JSON so ChatBubble
+      // can parse and render all three sections without calling the API.
+      // Regular cached responses: reconstruct a parseable JSON string from individual fields.
+      // Live API responses: data.raw is the full JSON string from Claude.
+      const content = data.isLayered
+        ? JSON.stringify(data)
+        : data.raw ?? (data.answer
+            ? JSON.stringify({
+                answer: data.answer,
+                steps: data.steps ?? [],
+                citations: data.citations ?? [],
+                partNumbers: data.partNumbers ?? [],
+                safetyFlag: data.safetyFlag ?? false,
+                recommendProfessional: data.recommendProfessional ?? false,
+              })
+            : "");
       if (!content) throw new Error("Empty response from agent");
       const assistantMsg: AgentMessage = { role: "assistant", content };
       setMessages((prev) => [...prev, assistantMsg]);

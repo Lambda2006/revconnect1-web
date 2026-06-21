@@ -6,6 +6,36 @@ export type AgentMessage = {
   content: string;
 };
 
+// A single layer of a cached emergency response
+export type CacheLayer = {
+  answer: string;
+  steps: string[];
+  citations: Array<{ title: string; url: string; section: string }>;
+  partNumbers: string[];
+  safetyFlag: boolean;
+  recommendProfessional: boolean;
+};
+
+// Three-layer emergency response returned directly from cache (no API call)
+export type LayeredAgentResponse = {
+  isLayered: true;
+  universal: CacheLayer;
+  boat: CacheLayer | null;
+  boatLabel: string | null;   // e.g. "Sea Ray" — used as section header
+  engine: CacheLayer | null;
+  engineLabel: string | null; // e.g. "Mercury" — used as section header
+};
+
+export function parseLayeredResponse(text: string): LayeredAgentResponse | null {
+  try {
+    const obj = JSON.parse(text);
+    if (obj?.isLayered === true) return obj as LayeredAgentResponse;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export type AgentResponsePayload = {
   answer: string;
   steps: string[];

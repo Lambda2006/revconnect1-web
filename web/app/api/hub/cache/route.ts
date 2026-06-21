@@ -8,8 +8,9 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await supabaseAdmin
     .from("cached_responses")
-    .select("id, boat_make, boat_model, boat_year, query_category, query_summary, is_emergency, hit_count, cached_at, expires_at, response, source_urls")
+    .select("id, layer, boat_make, boat_model, boat_year, engine_brand, query_category, query_summary, is_emergency, hit_count, cached_at, expires_at, response, source_urls")
     .order("is_emergency", { ascending: false })
+    .order("layer")
     .order("query_category")
     .order("boat_make");
 
@@ -23,9 +24,11 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
   const {
+    layer,
     boat_make,
     boat_model,
     boat_year,
+    engine_brand,
     query_category,
     query_summary,
     query_hash,
@@ -35,16 +38,27 @@ export async function POST(request: NextRequest) {
     expires_at,
   } = body;
 
-  if (!boat_make || !query_category || !response) {
-    return NextResponse.json({ error: "boat_make, query_category, and response are required." }, { status: 400 });
+  const resolvedLayer = layer ?? "boat_make";
+
+  // Universal and engine layers don't require boat_make; boat_make layer does
+  if (resolvedLayer === "boat_make" && !boat_make) {
+    return NextResponse.json({ error: "boat_make is required for layer 'boat_make'." }, { status: 400 });
+  }
+  if (resolvedLayer === "engine" && !engine_brand) {
+    return NextResponse.json({ error: "engine_brand is required for layer 'engine'." }, { status: 400 });
+  }
+  if (!query_category || !response) {
+    return NextResponse.json({ error: "query_category and response are required." }, { status: 400 });
   }
 
   const { data, error } = await supabaseAdmin
     .from("cached_responses")
     .insert({
-      boat_make,
+      layer: resolvedLayer,
+      boat_make: boat_make ?? null,
       boat_model: boat_model ?? null,
       boat_year: boat_year ?? null,
+      engine_brand: engine_brand ?? null,
       query_category,
       query_summary: query_summary ?? null,
       query_hash: query_hash ?? `hub-${Date.now()}`,
