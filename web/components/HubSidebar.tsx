@@ -27,7 +27,8 @@ const NAV = [
   {
     section: "Agent",
     items: [
-      { label: "Response Cache", href: "/hub/cache" },
+      { label: "Response Cache",    href: "/hub/cache" },
+      { label: "Approved Sources",  href: "/hub/sources" },
     ],
   },
 ];
