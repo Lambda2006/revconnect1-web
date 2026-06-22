@@ -96,26 +96,27 @@ CRITICAL RULES:
 ${blogSection}
 RESPONSE FORMATTING — apply to both "answer" and "steps":
 
-ANSWER FIELD:
-- Begin with a 1–2 sentence plain-language summary.
-- Do NOT include the sequential procedure steps in the answer — those go exclusively in the "steps" array. The answer covers context, diagnosis, tools needed, what to inspect, and warnings.
-- Separate every distinct idea with a blank line (\\n\\n) — never run topics into a single block of text.
-- Use ## section headers for each distinct part (e.g., ## Tools You'll Need, ## What to Inspect).
+ANSWER FIELD RULES:
+- Begin with a 1–2 sentence plain-language summary, followed by \\n\\n.
+- Do NOT put the sequential procedure steps in the answer — those go exclusively in the "steps" array.
+- Use ## section headers for each distinct part of the answer.
+- After every ## header, put \\n\\n before the content.
+- WITHIN each section: use a hyphen bullet list (- item) for any content that is a list of items (tools, inspection items, warnings). Do NOT write list-type content as prose sentences.
+- For prose content within a section: maximum 2 sentences per paragraph, then \\n\\n before the next paragraph. Never chain 3+ sentences without a \\n\\n break.
 - Bold exactly one critical fact per section using **bold** markdown.
-- Keep paragraphs to 3 sentences max before a blank line break.
+- Never use jargon without defining it in plain language immediately after (e.g., "impeller — the rubber paddle wheel inside the pump").
 - Match length to urgency: emergency under 150 words; diagnostic under 400 words; procedure walkthroughs as long as needed.
-- Never use jargon without defining it immediately in plain language (e.g., "impeller — the rubber paddle wheel inside the pump").
-- End with a single clear next action on its own line, prefixed with ➡️.
+- End with \\n\\n➡️ followed by a single clear next action.
 
-STEPS ARRAY:
-- Include ONLY the sequential procedure steps here — one discrete action per step.
-- Bold the single most critical action or warning within each step using **bold**.
-- Do not repeat context already in the answer field.
+STEPS ARRAY RULES:
+- One discrete action per step string — no run-on steps.
+- Bold the single most critical word or phrase in each step using **bold**.
+- Do not repeat context from the answer field.
 
-RESPONSE FORMAT (strict JSON):
+RESPONSE FORMAT (strict JSON — the \\n\\n in the example below are literal and required):
 {
-  "answer": "1–2 sentence summary.\\n\\n## Section Header\\n\\nSection content — max 3 sentences, one clear idea.\\n\\n## Next Section\\n\\nMore content.\\n\\n➡️ Next action sentence.",
-  "steps": ["**Critical action** — detail", "Step 2 detail"],
+  "answer": "1–2 sentence summary.\\n\\n## Section One\\n\\nOne or two sentences of context.\\n\\n- **Key item:** explanation\\n- Item two: explanation\\n\\n## Section Two\\n\\nContext sentence.\\n\\n- Item\\n- Item\\n\\n➡️ Clear next action.",
+  "steps": ["**Critical action** — supporting detail", "Next step"],
   "citations": [{ "title": "string", "url": "string", "section": "string" }],
   "partNumbers": ["string"],
   "safetyFlag": boolean,
@@ -153,26 +154,27 @@ Leave citations as an empty array. This is honest — you are not citing a live 
 
 RESPONSE FORMATTING — apply to both "answer" and "steps":
 
-ANSWER FIELD:
-- Begin with the transparency disclaimer, then a 1–2 sentence plain-language summary on a new line.
-- Do NOT include the sequential procedure steps in the answer — those go exclusively in the "steps" array. The answer covers context, diagnosis, tools needed, what to inspect, and warnings.
-- Separate every distinct idea with a blank line (\\n\\n) — never run topics into a single block of text.
-- Use ## section headers for each distinct part (e.g., ## Tools You'll Need, ## What to Inspect).
+ANSWER FIELD RULES:
+- Begin with the transparency disclaimer, then \\n\\n, then a 1–2 sentence plain-language summary, then \\n\\n.
+- Do NOT put the sequential procedure steps in the answer — those go exclusively in the "steps" array.
+- Use ## section headers for each distinct part of the answer.
+- After every ## header, put \\n\\n before the content.
+- WITHIN each section: use a hyphen bullet list (- item) for any content that is a list of items (tools, inspection items, warnings). Do NOT write list-type content as prose sentences.
+- For prose content within a section: maximum 2 sentences per paragraph, then \\n\\n before the next paragraph. Never chain 3+ sentences without a \\n\\n break.
 - Bold exactly one critical fact per section using **bold** markdown.
-- Keep paragraphs to 3 sentences max before a blank line break.
+- Never use jargon without defining it in plain language immediately after.
 - Match length to urgency: emergency under 150 words; diagnostic under 400 words; procedure walkthroughs as long as needed.
-- Never use jargon without defining it immediately in plain language.
-- End with a single clear next action on its own line, prefixed with ➡️.
+- End with \\n\\n➡️ followed by a single clear next action.
 
-STEPS ARRAY:
-- Include ONLY the sequential procedure steps here — one discrete action per step.
-- Bold the single most critical action or warning within each step using **bold**.
-- Do not repeat context already in the answer field.
+STEPS ARRAY RULES:
+- One discrete action per step string — no run-on steps.
+- Bold the single most critical word or phrase in each step using **bold**.
+- Do not repeat context from the answer field.
 
-RESPONSE FORMAT (strict JSON):
+RESPONSE FORMAT (strict JSON — the \\n\\n in the example below are literal and required):
 {
-  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\n1–2 sentence summary.\\n\\n## Section Header\\n\\nSection content — max 3 sentences.\\n\\n➡️ Next action sentence.",
-  "steps": ["**Critical action** — detail", "Step 2 detail"],
+  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\n1–2 sentence summary.\\n\\n## Section One\\n\\nOne or two sentences of context.\\n\\n- **Key item:** explanation\\n- Item two: explanation\\n\\n## Section Two\\n\\nContext sentence.\\n\\n- Item\\n- Item\\n\\n➡️ Clear next action.",
+  "steps": ["**Critical action** — supporting detail", "Next step"],
   "citations": [],
   "partNumbers": ["OEM part numbers if known from training"],
   "safetyFlag": boolean,
