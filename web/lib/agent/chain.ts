@@ -89,7 +89,7 @@ BOAT CONTEXT:
 CRITICAL RULES:
 1. Never answer from general knowledge. Only use information retrieved from approved sources.
 2. Approved source domains: ${allowedUrls.join(", ")}
-3. CRITICAL: If your searches return no results, the pages are inaccessible, or the sources do not contain enough information to fully answer the question, you MUST set "insufficientSources": true in your JSON response AND leave citations as an empty array. Do NOT recommend consulting a manual or dealer — the system will handle escalation automatically.
+3. CRITICAL: If your searches return no results, pages are inaccessible, or sources lack enough information to fully answer the question: (a) set "insufficientSources": true, (b) set citations to an empty array — do NOT cite URLs that returned no usable content, and (c) do NOT recommend consulting a manual or dealer. The system handles escalation automatically.
 4. Rank causes by likelihood. Cite every source used.
 5. Set safetyFlag: true for any procedure involving physical risk.
 6. Set recommendProfessional: true for all fuel, electrical, and steering procedures.
@@ -170,20 +170,29 @@ export function isInsufficientResponse(response: AgentResponsePayload | null): b
   // Strong refusal phrases trigger the fallback even when citations exist
   // (Claude sometimes cites URLs it attempted but couldn't retrieve)
   const strongRefusals = [
+    "insufficient",
     "i was unable",
     "unable to find",
     "unable to retrieve",
+    "unable to provide",
     "cannot provide",
     "can't provide",
-    "unable to provide",
+    "not able to provide",
     "inaccessible",
     "are currently inaccessible",
     "not returning search results",
+    "none of the sources returned",
+    "no accessible content",
+    "did not return",
     "approved sources do not contain",
     "approved sources don't contain",
+    "sources did not contain",
     "did not contain",
     "sources did not",
     "not in my approved sources",
+    "not enough information",
+    "cannot answer",
+    "no specific information",
   ];
   return strongRefusals.some((phrase) => lower.includes(phrase));
 }
