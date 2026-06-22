@@ -280,10 +280,14 @@ export async function POST(request: NextRequest) {
 
     let parsed = parseAgentResponse(finalResponse);
 
-    // Step 6b — Fallback: trigger when no tool call returned usable content, OR when
-    // Claude's structured response explicitly flags insufficientSources.
-    // This replaces keyword matching — we check actual tool results, not Claude's prose.
-    const needsFallback = !hadUsefulContent || (parsed?.insufficientSources === true);
+    // Step 6b — Fallback: trigger when:
+    //   • no tool call returned usable content (hadUsefulContent = false)
+    //   • the agentic loop exhausted all rounds without producing text (finalResponse = "")
+    //   • Claude's structured response explicitly flags insufficientSources
+    const needsFallback =
+      !hadUsefulContent ||
+      !finalResponse ||
+      (parsed?.insufficientSources === true);
     if (needsFallback) {
       const fallbackRes = await getAnthropic().messages.create({
         model: "claude-sonnet-4-6",
@@ -325,6 +329,21 @@ export async function POST(request: NextRequest) {
         sourceType: "approved_sources",
       };
       finalResponse = JSON.stringify(parsed);
+    }
+
+    // Unconditional safety net — guarantees data.raw is never an empty string.
+    // Guards against any edge case that slips through the branches above.
+    if (!finalResponse) {
+      const safePayload: AgentResponsePayload = {
+        answer: "I was unable to generate a response. Please try rephrasing your question.",
+        steps: [],
+        citations: [],
+        partNumbers: [],
+        safetyFlag: false,
+        recommendProfessional: false,
+        sourceType: "claude_expertise",
+      };
+      finalResponse = JSON.stringify(safePayload);
     }
 
     // Step 7: Persist session
