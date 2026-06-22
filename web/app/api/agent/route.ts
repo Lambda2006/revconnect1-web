@@ -272,11 +272,13 @@ export async function POST(request: NextRequest) {
       });
       const fallbackTextBlock = fallbackRes.content.find((b) => b.type === "text");
       const fallbackText = fallbackTextBlock?.type === "text" ? fallbackTextBlock.text : "";
-      // Update finalResponse so data.raw in the frontend points to the fallback text,
-      // not the empty/refusal text from the tool loop.
-      finalResponse = fallbackText;
       parsed = parseAgentResponse(fallbackText);
-      if (parsed) parsed.sourceType = "claude_expertise";
+      if (parsed) {
+        parsed.sourceType = "claude_expertise";
+        // Serialize the parsed object back to clean JSON (strips markdown fences)
+        // so data.raw is a valid JSON string the frontend ChatBubble can parse.
+        finalResponse = JSON.stringify(parsed);
+      }
     } else if (parsed) {
       parsed.sourceType = "approved_sources";
     }
