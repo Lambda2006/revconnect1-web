@@ -341,7 +341,16 @@ export async function POST(request: NextRequest) {
       sessionId: newSessionId,
     });
   } catch (err) {
-    console.error("Agent error:", err);
+    // Split into multiple log lines so Vercel doesn't truncate the full Anthropic error body
+    if (err && typeof err === "object") {
+      const e = err as Record<string, unknown>;
+      console.error("[agent] HTTP status:", e.status);
+      console.error("[agent] message:", e.message);
+      console.error("[agent] error body:", JSON.stringify(e.error ?? {}));
+      console.error("[agent] full:", JSON.stringify(e));
+    } else {
+      console.error("[agent] error:", String(err));
+    }
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
