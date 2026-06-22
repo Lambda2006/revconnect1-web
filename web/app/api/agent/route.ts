@@ -296,12 +296,35 @@ export async function POST(request: NextRequest) {
       parsed = parseAgentResponse(fallbackText);
       if (parsed) {
         parsed.sourceType = "claude_expertise";
-        // Serialize the parsed object back to clean JSON (strips markdown fences)
-        // so data.raw is a valid JSON string the frontend ChatBubble can parse.
-        finalResponse = JSON.stringify(parsed);
+      } else {
+        // Fallback parse failed — construct a minimal valid response so the
+        // frontend never receives an empty raw string.
+        parsed = {
+          answer: fallbackText || "I was unable to generate a response. Please try rephrasing your question.",
+          steps: [],
+          citations: [],
+          partNumbers: [],
+          safetyFlag: false,
+          recommendProfessional: false,
+          sourceType: "claude_expertise",
+        };
       }
+      finalResponse = JSON.stringify(parsed);
     } else if (parsed) {
       parsed.sourceType = "approved_sources";
+      finalResponse = JSON.stringify(parsed);
+    } else if (finalResponse) {
+      // Main loop produced text but it wasn't parseable JSON — surface it raw
+      parsed = {
+        answer: finalResponse,
+        steps: [],
+        citations: [],
+        partNumbers: [],
+        safetyFlag: false,
+        recommendProfessional: false,
+        sourceType: "approved_sources",
+      };
+      finalResponse = JSON.stringify(parsed);
     }
 
     // Step 7: Persist session

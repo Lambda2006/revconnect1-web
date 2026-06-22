@@ -236,11 +236,32 @@ export function isInsufficientResponse(response: AgentResponsePayload | null): b
 }
 
 export function parseAgentResponse(text: string): AgentResponsePayload | null {
+  if (!text) return null;
   try {
-    const jsonMatch = text.match(/\`\`\`(?:json)?\s*([\s\S]*?)\s*\`\`\`/) ||
-      text.match(/(\{[\s\S]*\})/);
-    const jsonStr = jsonMatch ? jsonMatch[1] : text;
-    return JSON.parse(jsonStr);
+    // Extract JSON from optional markdown code fences
+    const fenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+    const jsonCandidate = fenceMatch
+      ? fenceMatch[1]
+      : (text.match(/(\{[\s\S]*\})/)?.[1] ?? text);
+
+    // First attempt: direct parse (Claude output well-formed JSON)
+    try {
+      return JSON.parse(jsonCandidate);
+    } catch {
+      // Second attempt: Claude wrote literal newlines inside JSON string values
+      // (a common failure mode). Escape them so JSON.parse can succeed.
+      const repaired = jsonCandidate.replace(
+        /"((?:[^"\\]|\\.)*)"/gs,
+        (_, inner: string) =>
+          '"' +
+          inner
+            .replace(/\n/g, "\\n")
+            .replace(/\r/g, "\\r")
+            .replace(/\t/g, "\\t") +
+          '"'
+      );
+      return JSON.parse(repaired);
+    }
   } catch {
     return null;
   }
