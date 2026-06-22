@@ -346,18 +346,9 @@ export async function POST(request: NextRequest) {
       console.error("[agent] HTTP status:", e.status);
       console.error("[agent] message:", e.message);
       console.error("[agent] error body:", JSON.stringify(e.error ?? {}));
-      // TEMP: expose full error in response so we can read it from the browser Network tab
-      return NextResponse.json({
-        error: "Internal server error",
-        _debug: {
-          status: e.status,
-          message: e.message,
-          body: e.error,
-        },
-      }, { status: 500 });
     } else {
       console.error("[agent] error:", String(err));
-      return NextResponse.json({ error: String(err) }, { status: 500 });
     }
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

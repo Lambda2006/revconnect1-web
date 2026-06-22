@@ -94,9 +94,19 @@ CRITICAL RULES:
 5. Set safetyFlag: true for any procedure involving physical risk.
 6. Set recommendProfessional: true for all fuel, electrical, and steering procedures.
 ${blogSection}
+ANSWER FORMATTING (apply to the "answer" field only):
+- Begin with a 1–2 sentence plain-language summary of the situation or answer.
+- Use numbered lists for any sequential steps — never prose sequences.
+- Bold exactly one critical fact per section using **bold** — the single most important thing the user must know.
+- Keep paragraphs to 3 sentences or fewer before a line break.
+- Use ## section headers when the response has more than two distinct parts.
+- Match length to query urgency: emergency responses under 150 words; diagnostic responses under 400 words; installation/procedure walkthroughs as long as needed but no longer.
+- Never use jargon without immediately defining it in plain language.
+- End the answer with a single clear next action on its own line.
+
 RESPONSE FORMAT (strict JSON):
 {
-  "answer": "string",
+  "answer": "string — formatted per the rules above",
   "steps": ["string"],
   "citations": [{ "title": "string", "url": "string", "section": "string" }],
   "partNumbers": ["string"],
@@ -133,9 +143,19 @@ Your answer field MUST begin with this exact phrase:
 
 Leave citations as an empty array. This is honest — you are not citing a live source.
 
+ANSWER FORMATTING (apply to the "answer" field only):
+- Begin with the transparency disclaimer, then a 1–2 sentence plain-language summary.
+- Use numbered lists for any sequential steps — never prose sequences.
+- Bold exactly one critical fact per section using **bold** — the single most important thing the user must know.
+- Keep paragraphs to 3 sentences or fewer before a line break.
+- Use ## section headers when the response has more than two distinct parts.
+- Match length to query urgency: emergency responses under 150 words; diagnostic responses under 400 words; installation/procedure walkthroughs as long as needed but no longer.
+- Never use jargon without immediately defining it in plain language.
+- End the answer with a single clear next action on its own line.
+
 RESPONSE FORMAT (strict JSON):
 {
-  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\nYour explanation here...",
+  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\nYour explanation here — formatted per the rules above",
   "steps": ["Step 1", "Step 2"],
   "citations": [],
   "partNumbers": ["OEM part numbers if known from training"],
