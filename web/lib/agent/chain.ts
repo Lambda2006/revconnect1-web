@@ -89,7 +89,7 @@ BOAT CONTEXT:
 CRITICAL RULES:
 1. Never answer from general knowledge. Only use information retrieved from approved sources.
 2. Approved source domains: ${allowedUrls.join(", ")}
-3. If approved sources do not contain sufficient information to answer the question, set "insufficientSources": true in your JSON response. Briefly note in the answer what specific information was missing from your sources.
+3. CRITICAL: If your searches return no results, the pages are inaccessible, or the sources do not contain enough information to fully answer the question, you MUST set "insufficientSources": true in your JSON response AND leave citations as an empty array. Do NOT recommend consulting a manual or dealer — the system will handle escalation automatically.
 4. Rank causes by likelihood. Cite every source used.
 5. Set safetyFlag: true for any procedure involving physical risk.
 6. Set recommendProfessional: true for all fuel, electrical, and steering procedures.
@@ -160,16 +160,37 @@ LIABILITY DISCLAIMER: VictoryRevConnect is not liable for outcomes resulting fro
 export function isInsufficientResponse(response: AgentResponsePayload | null): boolean {
   if (!response) return true;
   if (response.insufficientSources === true) return true;
-  // String-match fallback in case Claude omits the flag
+  // String-match safety net — catches cases where Claude omits insufficientSources: true
   const lower = response.answer?.toLowerCase() ?? "";
-  return (
-    response.citations.length === 0 &&
-    (lower.includes("don't have enough information") ||
-      lower.includes("insufficient") ||
-      lower.includes("unable to retrieve") ||
-      lower.includes("not in my approved sources") ||
-      lower.includes("i was unable"))
-  );
+  const noSources = response.citations.length === 0;
+  const refusalPhrases = [
+    "cannot provide",
+    "can't provide",
+    "unable to provide",
+    "not able to provide",
+    "don't have enough information",
+    "don't have specific",
+    "unable to retrieve",
+    "unable to find",
+    "not able to find",
+    "cannot find",
+    "insufficient",
+    "not in my approved sources",
+    "i was unable",
+    "no results",
+    "not returning",
+    "inaccessible",
+    "not accessible",
+    "sources are not",
+    "approved sources do not",
+    "approved sources don't",
+    "consult your owner",
+    "consult a certified",
+    "contact a mercury",
+    "contact your dealer",
+    "please consult",
+  ];
+  return noSources && refusalPhrases.some((phrase) => lower.includes(phrase));
 }
 
 export function parseAgentResponse(text: string): AgentResponsePayload | null {

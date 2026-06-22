@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
 
     for (let round = 0; round < 5; round++) {
       const response = await getAnthropic().messages.create({
-        model: "claude-sonnet-4-5",
+        model: "claude-sonnet-4-6",
         max_tokens: 4096,
         system: systemPrompt,
         messages: currentMessages,
@@ -265,7 +265,7 @@ export async function POST(request: NextRequest) {
     // answer from Claude's trained boating expertise. No tools are provided — no web retrieval.
     if (isInsufficientResponse(parsed)) {
       const fallbackRes = await getAnthropic().messages.create({
-        model: "claude-sonnet-4-5",
+        model: "claude-sonnet-4-6",
         max_tokens: 1000,
         system: buildFallbackSystemPrompt(boat),
         messages: claudeMessages, // original user messages only — no tool results
