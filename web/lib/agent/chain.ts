@@ -160,37 +160,32 @@ LIABILITY DISCLAIMER: VictoryRevConnect is not liable for outcomes resulting fro
 export function isInsufficientResponse(response: AgentResponsePayload | null): boolean {
   if (!response) return true;
   if (response.insufficientSources === true) return true;
-  // String-match safety net — catches cases where Claude omits insufficientSources: true
+
+  const citations = response.citations ?? [];
   const lower = response.answer?.toLowerCase() ?? "";
-  const noSources = response.citations.length === 0;
-  const refusalPhrases = [
+
+  // No citations at all = Claude found nothing usable from approved sources
+  if (citations.length === 0) return true;
+
+  // Strong refusal phrases trigger the fallback even when citations exist
+  // (Claude sometimes cites URLs it attempted but couldn't retrieve)
+  const strongRefusals = [
+    "i was unable",
+    "unable to find",
+    "unable to retrieve",
     "cannot provide",
     "can't provide",
     "unable to provide",
-    "not able to provide",
-    "don't have enough information",
-    "don't have specific",
-    "unable to retrieve",
-    "unable to find",
-    "not able to find",
-    "cannot find",
-    "insufficient",
-    "not in my approved sources",
-    "i was unable",
-    "no results",
-    "not returning",
     "inaccessible",
-    "not accessible",
-    "sources are not",
-    "approved sources do not",
-    "approved sources don't",
-    "consult your owner",
-    "consult a certified",
-    "contact a mercury",
-    "contact your dealer",
-    "please consult",
+    "are currently inaccessible",
+    "not returning search results",
+    "approved sources do not contain",
+    "approved sources don't contain",
+    "did not contain",
+    "sources did not",
+    "not in my approved sources",
   ];
-  return noSources && refusalPhrases.some((phrase) => lower.includes(phrase));
+  return strongRefusals.some((phrase) => lower.includes(phrase));
 }
 
 export function parseAgentResponse(text: string): AgentResponsePayload | null {
