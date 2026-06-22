@@ -4,7 +4,6 @@ import { supabaseAdmin } from "@/lib/supabase/server";
 import {
   buildSystemPrompt,
   buildFallbackSystemPrompt,
-  isInsufficientResponse,
   parseAgentResponse,
   persistSession,
 } from "@/lib/agent/chain";
@@ -201,10 +200,22 @@ export async function POST(request: NextRequest) {
     let currentMessages = [...claudeMessages];
     let finalResponse = "";
     const usedUrls: string[] = [];
+    // Track whether any tool call returned real content.
+    // This is the primary signal for triggering the Claude expertise fallback —
+    // no keyword matching needed; we inspect the actual tool results directly.
+    let hadUsefulContent = false;
+    const USEFUL_CONTENT_THRESHOLD = 150;
+    const FAILED_PREFIXES = [
+      "URL not in approved",
+      "HTTP ",
+      "No content found",
+      "Fetch failed",
+      "Error:",
+    ];
 
     for (let round = 0; round < 5; round++) {
       const response = await getAnthropic().messages.create({
-        model: "claude-sonnet-4-6",
+        model: "claude-sonnet-4-5",
         max_tokens: 4096,
         system: systemPrompt,
         messages: currentMessages,
@@ -244,6 +255,14 @@ export async function POST(request: NextRequest) {
             result = await fetchPage(sourceUrl);
           }
 
+          // Check if this tool result contains real content
+          if (
+            result.length >= USEFUL_CONTENT_THRESHOLD &&
+            !FAILED_PREFIXES.some((prefix) => result.startsWith(prefix))
+          ) {
+            hadUsefulContent = true;
+          }
+
           if (sourceUrl && !usedUrls.includes(sourceUrl)) usedUrls.push(sourceUrl);
           toolResults.push({ type: "tool_result", tool_use_id: toolUse.id, content: result || "No content found." });
         }
@@ -261,12 +280,14 @@ export async function POST(request: NextRequest) {
 
     let parsed = parseAgentResponse(finalResponse);
 
-    // Step 6b — Fallback: if approved sources were insufficient (or produced no response),
-    // answer from Claude's trained boating expertise. No tools are provided — no web retrieval.
-    if (isInsufficientResponse(parsed)) {
+    // Step 6b — Fallback: trigger when no tool call returned usable content, OR when
+    // Claude's structured response explicitly flags insufficientSources.
+    // This replaces keyword matching — we check actual tool results, not Claude's prose.
+    const needsFallback = !hadUsefulContent || (parsed?.insufficientSources === true);
+    if (needsFallback) {
       const fallbackRes = await getAnthropic().messages.create({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
+        model: "claude-sonnet-4-5",
+        max_tokens: 2048,
         system: buildFallbackSystemPrompt(boat),
         messages: claudeMessages, // original user messages only — no tool results
       });
