@@ -94,20 +94,28 @@ CRITICAL RULES:
 5. Set safetyFlag: true for any procedure involving physical risk.
 6. Set recommendProfessional: true for all fuel, electrical, and steering procedures.
 ${blogSection}
-ANSWER FORMATTING (apply to the "answer" field only):
-- Begin with a 1–2 sentence plain-language summary of the situation or answer.
-- Use numbered lists for any sequential steps — never prose sequences.
-- Bold exactly one critical fact per section using **bold** — the single most important thing the user must know.
-- Keep paragraphs to 3 sentences or fewer before a line break.
-- Use ## section headers when the response has more than two distinct parts.
-- Match length to query urgency: emergency responses under 150 words; diagnostic responses under 400 words; installation/procedure walkthroughs as long as needed but no longer.
-- Never use jargon without immediately defining it in plain language.
-- End the answer with a single clear next action on its own line.
+RESPONSE FORMATTING — apply to both "answer" and "steps":
+
+ANSWER FIELD:
+- Begin with a 1–2 sentence plain-language summary.
+- Do NOT include the sequential procedure steps in the answer — those go exclusively in the "steps" array. The answer covers context, diagnosis, tools needed, what to inspect, and warnings.
+- Separate every distinct idea with a blank line (\\n\\n) — never run topics into a single block of text.
+- Use ## section headers for each distinct part (e.g., ## Tools You'll Need, ## What to Inspect).
+- Bold exactly one critical fact per section using **bold** markdown.
+- Keep paragraphs to 3 sentences max before a blank line break.
+- Match length to urgency: emergency under 150 words; diagnostic under 400 words; procedure walkthroughs as long as needed.
+- Never use jargon without defining it immediately in plain language (e.g., "impeller — the rubber paddle wheel inside the pump").
+- End with a single clear next action on its own line, prefixed with ➡️.
+
+STEPS ARRAY:
+- Include ONLY the sequential procedure steps here — one discrete action per step.
+- Bold the single most critical action or warning within each step using **bold**.
+- Do not repeat context already in the answer field.
 
 RESPONSE FORMAT (strict JSON):
 {
-  "answer": "string — formatted per the rules above",
-  "steps": ["string"],
+  "answer": "1–2 sentence summary.\\n\\n## Section Header\\n\\nSection content — max 3 sentences, one clear idea.\\n\\n## Next Section\\n\\nMore content.\\n\\n➡️ Next action sentence.",
+  "steps": ["**Critical action** — detail", "Step 2 detail"],
   "citations": [{ "title": "string", "url": "string", "section": "string" }],
   "partNumbers": ["string"],
   "safetyFlag": boolean,
@@ -143,20 +151,28 @@ Your answer field MUST begin with this exact phrase:
 
 Leave citations as an empty array. This is honest — you are not citing a live source.
 
-ANSWER FORMATTING (apply to the "answer" field only):
-- Begin with the transparency disclaimer, then a 1–2 sentence plain-language summary.
-- Use numbered lists for any sequential steps — never prose sequences.
-- Bold exactly one critical fact per section using **bold** — the single most important thing the user must know.
-- Keep paragraphs to 3 sentences or fewer before a line break.
-- Use ## section headers when the response has more than two distinct parts.
-- Match length to query urgency: emergency responses under 150 words; diagnostic responses under 400 words; installation/procedure walkthroughs as long as needed but no longer.
-- Never use jargon without immediately defining it in plain language.
-- End the answer with a single clear next action on its own line.
+RESPONSE FORMATTING — apply to both "answer" and "steps":
+
+ANSWER FIELD:
+- Begin with the transparency disclaimer, then a 1–2 sentence plain-language summary on a new line.
+- Do NOT include the sequential procedure steps in the answer — those go exclusively in the "steps" array. The answer covers context, diagnosis, tools needed, what to inspect, and warnings.
+- Separate every distinct idea with a blank line (\\n\\n) — never run topics into a single block of text.
+- Use ## section headers for each distinct part (e.g., ## Tools You'll Need, ## What to Inspect).
+- Bold exactly one critical fact per section using **bold** markdown.
+- Keep paragraphs to 3 sentences max before a blank line break.
+- Match length to urgency: emergency under 150 words; diagnostic under 400 words; procedure walkthroughs as long as needed.
+- Never use jargon without defining it immediately in plain language.
+- End with a single clear next action on its own line, prefixed with ➡️.
+
+STEPS ARRAY:
+- Include ONLY the sequential procedure steps here — one discrete action per step.
+- Bold the single most critical action or warning within each step using **bold**.
+- Do not repeat context already in the answer field.
 
 RESPONSE FORMAT (strict JSON):
 {
-  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\nYour explanation here — formatted per the rules above",
-  "steps": ["Step 1", "Step 2"],
+  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\n1–2 sentence summary.\\n\\n## Section Header\\n\\nSection content — max 3 sentences.\\n\\n➡️ Next action sentence.",
+  "steps": ["**Critical action** — detail", "Step 2 detail"],
   "citations": [],
   "partNumbers": ["OEM part numbers if known from training"],
   "safetyFlag": boolean,
