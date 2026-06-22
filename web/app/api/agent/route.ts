@@ -6,6 +6,7 @@ import {
   buildFallbackSystemPrompt,
   parseAgentResponse,
   persistSession,
+  type AgentResponsePayload,
 } from "@/lib/agent/chain";
 import { checkCache, checkEmergencyCache, classifyQuery, extractEngineBrand, hashQuery } from "@/lib/agent/retrieval";
 import { getApprovedSources, getRelevantBlogPosts } from "@/lib/agent/sources";
