@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { useGarage } from "@/lib/hooks/useGarage";
 import { useSession } from "@/lib/hooks/useSession";
+import { BOAT_CATALOG, ENGINE_TYPES, getEngineHint, getYearRange } from "@/lib/boatCatalog";
+
+const inputCls =
+  "w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy bg-white";
 
 export default function AddBoatPage() {
   const router = useRouter();
@@ -12,68 +16,294 @@ export default function AddBoatPage() {
   const { addBoat, boats } = useGarage(user?.id ?? null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({
-    make: "",
-    model: "",
-    year: new Date().getFullYear(),
-    engine_type: "",
-    engine_hours: "",
-    hull_id: "",
-    notes: "",
-    is_primary: boats.length === 0,
-  });
+
+  // Make selection
+  const [make, setMake] = useState("");
+  const [makeCustom, setMakeCustom] = useState("");
+
+  // Model selection
+  const [model, setModel] = useState("");
+  const [modelCustom, setModelCustom] = useState("");
+
+  // Rest of form
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [engineType, setEngineType] = useState("");
+  const [engineTypeCustom, setEngineTypeCustom] = useState("");
+  const [engineHours, setEngineHours] = useState("");
+  const [hullId, setHullId] = useState("");
+  const [notes, setNotes] = useState("");
+  const [isPrimary, setIsPrimary] = useState(boats.length === 0);
+
+  const catalogMake = BOAT_CATALOG.find((b) => b.make === make);
+  const catalogModels = catalogMake?.models ?? [];
+
+  // Year range hint for the selected model
+  const yearRange = make && make !== "Other" && model && model !== "Other"
+    ? getYearRange(make, model)
+    : undefined;
+
+  function handleMakeChange(val: string) {
+    setMake(val);
+    setMakeCustom("");
+    setModel("");
+    setModelCustom("");
+    // Auto-suggest engine type at make level (clears if "Other" or no hint)
+    if (val !== "Other") {
+      const hint = getEngineHint(val, "");
+      setEngineType(hint ?? "");
+      setEngineTypeCustom("");
+    } else {
+      setEngineType("");
+      setEngineTypeCustom("");
+    }
+  }
+
+  function handleModelChange(val: string) {
+    setModel(val);
+    setModelCustom("");
+    if (make !== "Other" && val !== "Other" && val) {
+      const hint = getEngineHint(make, val);
+      if (hint) {
+        setEngineType(hint);
+        setEngineTypeCustom("");
+      }
+    }
+  }
+
+  const effectiveMake = make === "Other" ? makeCustom : make;
+  const effectiveModel = model === "Other" ? modelCustom : model;
+  const effectiveEngine = engineType === "Other" ? engineTypeCustom : engineType;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.make || !form.model) { setError("Make and model required."); return; }
+    if (!effectiveMake || !effectiveModel) {
+      setError("Make and model are required.");
+      return;
+    }
     setLoading(true);
     const result = await addBoat({
-      ...form,
-      engine_hours: form.engine_hours ? parseInt(form.engine_hours) : null,
-      hull_id: form.hull_id || null,
-      notes: form.notes || null,
+      make: effectiveMake,
+      model: effectiveModel,
+      year,
+      engine_type: effectiveEngine || null,
+      engine_hours: engineHours ? parseInt(engineHours) : null,
+      hull_id: hullId || null,
+      notes: notes || null,
+      is_primary: isPrimary,
     });
     setLoading(false);
     if (result) {
       router.push("/garage");
     } else {
-      setError("Failed to add boat.");
+      setError("Failed to add boat. Please try again.");
     }
   };
 
   return (
     <div className="px-4 pt-4 pb-6 space-y-5">
-      <button onClick={() => router.back()} className="text-brand-navy text-sm">← Back</button>
+      <button onClick={() => router.back()} className="text-brand-navy text-sm">
+        ← Back
+      </button>
       <h1 className="text-2xl font-bold text-brand-navy">Add a Boat</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <input placeholder="Make *" required value={form.make} onChange={(e) => setForm((f) => ({ ...f, make: e.target.value }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy" />
-        <input placeholder="Model *" required value={form.model} onChange={(e) => setForm((f) => ({ ...f, model: e.target.value }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy" />
-        <input type="number" placeholder="Year" value={form.year}
-          onChange={(e) => setForm((f) => ({ ...f, year: parseInt(e.target.value) || f.year }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy" />
-        <input placeholder="Engine type (e.g. Inboard V8)" value={form.engine_type}
-          onChange={(e) => setForm((f) => ({ ...f, engine_type: e.target.value }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy" />
-        <input type="number" placeholder="Engine hours" value={form.engine_hours}
-          onChange={(e) => setForm((f) => ({ ...f, engine_hours: e.target.value }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy" />
-        <input placeholder="Hull ID (HIN)" value={form.hull_id}
-          onChange={(e) => setForm((f) => ({ ...f, hull_id: e.target.value }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy" />
-        <textarea rows={2} placeholder="Notes" value={form.notes}
-          onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-navy resize-none" />
-        <label className="flex items-center gap-3">
-          <input type="checkbox" checked={form.is_primary}
-            onChange={(e) => setForm((f) => ({ ...f, is_primary: e.target.checked }))}
-            className="w-5 h-5 accent-brand-navy" />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* ── Make ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Make <span className="text-brand-red">*</span>
+          </label>
+          <select
+            required
+            value={make}
+            onChange={(e) => handleMakeChange(e.target.value)}
+            className={inputCls}
+          >
+            <option value="" disabled>Select make…</option>
+            {BOAT_CATALOG.map((b) => (
+              <option key={b.make} value={b.make}>{b.make}</option>
+            ))}
+            <option value="Other">Other (not listed)</option>
+          </select>
+          {make === "Other" && (
+            <input
+              placeholder="Enter make"
+              required
+              value={makeCustom}
+              onChange={(e) => setMakeCustom(e.target.value)}
+              className={`${inputCls} mt-2`}
+            />
+          )}
+        </div>
+
+        {/* ── Model ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Model <span className="text-brand-red">*</span>
+          </label>
+          {make && make !== "Other" ? (
+            <>
+              <select
+                required
+                value={model}
+                onChange={(e) => handleModelChange(e.target.value)}
+                className={inputCls}
+              >
+                <option value="" disabled>Select model…</option>
+                {catalogModels.map((m) => (
+                  <option key={m.name} value={m.name}>{m.name}</option>
+                ))}
+                <option value="Other">Other (not listed)</option>
+              </select>
+              {model === "Other" && (
+                <input
+                  placeholder="Enter model"
+                  required
+                  value={modelCustom}
+                  onChange={(e) => setModelCustom(e.target.value)}
+                  className={`${inputCls} mt-2`}
+                />
+              )}
+              {yearRange && model && model !== "Other" && (
+                <p className="text-xs text-green-700 mt-1.5">
+                  ✓ Supported years: {yearRange} — AI mechanic has full coverage for this model.
+                </p>
+              )}
+            </>
+          ) : make === "Other" ? (
+            <input
+              placeholder="Enter model"
+              required
+              value={modelCustom}
+              onChange={(e) => setModelCustom(e.target.value)}
+              className={inputCls}
+            />
+          ) : (
+            <input
+              disabled
+              placeholder="Select a make first"
+              className={`${inputCls} bg-gray-50 text-gray-400 cursor-not-allowed`}
+            />
+          )}
+        </div>
+
+        {/* ── Year ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Year
+          </label>
+          <input
+            type="number"
+            value={year}
+            min={1980}
+            max={new Date().getFullYear() + 1}
+            onChange={(e) => setYear(parseInt(e.target.value) || year)}
+            className={inputCls}
+          />
+        </div>
+
+        {/* ── Engine Type ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Engine Type
+          </label>
+          <select
+            value={engineType}
+            onChange={(e) => {
+              setEngineType(e.target.value);
+              setEngineTypeCustom("");
+            }}
+            className={inputCls}
+          >
+            <option value="">Select engine type…</option>
+            {ENGINE_TYPES.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          {engineType === "Other" && (
+            <input
+              placeholder="Describe engine type"
+              value={engineTypeCustom}
+              onChange={(e) => setEngineTypeCustom(e.target.value)}
+              className={`${inputCls} mt-2`}
+            />
+          )}
+        </div>
+
+        {/* ── Engine Hours ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Engine Hours
+          </label>
+          <input
+            type="number"
+            placeholder="e.g. 320"
+            min={0}
+            value={engineHours}
+            onChange={(e) => setEngineHours(e.target.value)}
+            className={inputCls}
+          />
+        </div>
+
+        {/* ── Hull ID (HIN) ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Hull ID (HIN)
+          </label>
+          <input
+            placeholder="e.g. MCZX24AB1K001"
+            value={hullId}
+            onChange={(e) => setHullId(e.target.value)}
+            className={inputCls}
+          />
+          <p className="text-xs text-gray-400 mt-1">
+            Found on the starboard stern. Helps the mechanic agent locate recall notices.
+          </p>
+        </div>
+
+        {/* ── Notes ── */}
+        <div>
+          <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+            Notes
+          </label>
+          <textarea
+            rows={3}
+            placeholder="Modifications, known issues, maintenance history…"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            className={`${inputCls} resize-none`}
+          />
+        </div>
+
+        {/* ── Primary boat ── */}
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={isPrimary}
+            onChange={(e) => setIsPrimary(e.target.checked)}
+            className="w-5 h-5 accent-brand-navy"
+          />
           <span className="text-sm text-gray-700">Set as primary boat</span>
         </label>
+
         {error && <p className="text-brand-red text-sm">{error}</p>}
-        <Button type="submit" loading={loading} className="w-full">Add Boat</Button>
+
+        <Button type="submit" loading={loading} className="w-full">
+          Add Boat
+        </Button>
+
+        {/* ── Unsupported boat note ── */}
+        <p className="text-xs text-gray-400 text-center">
+          Don&apos;t see your boat in the list?{" "}
+          <a
+            href="https://victoryrevconnect.com/boats#request"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-navy underline"
+          >
+            Submit a model request
+          </a>{" "}
+          — supported makes are added based on community demand.
+        </p>
       </form>
     </div>
   );
