@@ -251,7 +251,7 @@ export function parseAgentResponse(text: string): AgentResponsePayload | null {
       // Second attempt: Claude wrote literal newlines inside JSON string values
       // (a common failure mode). Escape them so JSON.parse can succeed.
       const repaired = jsonCandidate.replace(
-        /"((?:[^"\\]|\\.)*)"/gs,
+        /"((?:[^"\\]|\\.)*)"/g,
         (_, inner: string) =>
           '"' +
           inner
