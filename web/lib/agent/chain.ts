@@ -43,6 +43,19 @@ export type AgentResponsePayload = {
   partNumbers: string[];
   safetyFlag: boolean;
   recommendProfessional: boolean;
+  /**
+   * Set to true by Claude when approved sources did not contain sufficient
+   * information. Triggers the Claude-expertise fallback in route.ts.
+   */
+  insufficientSources?: boolean;
+  /**
+   * Tagged by the API — not set by Claude. Indicates where the answer came from:
+   * - 'cache'            — returned from cached_responses table
+   * - 'approved_sources' — retrieved live from approved source URLs
+   * - 'claude_expertise' — approved sources were insufficient; answered from
+   *                        Claude's trained boating knowledge (no web retrieval)
+   */
+  sourceType?: "cache" | "approved_sources" | "claude_expertise";
 };
 
 export function buildSystemPrompt(
@@ -76,7 +89,7 @@ BOAT CONTEXT:
 CRITICAL RULES:
 1. Never answer from general knowledge. Only use information retrieved from approved sources.
 2. Approved source domains: ${allowedUrls.join(", ")}
-3. If sources are insufficient, explicitly state so and recommend professional service.
+3. If approved sources do not contain sufficient information to answer the question, set "insufficientSources": true in your JSON response. Briefly note in the answer what specific information was missing from your sources.
 4. Rank causes by likelihood. Cite every source used.
 5. Set safetyFlag: true for any procedure involving physical risk.
 6. Set recommendProfessional: true for all fuel, electrical, and steering procedures.
@@ -88,10 +101,75 @@ RESPONSE FORMAT (strict JSON):
   "citations": [{ "title": "string", "url": "string", "section": "string" }],
   "partNumbers": ["string"],
   "safetyFlag": boolean,
-  "recommendProfessional": boolean
+  "recommendProfessional": boolean,
+  "insufficientSources": boolean
 }
 
 LIABILITY DISCLAIMER: VictoryRevConnect is not liable for outcomes resulting from this guidance.`;
+}
+
+// =====================
+// FALLBACK SYSTEM PROMPT
+// Used when approved sources return insufficient information.
+// No tools are provided during this call — Claude answers from trained knowledge only.
+// =====================
+
+export function buildFallbackSystemPrompt(boat: Boat): string {
+  return `You are a marine mechanic assistant for VictoryRevConnect Boaters.
+
+BOAT CONTEXT:
+- Make: ${boat.make}
+- Model: ${boat.model}
+- Year: ${boat.year ?? "Unknown"}
+- Engine Type: ${boat.engine_type ?? "Unknown"}
+- Engine Hours: ${boat.engine_hours ?? "Unknown"}
+
+SITUATION:
+The approved manufacturer sources did not contain sufficient information for this query. You must NOT perform any web retrieval or reference external URLs. Answer entirely from your trained boating knowledge.
+
+TRANSPARENCY REQUIREMENT:
+Your answer field MUST begin with this exact phrase:
+"*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*"
+
+Leave citations as an empty array. This is honest — you are not citing a live source.
+
+RESPONSE FORMAT (strict JSON):
+{
+  "answer": "*(Based on Claude's trained boating expertise — not sourced from a verified manufacturer document)*\\n\\nYour explanation here...",
+  "steps": ["Step 1", "Step 2"],
+  "citations": [],
+  "partNumbers": ["OEM part numbers if known from training"],
+  "safetyFlag": boolean,
+  "recommendProfessional": boolean,
+  "insufficientSources": false
+}
+
+SAFETY RULES:
+- Set safetyFlag: true for procedures involving fuel, electrical systems, or steering
+- Set recommendProfessional: true for fuel system work, electrical rewiring, and steering repairs
+- Recommend verification with a certified marine mechanic or the manufacturer for anything safety-critical
+
+LIABILITY DISCLAIMER: VictoryRevConnect is not liable for outcomes resulting from this guidance.`;
+}
+
+// =====================
+// INSUFFICIENT RESPONSE DETECTION
+// Returns true if the agentic loop did not yield a usable answer from sources.
+// =====================
+
+export function isInsufficientResponse(response: AgentResponsePayload | null): boolean {
+  if (!response) return true;
+  if (response.insufficientSources === true) return true;
+  // String-match fallback in case Claude omits the flag
+  const lower = response.answer?.toLowerCase() ?? "";
+  return (
+    response.citations.length === 0 &&
+    (lower.includes("don't have enough information") ||
+      lower.includes("insufficient") ||
+      lower.includes("unable to retrieve") ||
+      lower.includes("not in my approved sources") ||
+      lower.includes("i was unable"))
+  );
 }
 
 export function parseAgentResponse(text: string): AgentResponsePayload | null {

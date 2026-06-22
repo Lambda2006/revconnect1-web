@@ -236,6 +236,19 @@ export type AgentResponsePayload = {
   partNumbers: string[]
   safetyFlag: boolean
   recommendProfessional: boolean
+  /**
+   * Set to true by Claude when approved sources did not contain sufficient
+   * information. Triggers the Claude-expertise fallback in agent+api.ts.
+   */
+  insufficientSources?: boolean
+  /**
+   * Tagged by the API — not set by Claude. Indicates where the answer came from:
+   * - 'cache'            — returned from cached_responses table
+   * - 'approved_sources' — retrieved live from approved source URLs
+   * - 'claude_expertise' — approved sources were insufficient; answered from
+   *                        Claude's trained boating knowledge (no web retrieval)
+   */
+  sourceType?: 'cache' | 'approved_sources' | 'claude_expertise'
 }
 
 export type MediaInput = {

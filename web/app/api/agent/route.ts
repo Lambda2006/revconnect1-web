@@ -1,7 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { buildSystemPrompt, parseAgentResponse, persistSession } from "@/lib/agent/chain";
+import {
+  buildSystemPrompt,
+  buildFallbackSystemPrompt,
+  isInsufficientResponse,
+  parseAgentResponse,
+  persistSession,
+} from "@/lib/agent/chain";
 import { checkCache, checkEmergencyCache, classifyQuery, extractEngineBrand, hashQuery } from "@/lib/agent/retrieval";
 import { getApprovedSources, getRelevantBlogPosts } from "@/lib/agent/sources";
 import type { AgentMessage } from "@/lib/agent/chain";
@@ -128,6 +134,7 @@ export async function POST(request: NextRequest) {
     if (cached) {
       return NextResponse.json({
         ...cached.response,
+        sourceType: "cache",
         sessionId,
         cached: true,
       });
@@ -252,18 +259,25 @@ export async function POST(request: NextRequest) {
       break;
     }
 
-    // Fallback: if Claude never produced text, return a safe error message
-    if (!finalResponse) {
-      finalResponse = JSON.stringify({
-        answer: "I was unable to find specific information in the approved sources for your boat. Please consult your owner's manual or a certified marine technician.",
-        steps: [],
-        citations: [],
-        partNumbers: [],
-        safetyFlag: false,
-        recommendProfessional: true,
+    let parsed = parseAgentResponse(finalResponse);
+
+    // Step 6b — Fallback: if approved sources were insufficient (or produced no response),
+    // answer from Claude's trained boating expertise. No tools are provided — no web retrieval.
+    if (isInsufficientResponse(parsed)) {
+      const fallbackRes = await getAnthropic().messages.create({
+        model: "claude-sonnet-4-5",
+        max_tokens: 1000,
+        system: buildFallbackSystemPrompt(boat),
+        messages: claudeMessages, // original user messages only — no tool results
       });
+      const fallbackText = fallbackRes.content.find((b) => b.type === "text");
+      parsed = parseAgentResponse(
+        fallbackText?.type === "text" ? fallbackText.text : ""
+      );
+      if (parsed) parsed.sourceType = "claude_expertise";
+    } else if (parsed) {
+      parsed.sourceType = "approved_sources";
     }
-    const parsed = parseAgentResponse(finalResponse);
 
     // Step 7: Persist session
     const allMessages = [...messages, { role: "assistant" as const, content: finalResponse }];

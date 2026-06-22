@@ -2,6 +2,8 @@ import Anthropic from '@anthropic-ai/sdk'
 import { createClient } from '@supabase/supabase-js'
 import {
   buildSystemPrompt,
+  buildFallbackSystemPrompt,
+  isInsufficientResponse,
   persistSession,
   buildAssistantMessage,
   parseAgentResponse,
@@ -64,8 +66,9 @@ export async function POST(request: Request): Promise<Response> {
       const newSessionId = await persistSession(
         sessionId, userId, boatId, messages, cacheResult.sourceUrls, category
       )
+      const cachedPayload = { ...cacheResult.response, sourceType: 'cache' as const }
       return new Response(
-        JSON.stringify({ sessionId: newSessionId, response: cacheResult.response }),
+        JSON.stringify({ sessionId: newSessionId, response: cachedPayload }),
         { headers: { 'Content-Type': 'application/json' } }
       )
     }
@@ -192,7 +195,25 @@ export async function POST(request: Request): Promise<Response> {
       break
     }
 
-    const parsedResponse = parseAgentResponse(finalResponse)
+    let parsedResponse = parseAgentResponse(finalResponse)
+
+    // Step 6b — Fallback: if approved sources were insufficient, answer from Claude's expertise.
+    // No tools are provided — Claude draws on trained knowledge only. No web retrieval occurs.
+    if (isInsufficientResponse(parsedResponse)) {
+      const fallbackApiResponse = await anthropic.messages.create({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: buildFallbackSystemPrompt(boat),
+        messages: claudeMessages, // original user messages only — no tool results
+      })
+      const fallbackText = fallbackApiResponse.content.find((b) => b.type === 'text')
+      parsedResponse = parseAgentResponse(
+        fallbackText?.type === 'text' ? fallbackText.text : ''
+      )
+      parsedResponse.sourceType = 'claude_expertise'
+    } else {
+      parsedResponse.sourceType = 'approved_sources'
+    }
 
     // Step 7 — Persist session
     const newSessionId = await persistSession(
