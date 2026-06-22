@@ -1,10 +1,43 @@
 "use client";
 
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { SourceCitation } from "./SourceCitation";
 import { GearAvatar } from "./GearAvatar";
 import type { AgentResponsePayload, CacheLayer, LayeredAgentResponse } from "@/lib/agent/chain";
 import { parseLayeredResponse } from "@/lib/agent/chain";
+
+// Shared markdown renderer — applies consistent heading/paragraph/list styles
+function AnswerMarkdown({ children }: { children: string }) {
+  return (
+    <ReactMarkdown
+      components={{
+        h2: ({ children }) => (
+          <h2 className="font-semibold text-gray-900 text-sm mt-4 mb-1 first:mt-0">{children}</h2>
+        ),
+        h3: ({ children }) => (
+          <h3 className="font-semibold text-gray-800 text-sm mt-3 mb-1">{children}</h3>
+        ),
+        p: ({ children }) => (
+          <p className="text-gray-800 leading-relaxed mb-2 last:mb-0">{children}</p>
+        ),
+        ul: ({ children }) => (
+          <ul className="list-disc list-outside pl-4 space-y-1 mb-2">{children}</ul>
+        ),
+        ol: ({ children }) => (
+          <ol className="list-decimal list-outside pl-4 space-y-1 mb-2">{children}</ol>
+        ),
+        li: ({ children }) => <li className="text-gray-800 leading-snug">{children}</li>,
+        strong: ({ children }) => (
+          <strong className="font-semibold text-gray-900">{children}</strong>
+        ),
+        em: ({ children }) => <em className="italic text-gray-600">{children}</em>,
+      }}
+    >
+      {children}
+    </ReactMarkdown>
+  );
+}
 
 interface ChatBubbleProps {
   role: "user" | "assistant";
@@ -16,11 +49,13 @@ interface ChatBubbleProps {
 function LayerSection({ layer }: { layer: CacheLayer }) {
   return (
     <div className="space-y-2">
-      <p className="leading-relaxed">{layer.answer}</p>
+      <AnswerMarkdown>{layer.answer}</AnswerMarkdown>
       {layer.steps.length > 0 && (
-        <ol className="list-decimal list-inside space-y-1 text-sm">
+        <ol className="list-decimal list-outside pl-4 space-y-1 text-sm">
           {layer.steps.map((step, i) => (
-            <li key={i}>{step.replace(/^\d+\.\s*/, "")}</li>
+            <li key={i}>
+              <AnswerMarkdown>{step.replace(/^\d+\.\s*/, "")}</AnswerMarkdown>
+            </li>
           ))}
         </ol>
       )}
@@ -116,11 +151,13 @@ export function ChatBubble({ role, content, parsed }: ChatBubbleProps) {
               ⚠️ Safety Warning — read all steps carefully before proceeding.
             </div>
           )}
-          <p className="leading-relaxed">{parsed.answer}</p>
+          <AnswerMarkdown>{parsed.answer}</AnswerMarkdown>
           {parsed.steps.length > 0 && (
-            <ol className="list-decimal list-inside space-y-1 text-sm">
+            <ol className="list-decimal list-outside pl-4 space-y-1 text-sm">
               {parsed.steps.map((step, i) => (
-                <li key={i}>{step.replace(/^\d+\.\s*/, "")}</li>
+                <li key={i}>
+                  <AnswerMarkdown>{step.replace(/^\d+\.\s*/, "")}</AnswerMarkdown>
+                </li>
               ))}
             </ol>
           )}
