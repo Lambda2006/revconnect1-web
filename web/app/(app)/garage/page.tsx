@@ -123,20 +123,42 @@ export default function GaragePage() {
           </Link>
         </div>
 
-        {/* Boater's Blog card — Phase 9 */}
-        <Link
-          href="/blog"
-          className="flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-3.5 mb-4 hover:border-brand-navy/40 hover:shadow-sm transition-all group"
-        >
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">📖</span>
-            <div>
-              <p className="text-sm font-semibold text-brand-navy">Boater&apos;s Blog</p>
-              <p className="text-xs text-gray-400">Model-specific guides &amp; maintenance tips</p>
+        {/* Quick-access cards */}
+        <div className="flex gap-3 mb-4">
+          <Link
+            href="/blog"
+            className="flex-1 flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-3.5 hover:border-brand-navy/40 hover:shadow-sm transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-xl">📖</span>
+              <div>
+                <p className="text-sm font-semibold text-brand-navy">Boater&apos;s Blog</p>
+                <p className="text-xs text-gray-400">Guides &amp; tips</p>
+              </div>
             </div>
-          </div>
-          <span className="text-gray-300 group-hover:text-brand-navy transition-colors">›</span>
-        </Link>
+            <span className="text-gray-300 group-hover:text-brand-navy transition-colors">›</span>
+          </Link>
+          {boats.length > 0 && (() => {
+            const primaryBoat = boats.find((b) => b.is_primary) ?? boats[0];
+            return (
+              <Link
+                href={`/garage/${primaryBoat.id}/knowledge`}
+                className="flex-1 flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-3.5 hover:border-brand-navy/40 hover:shadow-sm transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-xl">📚</span>
+                  <div>
+                    <p className="text-sm font-semibold text-brand-navy">Knowledge Base</p>
+                    <p className="text-xs text-gray-400 truncate max-w-[100px]">
+                      {primaryBoat.make} {primaryBoat.model}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-gray-300 group-hover:text-brand-navy transition-colors">›</span>
+              </Link>
+            );
+          })()}
+        </div>
 
         {loading ? (
           <div className="text-center text-gray-400 py-12">Loading...</div>

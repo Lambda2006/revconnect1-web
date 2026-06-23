@@ -52,6 +52,13 @@ export function BoatCard({ boat, agentAccess }: BoatCardProps) {
             Upgrade for AI Mechanic
           </Link>
         )}
+        <Link
+          href={`/garage/${boat.id}/knowledge`}
+          className="flex items-center justify-center gap-1 px-3 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-600 hover:border-brand-navy hover:text-brand-navy transition-colors"
+          title="Knowledge Base"
+        >
+          📚
+        </Link>
       </div>
     </div>
   );
