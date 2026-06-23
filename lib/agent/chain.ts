@@ -25,7 +25,7 @@ You are a knowledgeable marine mechanic assistant. You answer ONLY from the retr
 You may ONLY retrieve information from these approved URLs:
 ${allowedUrls.map((url) => `- ${url}`).join('\n')}
 
-Never retrieve from any URL not in this list. If your approved sources do not contain sufficient information to answer the question, set "insufficientSources": true in your JSON response. Briefly note in the answer what specific information was missing from your sources.
+Never retrieve from any URL not in this list. CRITICAL: If your searches return no results, the pages are inaccessible, or the sources do not contain enough information to fully answer the question, you MUST set "insufficientSources": true in your JSON response AND leave citations as an empty array. Do NOT recommend consulting a manual or dealer — the system will handle escalation automatically.
 
 ## Response Format
 Always respond with valid JSON matching this structure:
@@ -167,18 +167,38 @@ Always respond with valid JSON matching this structure:
 // Returns true if the agentic loop did not yield a usable answer from sources.
 // =====================
 
-export function isInsufficientResponse(response: AgentResponsePayload): boolean {
+export function isInsufficientResponse(response: AgentResponsePayload | null): boolean {
+  if (!response) return true
   if (response.insufficientSources === true) return true
-  // Fallback string detection for safety, in case Claude omits the flag
-  const lower = response.answer.toLowerCase()
-  return (
-    response.citations.length === 0 &&
-    (lower.includes("don't have enough information") ||
-      lower.includes("insufficient") ||
-      lower.includes('unable to retrieve') ||
-      lower.includes('not in my approved sources') ||
-      lower.includes('i was unable'))
-  )
+  // String-match safety net — catches cases where Claude omits insufficientSources: true
+  const lower = response.answer?.toLowerCase() ?? ''
+  const noSources = response.citations.length === 0
+  const refusalPhrases = [
+    'cannot provide',
+    "can't provide",
+    'unable to provide',
+    'not able to provide',
+    "don't have enough information",
+    "don't have specific",
+    'unable to retrieve',
+    'unable to find',
+    'not able to find',
+    'cannot find',
+    'insufficient',
+    'not in my approved sources',
+    'i was unable',
+    'no results',
+    'not returning',
+    'inaccessible',
+    'not accessible',
+    'sources are not',
+    'approved sources do not',
+    "approved sources don't",
+    'consult your owner',
+    'consult a certified',
+    'please consult',
+  ]
+  return noSources && refusalPhrases.some((phrase) => lower.includes(phrase))
 }
 
 export function buildAssistantMessage(response: AgentResponsePayload): AgentMessage {
