@@ -61,10 +61,10 @@ export async function POST(request: NextRequest) {
     // Verify boat belongs to user
     const { data: boatRow } = await supabaseAdmin
       .from("boats")
-      .select("id, user_id")
+      .select("id, owner_id")
       .eq("id", boat.id)
       .single();
-    if (!boatRow || boatRow.user_id !== user.id) {
+    if (!boatRow || boatRow.owner_id !== user.id) {
       return NextResponse.json({ error: "Boat not found" }, { status: 404 });
     }
 
