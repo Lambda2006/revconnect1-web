@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useGarage } from "@/lib/hooks/useGarage";
@@ -842,7 +843,7 @@ export default function KnowledgeBasePage() {
 
       <div className="mb-5">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-2xl">📚</span>
+          <Image src="/icon-mark-white.svg" alt="Knowledge Base" width={28} height={28} className="rounded-md bg-brand-navy p-1" />
           <h1 className="text-xl font-bold text-brand-navy">Knowledge Base</h1>
         </div>
         <p className="text-sm text-gray-500">

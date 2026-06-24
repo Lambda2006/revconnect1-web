@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -61,14 +62,14 @@ export function SideNav() {
 
   return (
     <aside className="hidden md:flex fixed top-0 left-0 h-full w-52 bg-brand-navy flex-col z-50 shadow-xl">
-      <div className="px-5 py-6 border-b border-white/10">
-        <div className="flex items-center gap-2.5">
-          <span className="text-white text-2xl">&#9875;</span>
-          <div>
-            <p className="text-white font-bold text-sm leading-tight">VictoryRevConnect</p>
-            <p className="text-blue-300 text-xs">Boaters</p>
-          </div>
-        </div>
+      <div className="px-5 py-5 border-b border-white/10">
+        <Image
+          src="/lockup-reversed.svg"
+          alt="VictoryRevConnect Boaters"
+          width={152}
+          height={40}
+          priority
+        />
       </div>
 
       <nav className="flex-1 px-3 py-4 space-y-1">
