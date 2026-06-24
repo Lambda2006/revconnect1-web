@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <SideNav />
-      <div className="flex-1 flex flex-col md:ml-52 min-w-0">
+      <div className="flex-1 flex flex-col md:ml-64 min-w-0">
         {sub.status === "trialing" && sub.daysRemaining !== null && (
           <TrialBanner daysRemaining={sub.daysRemaining} plan={sub.plan} />
         )}

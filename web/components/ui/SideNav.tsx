@@ -61,13 +61,13 @@ export function SideNav() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex fixed top-0 left-0 h-full w-52 bg-brand-navy flex-col z-50 shadow-xl">
+    <aside className="hidden md:flex fixed top-0 left-0 h-full w-64 bg-brand-navy flex-col z-50 shadow-xl">
       <div className="px-3 py-4 border-b border-white/10">
         <Image
           src="/lockup-reversed.svg"
           alt="VictoryRevConnect Boaters"
-          width={184}
-          height={49}
+          width={220}
+          height={59}
           priority
         />
       </div>

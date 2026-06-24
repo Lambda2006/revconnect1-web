@@ -171,7 +171,7 @@ export default function GaragePage() {
                 className="flex-1 flex items-center justify-between bg-white border border-gray-200 rounded-xl px-4 py-3.5 hover:border-brand-navy/40 hover:shadow-sm transition-all group"
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-xl">📚</span>
+                  <Image src="/north-arrow.svg" alt="Knowledge Base" width={22} height={22} />
                   <div>
                     <p className="text-sm font-semibold text-brand-navy">Knowledge Base</p>
                     <p className="text-xs text-gray-400 truncate max-w-[100px]">
