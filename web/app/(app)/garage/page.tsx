@@ -133,8 +133,8 @@ export default function GaragePage() {
               className="block mb-4 rounded-2xl overflow-hidden bg-brand-navy hover:bg-[#0d2d55] transition-colors group"
             >
               <div className="px-5 py-4 flex items-center gap-4">
-                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                  <Image src="/icon-mark-white.svg" alt="Guided Diagnosis" width={28} height={28} />
+                <div className="w-11 h-11 flex items-center justify-center flex-shrink-0">
+                  <Image src="/icon-mark-white.svg" alt="Guided Diagnosis" width={40} height={40} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-white font-bold text-sm">Guided Diagnosis</p>

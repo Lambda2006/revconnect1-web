@@ -66,8 +66,8 @@ export function SideNav() {
         <Image
           src="/lockup-reversed.svg"
           alt="VictoryRevConnect Boaters"
-          width={152}
-          height={40}
+          width={172}
+          height={46}
           priority
         />
       </div>

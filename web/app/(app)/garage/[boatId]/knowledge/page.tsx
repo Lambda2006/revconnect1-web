@@ -843,7 +843,7 @@ export default function KnowledgeBasePage() {
 
       <div className="mb-5">
         <div className="flex items-center gap-2 mb-1">
-          <Image src="/north-arrow.svg" alt="Knowledge Base" width={24} height={24} />
+          <Image src="/north-arrow.svg" alt="Knowledge Base" width={32} height={32} />
           <h1 className="text-xl font-bold text-brand-navy">Knowledge Base</h1>
         </div>
         <p className="text-sm text-gray-500">
