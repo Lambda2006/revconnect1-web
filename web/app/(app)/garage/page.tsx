@@ -123,6 +123,30 @@ export default function GaragePage() {
           </Link>
         </div>
 
+        {/* Guided Diagnosis — primary subscriber feature */}
+        {sub.agentAccess && boats.length > 0 && (() => {
+          const primaryBoat = boats.find((b) => b.is_primary) ?? boats[0];
+          return (
+            <Link
+              href={`/garage/${primaryBoat.id}/diagnose`}
+              className="block mb-4 rounded-2xl overflow-hidden bg-brand-navy hover:bg-[#0d2d55] transition-colors group"
+            >
+              <div className="px-5 py-4 flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0 text-2xl">
+                  🔍
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-bold text-sm">Guided Diagnosis</p>
+                  <p className="text-white/70 text-xs mt-0.5">
+                    Answer a few questions — get a ranked diagnosis without the back-and-forth.
+                  </p>
+                </div>
+                <span className="text-white/50 group-hover:text-white transition-colors text-lg">›</span>
+              </div>
+            </Link>
+          );
+        })()}
+
         {/* Quick-access cards */}
         <div className="flex gap-3 mb-4">
           <Link
