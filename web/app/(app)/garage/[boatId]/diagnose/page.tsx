@@ -154,24 +154,10 @@ export default function DiagnosePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Subscription gate
-  if (!sub.agentAccess && !sub.loading) {
-    return (
-      <SubscriptionGate hasAccess={false} message="Guided Diagnosis requires the App + Agent plan.">
-        {null}
-      </SubscriptionGate>
-    );
-  }
-
+  // Derived values (must be before all hooks)
   const stage2Qs: Stage2Question[] = system ? STAGE2_QUESTIONS[system] : [];
-
-  const stage2Complete = stage2Qs
-    .filter((q) => q.required)
-    .every((q) => stage2Answers[q.id]);
-
-  const stage3Complete = stage3Questions.every(
-    (q) => stage3Answers[q.id]
-  );
+  const stage2Complete = stage2Qs.filter((q) => q.required).every((q) => stage2Answers[q.id]);
+  const stage3Complete = stage3Questions.every((q) => stage3Answers[q.id]);
 
   // ── Stage 1 → 2 ────────────────────────────────────────────────────────────
   const selectSystem = useCallback((sys: DiagnosticSystem) => {
@@ -261,6 +247,15 @@ export default function DiagnosePage() {
   }, []);
 
   // ─── Render ─────────────────────────────────────────────────────────────────
+
+  // Subscription gate — must come after all hooks
+  if (!sub.agentAccess && !sub.loading) {
+    return (
+      <SubscriptionGate hasAccess={false} message="Guided Diagnosis requires the App + Agent plan.">
+        {null}
+      </SubscriptionGate>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
