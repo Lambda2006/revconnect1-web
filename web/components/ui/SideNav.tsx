@@ -62,12 +62,12 @@ export function SideNav() {
 
   return (
     <aside className="hidden md:flex fixed top-0 left-0 h-full w-52 bg-brand-navy flex-col z-50 shadow-xl">
-      <div className="px-5 py-5 border-b border-white/10">
+      <div className="px-3 py-4 border-b border-white/10">
         <Image
           src="/lockup-reversed.svg"
           alt="VictoryRevConnect Boaters"
-          width={172}
-          height={46}
+          width={184}
+          height={49}
           priority
         />
       </div>
