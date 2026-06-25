@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Features",
   description:
-    "Full breakdown of VictoryRevConnect Boaters — meetup discovery, AI mechanic agent, Boater's Blog, and more.",
+    "Full breakdown of VictoryRevConnect Boaters — meetup discovery, diagnostic questionnaire, AI mechanic agent, and offline knowledge base.",
 };
 
 const CONNECTIVITY = [
@@ -30,30 +30,68 @@ const CONNECTIVITY = [
   },
 ];
 
+const QUESTIONNAIRE = [
+  {
+    title: "Fault Narrowing",
+    body: "The questionnaire walks you through a structured set of questions to isolate the most likely cause before you ever open a chat. You're not guessing — you're arriving with a clear picture.",
+  },
+  {
+    title: "Context for the Agent",
+    body: "Once complete, the questionnaire's results can be passed directly into an agent session. The agent starts the conversation already knowing your symptoms, conditions, and what you've already ruled out.",
+  },
+  {
+    title: "Use It Independently",
+    body: "The questionnaire is a standalone tool. Run it to understand what might be wrong without needing to go further — helpful for quick checks before a trip or when you just want a second opinion.",
+  },
+];
+
 const AGENT = [
   {
-    title: "Model-Specific Knowledge",
-    body: "The agent is seeded with manufacturer documentation, support knowledge bases, and parts catalog data for each supported make and model. It doesn't answer from general knowledge — it cites its source on every response.",
+    title: "Step-by-Step Responses",
+    body: "Every agent answer is broken down into clear, sequential steps — not a wall of text. Each step is scoped to one action so you can work through a problem without losing your place.",
+  },
+  {
+    title: "Context-Aware Accuracy",
+    body: "When you bring questionnaire results into the chat, the agent already knows your boat, your symptoms, and what you've already tried. Answers are targeted — not generic troubleshooting that starts from zero.",
   },
   {
     title: "Voice Input",
-    body: "Hold the mic button and describe the problem by voice. OpenAI Whisper transcribes in seconds. Useful when your hands are greasy or you're trying to hold a flashlight at the same time.",
+    body: "Hold the mic button and describe the problem by voice. Transcription happens in seconds — useful when your hands are greasy or you're juggling a flashlight.",
   },
   {
     title: "Photo Input",
-    body: "Take or upload a photo from your gallery. Claude reads the image alongside your question — useful for identifying a part, showing corrosion, or pointing at something you can't describe.",
+    body: "Take or upload a photo from your gallery. The agent reads the image alongside your question — useful for identifying a part, showing corrosion, or pointing at something you can't describe in words.",
   },
   {
-    title: "Emergency Cache",
-    body: "Seven critical safety categories — engine overheating, fire, flooding, bilge pump failure, fuel emergencies, loss of steering, and battery failure — are pre-loaded and returned instantly with no live retrieval latency. These are pre-validated by domain experts and never auto-expire.",
-  },
-  {
-    title: "Cited Responses",
-    body: "Every agent answer includes a citation list — source name, URL, and section. Tap any citation to read the source material yourself in the in-app browser.",
+    title: "Offline Emergency Cache",
+    body: "Seven critical safety categories — engine overheating, fire, flooding, bilge pump failure, fuel emergencies, loss of steering, and battery failure — are pre-loaded and delivered instantly with no connection required. These responses are pre-validated and never auto-expire.",
   },
   {
     title: "Session Memory",
-    body: "The agent maintains context across your entire conversation. You can follow up, refine the question, and reference earlier parts of the same session without re-explaining your boat.",
+    body: "The agent maintains context across your entire conversation. Follow up, refine your question, or reference something from earlier in the same session without re-explaining anything.",
+  },
+];
+
+const KNOWLEDGE_BASE = [
+  {
+    title: "Personalized to Your Boat",
+    body: "The Knowledge Base is built from the information you enter about your boat — make, model, year, and configuration. Everything in it is scoped to what's relevant to you.",
+  },
+  {
+    title: "Maintenance",
+    body: "Service intervals, fluid specs, seasonal checks, and upkeep tasks specific to your boat. A reference you can pull up at the dock or in the garage without searching.",
+  },
+  {
+    title: "Safety & Legal",
+    body: "Required safety equipment, registration requirements, navigation rules, and on-water legal obligations relevant to your vessel. Know what you're required to have before you launch.",
+  },
+  {
+    title: "Engine & Systems",
+    body: "Engine specs, system overviews, and common fault information for your specific make and model. Useful for understanding what you're looking at before calling a mechanic.",
+  },
+  {
+    title: "Available Offline",
+    body: "The entire Knowledge Base is cached to your device. No signal needed — whether you're out on the water or in a marina with no reception, it's always there.",
   },
 ];
 
@@ -66,8 +104,9 @@ export default function FeaturesPage() {
           <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-3">Features</p>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Built for the serious boater.</h1>
           <p className="text-gray-300 text-xl max-w-2xl leading-relaxed">
-            VictoryRevConnect Boaters combines a connectivity platform for meetup discovery, an
-            AI-powered mechanic agent, and a curated Boater&apos;s Blog — all in one app.
+            VictoryRevConnect Boaters combines a connectivity platform for meetup discovery with a
+            subscription suite of intelligent tools — Diagnostic Questionnaire, AI Mechanic Agent,
+            and an offline Knowledge Base — all in one app.
           </p>
         </div>
       </section>
@@ -97,19 +136,75 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      {/* Agent */}
+      {/* Questionnaire */}
       <section className="bg-gray-50 py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <span className="inline-block bg-[#C8102E] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
-              AI Mechanic Agent
+              Diagnostic Questionnaire — Subscription
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240]">
-              Model-specific answers. Cited sources. No guessing.
+              Narrow it down before you start guessing.
+            </h2>
+            <p className="text-gray-500 mt-4 max-w-2xl leading-relaxed">
+              The questionnaire is a structured diagnostic tool that walks you through a fault-narrowing process specific to your boat. Use it independently or hand its results to the agent for a fully context-loaded conversation.
+            </p>
+          </div>
+          <div className="space-y-8">
+            {QUESTIONNAIRE.map((item) => (
+              <div key={item.title} className="flex gap-6 items-start">
+                <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-[#0A2240] font-bold text-lg mb-1">{item.title}</h3>
+                  <p className="text-gray-500 leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Agent */}
+      <section className="bg-white py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <span className="inline-block bg-[#C8102E] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+              AI Mechanic Agent — Subscription
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240]">
+              In-depth answers. Step by step. With context that matters.
             </h2>
           </div>
           <div className="space-y-8">
             {AGENT.map((item) => (
+              <div key={item.title} className="flex gap-6 items-start">
+                <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-[#0A2240] font-bold text-lg mb-1">{item.title}</h3>
+                  <p className="text-gray-500 leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Knowledge Base */}
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <span className="inline-block bg-[#C8102E] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+              Knowledge Base — Subscription
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240]">
+              Your boat&apos;s compendium. Offline, always available.
+            </h2>
+            <p className="text-gray-500 mt-4 max-w-2xl leading-relaxed">
+              A personalized reference built around your specific boat — covering every dimension of ownership, cached to your device so you can access it without a connection.
+            </p>
+          </div>
+          <div className="space-y-8">
+            {KNOWLEDGE_BASE.map((item) => (
               <div key={item.title} className="flex gap-6 items-start">
                 <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
                 <div>
@@ -143,10 +238,6 @@ export default function FeaturesPage() {
                 body: "Articles are available directly inside the app under the Blog tab — no external browser required. Each post includes a cover image, estimated read time, and a clean reading layout.",
               },
               {
-                title: "Contextual AI Guidance",
-                body: "The AI Mechanic agent pulls from published blog articles as additional context. A post on winterizing your outboard can surface directly inside a related agent session.",
-              },
-              {
                 title: "Curated & Reviewed",
                 body: "Every article passes through an editorial review queue before it goes live. Topics are planned around the boating calendar — spring commissioning, summer safety, fall layup, and more.",
               },
@@ -167,9 +258,9 @@ export default function FeaturesPage() {
       <section className="bg-amber-50 border-t border-amber-200 py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-amber-800 text-sm leading-relaxed">
-            <strong>Mechanical guidance disclaimer:</strong> AI-generated mechanic guidance is for
-            reference only. Always consult a certified marine mechanic for safety-critical repairs
-            involving fuel systems, electrical systems, and steering.{" "}
+            <strong>Mechanical guidance disclaimer:</strong> AI-generated guidance and Knowledge Base
+            content are for reference only. Always consult a certified marine mechanic for
+            safety-critical repairs involving fuel systems, electrical systems, and steering.{" "}
             <Link href="/disclaimer" className="underline">Read full disclaimer →</Link>
           </p>
         </div>

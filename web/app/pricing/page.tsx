@@ -18,23 +18,24 @@ const PLANS = [
       "Business promotions",
       "Boat garage",
     ],
-    excluded: ["AI Mechanic Agent", "Voice & photo input"],
+    excluded: ["Diagnostic Questionnaire", "AI Mechanic Agent", "Knowledge Base"],
     cta: "Start App-Only Trial",
     highlight: false,
   },
   {
     id: "app_and_agent",
-    name: "App + Agent",
+    name: "App + Subscription",
     oneTime: "$4.99",
     recurring: "$9.99/mo",
     billingNote: "$4.99 + $9.99/mo charged on day 8",
     features: [
       "Everything in App Only",
+      "Diagnostic Questionnaire",
       "AI Mechanic Agent",
       "Voice & photo input",
-      "Model-specific citations",
-      "Emergency safety cache",
+      "Offline emergency cache",
       "Session memory",
+      "Knowledge Base (offline)",
     ],
     excluded: [],
     cta: "Start Full Trial",
@@ -154,15 +155,15 @@ export default function PricingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm text-gray-600">
               <div>
                 <p className="font-semibold text-[#0A2240] mb-1">Day 1 — Download</p>
-                <p>Enter your card. Trial starts immediately. Full app access including the AI mechanic agent.</p>
+                <p>Enter your card. Trial starts immediately. Full access to the app and all subscription features.</p>
               </div>
               <div>
                 <p className="font-semibold text-[#0A2240] mb-1">Days 1–7 — Free</p>
-                <p>Use everything. Remove the agent add-on any time from your profile if you decide app-only is enough.</p>
+                <p>Use everything — Questionnaire, Agent, Knowledge Base. Switch to App Only from your profile any time if you decide the subscription isn&apos;t for you.</p>
               </div>
               <div>
                 <p className="font-semibold text-[#0A2240] mb-1">Day 8 — Charges Begin</p>
-                <p>$4.99 one-time app fee charged automatically. Agent subscription ($9.99/mo) charged if not removed.</p>
+                <p>$4.99 one-time app fee charged automatically. Subscription ($9.99/mo) charged if not removed.</p>
               </div>
             </div>
             <p className="text-xs text-gray-400 mt-6 border-t pt-4">

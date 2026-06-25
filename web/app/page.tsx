@@ -24,19 +24,22 @@ const FEATURES = [
     desc: "Create a meetup — set your location, activity type, max boats, and visibility. Public or followers only.",
   },
   {
+    icon: "🩺",
+    title: "Diagnostic Questionnaire",
+    desc: "Work through a guided fault-narrowing questionnaire before you ever type a message. Pinpoint the problem — then hand the agent full context to go deeper.",
+    badge: "Subscription",
+  },
+  {
     icon: "🔧",
     title: "AI Mechanic Agent",
-    desc: "Ask anything about your specific boat. Claude diagnoses issues from manufacturer documentation, with citations.",
+    desc: "Get in-depth, step-by-step guidance tailored to your boat. The agent uses your questionnaire context for accurate, focused answers — and keeps critical responses cached offline.",
+    badge: "Subscription",
   },
   {
-    icon: "🎙️",
-    title: "Voice & Photo Input",
-    desc: "Describe problems by voice or send a photo. The agent handles both — no typing required on the water.",
-  },
-  {
-    icon: "🛡️",
-    title: "Emergency Cache",
-    desc: "Critical safety procedures — fire, flooding, bilge failure — are pre-loaded and delivered instantly with zero latency.",
+    icon: "📖",
+    title: "Knowledge Base",
+    desc: "An offline compendium built around your boat — maintenance schedules, safety and legal requirements, engine specifics, and general boat info. Personalized to what you've entered, available without a connection.",
+    badge: "Subscription",
   },
   {
     icon: "🏪",
@@ -70,8 +73,9 @@ export default function Home() {
               Diagnose with <span className="text-[#C8102E]">confidence.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl">
-              VictoryRevConnect Boaters is the mobile app that puts real-time meetup discovery and
-              model-specific AI mechanic guidance in your pocket — on the water or at the dock.
+              VictoryRevConnect Boaters is the mobile app built for serious boaters — real-time meetup
+              discovery, a guided diagnostic questionnaire, an intelligent mechanic agent, and an
+              offline knowledge base personalized to your boat.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -115,7 +119,14 @@ export default function Home() {
             {FEATURES.map((f) => (
               <div key={f.title} className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
                 <div className="text-3xl mb-4">{f.icon}</div>
-                <h3 className="text-[#0A2240] font-bold text-lg mb-2">{f.title}</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <h3 className="text-[#0A2240] font-bold text-lg">{f.title}</h3>
+                  {"badge" in f && f.badge && (
+                    <span className="text-[10px] font-bold uppercase tracking-widest bg-[#C8102E] text-white px-2 py-0.5 rounded-full">
+                      {f.badge}
+                    </span>
+                  )}
+                </div>
                 <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
               </div>
             ))}
@@ -136,10 +147,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-              Supported at launch
+              Supported makes &amp; models
             </h2>
             <p className="text-gray-400 text-lg max-w-xl mx-auto">
-              The AI mechanic has model-specific knowledge for 15 boats across 5 premium makes.
+              The Knowledge Base and AI features are built around these boats.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -173,8 +184,8 @@ export default function Home() {
             Built for the boater who takes their time on the water seriously.
           </h2>
           <p className="text-gray-500 text-lg mb-10">
-            7 days free. If you love it, continue for $4.99 (one-time app purchase) and $9.99/month
-            for the AI mechanic. Cancel anytime before day 8 with zero charges.
+            7 days free. If you love it, continue with the full subscription — Questionnaire,
+            AI Mechanic Agent, and Knowledge Base included. Cancel anytime before day 8 with zero charges.
           </p>
           <Link
             href="/pricing"
@@ -183,7 +194,7 @@ export default function Home() {
             Start Your Free Trial
           </Link>
           <p className="text-gray-400 text-sm mt-4">
-            App only plan available — $4.99 on day 8, no recurring charge.
+            App-only plan available — connectivity features only, no subscription required.
           </p>
         </div>
       </section>
