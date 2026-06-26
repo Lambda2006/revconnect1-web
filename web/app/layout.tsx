@@ -27,6 +27,8 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0A2240" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/app-icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
       <body className="min-h-screen flex flex-col bg-white">
