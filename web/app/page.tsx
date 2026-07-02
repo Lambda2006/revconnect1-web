@@ -54,7 +54,7 @@ export default function Home() {
   useEffect(() => {
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) router.replace("/discover");
+      if (data.user) router.replace("/garage");
     });
   }, [router]);
 

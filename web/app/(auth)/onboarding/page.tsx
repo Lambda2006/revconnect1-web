@@ -223,7 +223,7 @@ export default function OnboardingPage() {
   };
 
   const handlePaymentSuccess = useCallback(() => {
-    router.push("/discover");
+    router.push("/garage");
   }, [router]);
 
   return (

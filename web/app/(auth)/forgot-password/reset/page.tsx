@@ -33,7 +33,7 @@ export default function ResetPasswordPage() {
     if (error) {
       setError(error.message);
     } else {
-      router.push("/discover");
+      router.push("/garage");
     }
   };
 
