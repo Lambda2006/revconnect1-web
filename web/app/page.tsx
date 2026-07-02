@@ -14,16 +14,6 @@ const SUPPORTED_BOATS = [
 
 const FEATURES = [
   {
-    icon: "🗺️",
-    title: "Discover Meetups",
-    desc: "Find boaters near you on the live map. RSVP, chat with attendees, and coordinate everything before you hit the water.",
-  },
-  {
-    icon: "⚓",
-    title: "Host Your Own",
-    desc: "Create a meetup — set your location, activity type, max boats, and visibility. Public or followers only.",
-  },
-  {
     icon: "🩺",
     title: "Diagnostic Questionnaire",
     desc: "Work through a guided fault-narrowing questionnaire before you ever type a message. Pinpoint the problem — then hand the agent full context to go deeper.",
@@ -40,6 +30,16 @@ const FEATURES = [
     title: "Knowledge Base",
     desc: "An offline compendium built around your boat — maintenance schedules, safety and legal requirements, engine specifics, and general boat info. Personalized to what you've entered, available without a connection.",
     badge: "Subscription",
+  },
+  {
+    icon: "🗺️",
+    title: "Discover Meetups",
+    desc: "Find boaters near you on the live map. RSVP, chat with attendees, and coordinate everything before you hit the water.",
+  },
+  {
+    icon: "⚓",
+    title: "Host Your Own",
+    desc: "Create a meetup — set your location, activity type, max boats, and visibility. Public or followers only.",
   },
   {
     icon: "🏪",
@@ -65,17 +65,17 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <div className="max-w-3xl">
             <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-4">
-              For Serious Boaters
+              For Serious Boat Owners
             </p>
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-              Connect with your <span className="text-[#C8102E]">community.</span>
+              Know your boat.
               <br />
-              Diagnose with <span className="text-[#C8102E]">confidence.</span>
+              Fix it with <span className="text-[#C8102E]">confidence.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl">
-              VictoryRevConnect Boaters is the mobile app built for serious boaters — real-time meetup
-              discovery, a guided diagnostic questionnaire, an intelligent mechanic agent, and an
-              offline knowledge base personalized to your boat.
+              VictoryRevConnect Boaters puts a diagnostic questionnaire, an intelligent AI mechanic
+              agent, and an offline knowledge base personalized to your boat right in your pocket —
+              plus a community of boaters to connect with when you&apos;re ready to hit the water.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -109,10 +109,10 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240] mb-4">
-              Everything you need on the water
+              Everything you need to own your boat
             </h2>
             <p className="text-gray-500 text-lg max-w-xl mx-auto">
-              One app for finding your crew and keeping your boat running.
+              One app for keeping your boat running — and finding your crew when you&apos;re ready.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

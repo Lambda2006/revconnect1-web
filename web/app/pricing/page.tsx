@@ -5,6 +5,25 @@ import { useState } from "react";
 
 const PLANS = [
   {
+    id: "app_and_agent",
+    name: "App + Subscription",
+    oneTime: "$4.99",
+    recurring: "$9.99/mo",
+    billingNote: "$4.99 + $9.99/mo charged on day 8",
+    features: [
+      "Diagnostic Questionnaire",
+      "AI Mechanic Agent",
+      "Voice & photo input",
+      "Offline emergency cache",
+      "Session memory",
+      "Knowledge Base (offline)",
+      "Everything in App Only",
+    ],
+    excluded: [],
+    cta: "Start Full Trial",
+    highlight: true,
+  },
+  {
     id: "app_only",
     name: "App Only",
     oneTime: "$4.99",
@@ -21,25 +40,6 @@ const PLANS = [
     excluded: ["Diagnostic Questionnaire", "AI Mechanic Agent", "Knowledge Base"],
     cta: "Start App-Only Trial",
     highlight: false,
-  },
-  {
-    id: "app_and_agent",
-    name: "App + Subscription",
-    oneTime: "$4.99",
-    recurring: "$9.99/mo",
-    billingNote: "$4.99 + $9.99/mo charged on day 8",
-    features: [
-      "Everything in App Only",
-      "Diagnostic Questionnaire",
-      "AI Mechanic Agent",
-      "Voice & photo input",
-      "Offline emergency cache",
-      "Session memory",
-      "Knowledge Base (offline)",
-    ],
-    excluded: [],
-    cta: "Start Full Trial",
-    highlight: true,
   },
 ];
 
@@ -72,10 +72,12 @@ export default function PricingPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-3">Pricing</p>
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            Download free for 7 days.
+            Your AI mechanic, for $9.99/mo.
           </h1>
           <p className="text-gray-300 text-xl max-w-xl mx-auto">
-            Card required — you won&apos;t be charged until day 8. Cancel any time before then with zero charges.
+            The full subscription unlocks the Diagnostic Questionnaire, AI Mechanic Agent, and
+            offline Knowledge Base built around your boat. Free for 7 days — card required, no charge
+            until day 8. Cancel any time before then with zero charges.
           </p>
         </div>
       </section>

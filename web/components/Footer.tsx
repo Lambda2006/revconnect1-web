@@ -12,7 +12,7 @@ export default function Footer() {
               <span className="text-[#C8102E]">Connect</span>
             </div>
             <p className="text-sm leading-relaxed">
-              The social and AI mechanic app for serious boaters.
+              The AI mechanic and knowledge platform for serious boat owners.
             </p>
           </div>
 

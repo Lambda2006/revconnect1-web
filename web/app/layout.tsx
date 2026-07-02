@@ -4,15 +4,15 @@ import NavbarWrapper from "@/components/NavbarWrapper";
 
 export const metadata: Metadata = {
   title: {
-    default: "VictoryRevConnect Boaters — Connect & Diagnose on the Water",
+    default: "VictoryRevConnect Boaters — Know Your Boat. Fix It With Confidence.",
     template: "%s | VictoryRevConnect Boaters",
   },
   description:
-    "The app for serious boaters. Discover meetups, connect with your boating community, and get AI-powered mechanic guidance for your specific boat.",
-  keywords: ["boating app", "boat meetups", "marine mechanic AI", "boating community"],
+    "The AI mechanic and knowledge platform for serious boat owners. Diagnose faults, maintain your boat, and get step-by-step guidance built around your specific make and model — plus a community of boaters to connect with.",
+  keywords: ["marine mechanic AI", "boat diagnostics", "boat maintenance app", "boating app", "boat knowledge base", "boat meetups"],
   openGraph: {
     title: "VictoryRevConnect Boaters",
-    description: "Discover meetups and get AI mechanic guidance for your boat.",
+    description: "The AI mechanic and knowledge platform for serious boat owners.",
     type: "website",
   },
 };

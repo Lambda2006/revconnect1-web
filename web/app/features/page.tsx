@@ -102,42 +102,18 @@ export default function FeaturesPage() {
       <section className="bg-[#0A2240] text-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-3">Features</p>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Built for the serious boater.</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Built for the serious boat owner.</h1>
           <p className="text-gray-300 text-xl max-w-2xl leading-relaxed">
-            VictoryRevConnect Boaters combines a connectivity platform for meetup discovery with a
-            subscription suite of intelligent tools — Diagnostic Questionnaire, AI Mechanic Agent,
-            and an offline Knowledge Base — all in one app.
+            VictoryRevConnect Boaters puts a subscription suite of intelligent tools at the center —
+            a Diagnostic Questionnaire, an AI Mechanic Agent, and an offline Knowledge Base built
+            around your boat — with a connectivity platform for meetup discovery as the community
+            layer on top.
           </p>
         </div>
       </section>
 
-      {/* Connectivity */}
-      <section className="bg-white py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12">
-            <span className="inline-block bg-[#0A2240] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
-              Connectivity
-            </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240]">
-              Find your crew. Plan the day.
-            </h2>
-          </div>
-          <div className="space-y-8">
-            {CONNECTIVITY.map((item) => (
-              <div key={item.title} className="flex gap-6 items-start">
-                <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
-                <div>
-                  <h3 className="text-[#0A2240] font-bold text-lg mb-1">{item.title}</h3>
-                  <p className="text-gray-500 leading-relaxed">{item.body}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Questionnaire */}
-      <section className="bg-gray-50 py-20">
+      <section className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <span className="inline-block bg-[#C8102E] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
@@ -165,7 +141,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* Agent */}
-      <section className="bg-white py-20">
+      <section className="bg-gray-50 py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <span className="inline-block bg-[#C8102E] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
@@ -190,7 +166,7 @@ export default function FeaturesPage() {
       </section>
 
       {/* Knowledge Base */}
-      <section className="bg-gray-50 py-20">
+      <section className="bg-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <span className="inline-block bg-[#C8102E] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
@@ -205,6 +181,36 @@ export default function FeaturesPage() {
           </div>
           <div className="space-y-8">
             {KNOWLEDGE_BASE.map((item) => (
+              <div key={item.title} className="flex gap-6 items-start">
+                <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-[#0A2240] font-bold text-lg mb-1">{item.title}</h3>
+                  <p className="text-gray-500 leading-relaxed">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Connectivity */}
+      <section className="bg-gray-50 py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <span className="inline-block bg-[#0A2240] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-4">
+              Connectivity — Community Layer
+            </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0A2240]">
+              Find your crew. Plan the day.
+            </h2>
+            <p className="text-gray-500 mt-4 max-w-2xl leading-relaxed">
+              Once your boat&apos;s dialed in, connect with other owners nearby. Meetup discovery,
+              chat, and business promos bring the community together when you&apos;re ready to get
+              on the water.
+            </p>
+          </div>
+          <div className="space-y-8">
+            {CONNECTIVITY.map((item) => (
               <div key={item.title} className="flex gap-6 items-start">
                 <div className="w-2 h-2 rounded-full bg-[#C8102E] mt-2.5 flex-shrink-0" />
                 <div>
