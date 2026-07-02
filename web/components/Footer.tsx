@@ -12,7 +12,8 @@ export default function Footer() {
               <span className="text-[#C8102E]">Connect</span>
             </div>
             <p className="text-sm leading-relaxed">
-              The AI mechanic and knowledge platform for serious boat owners.
+              Know your boat. Own the water. Your AI boat mechanic — diagnose, repair, and maintain
+              your boat, then meet other boaters near you.
             </p>
           </div>
 

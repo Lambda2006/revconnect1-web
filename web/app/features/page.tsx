@@ -102,12 +102,12 @@ export default function FeaturesPage() {
       <section className="bg-[#0A2240] text-white py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-3">Features</p>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Built for the serious boat owner.</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Know your boat. Own the water.</h1>
           <p className="text-gray-300 text-xl max-w-2xl leading-relaxed">
-            VictoryRevConnect Boaters puts a subscription suite of intelligent tools at the center —
-            a Diagnostic Questionnaire, an AI Mechanic Agent, and an offline Knowledge Base built
-            around your boat — with a connectivity platform for meetup discovery as the community
-            layer on top.
+            Start with a guided questionnaire that narrows down what&apos;s wrong. Hand it to an AI
+            mechanic that knows your exact boat and get step-by-step fixes. Keep an offline knowledge
+            base for maintenance, safety, and specs on hand. Then, when the boat&apos;s sorted, find
+            and meet other boaters near you.
           </p>
         </div>
       </section>

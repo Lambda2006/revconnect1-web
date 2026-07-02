@@ -70,12 +70,13 @@ export default function Home() {
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
               Know your boat.
               <br />
-              Fix it with <span className="text-[#C8102E]">confidence.</span>
+              Own the <span className="text-[#C8102E]">water.</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl">
-              VictoryRevConnect Boaters puts a diagnostic questionnaire, an intelligent AI mechanic
-              agent, and an offline knowledge base personalized to your boat right in your pocket —
-              plus a community of boaters to connect with when you&apos;re ready to hit the water.
+              Something not right with your boat? Answer a few guided questions to pinpoint the
+              problem, then get step-by-step repair help from an AI mechanic that knows your exact
+              make and model. Keep an offline knowledge base for maintenance, safety, and specs in
+              your pocket — and meet other boaters when you&apos;re ready to hit the water.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
