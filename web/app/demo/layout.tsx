@@ -14,9 +14,9 @@ export default function DemoLayout({ children }: { children: React.ReactNode }) 
   return (
     <AccessGate>
       <div className="min-h-screen bg-gray-50 flex flex-col">
-        <CoBrandHeader />
-        <main className="flex-1 w-full mx-auto max-w-6xl px-4 py-6 pb-28">{children}</main>
         <GuidedTour />
+        <CoBrandHeader />
+        <main className="flex-1 w-full mx-auto max-w-6xl px-4 py-6 pb-24">{children}</main>
       </div>
     </AccessGate>
   );

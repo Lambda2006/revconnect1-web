@@ -9,15 +9,19 @@ import { MARINEMAX_BLUE } from "@/demo/lib/data";
  */
 export function MarineMaxLogo({ height = 22 }: { height?: number }) {
   return (
-    <span
-      aria-label="MarineMax"
-      style={{ height, lineHeight: `${height}px` }}
-      className="inline-flex items-center select-none"
-    >
-      <svg height={height} viewBox="0 0 132 24" role="img" aria-hidden="true">
+    <span aria-label="MarineMax" className="inline-flex items-center select-none leading-none">
+      <svg
+        height={height}
+        viewBox="0 0 132 24"
+        role="img"
+        aria-hidden="true"
+        className="block"
+        style={{ verticalAlign: "middle" }}
+      >
         <text
           x="0"
-          y="18"
+          y="12"
+          dominantBaseline="central"
           fontFamily="Inter, system-ui, sans-serif"
           fontSize="20"
           fontWeight="800"
@@ -26,7 +30,7 @@ export function MarineMaxLogo({ height = 22 }: { height?: number }) {
           <tspan fill={MARINEMAX_BLUE}>Marine</tspan>
           <tspan fill="#00A0DF">Max</tspan>
         </text>
-        <circle cx="126" cy="6" r="3" fill="#00A0DF" />
+        <circle cx="126" cy="7" r="3" fill="#00A0DF" />
       </svg>
     </span>
   );

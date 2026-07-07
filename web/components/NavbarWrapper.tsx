@@ -12,7 +12,10 @@ export default function NavbarWrapper({ children }: { children: React.ReactNode 
   const isAppRoute = APP_PREFIXES.some((prefix) => pathname.startsWith(prefix));
   const isAuthRoute = AUTH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
   const isHubRoute = pathname === "/hub" || pathname.startsWith("/hub/");
-  const hideNav = isAppRoute || isAuthRoute;
+  // The MarineMax demo (/demo) is fully self-contained with its own co-branded
+  // navbar — never show the marketing nav/footer over it.
+  const isDemoRoute = pathname === "/demo" || pathname.startsWith("/demo/");
+  const hideNav = isAppRoute || isAuthRoute || isDemoRoute;
 
   if (hideNav) {
     return <>{children}</>;
