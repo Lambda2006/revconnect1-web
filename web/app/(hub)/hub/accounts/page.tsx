@@ -19,6 +19,13 @@ type User = {
   business_access: boolean;
 };
 
+type Business = {
+  id: string;
+  business_name: string;
+  is_verified: boolean;
+  owner_user_id: string | null;
+};
+
 /** Maps raw status+plan to the hub-facing label and display colour. */
 function hubLabel(sub: Subscription | null): { label: string; colour: string } {
   if (!sub) return { label: "None", colour: "bg-gray-100 text-gray-500" };
@@ -44,6 +51,8 @@ export default function AccountsPage() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [acting, setActing] = useState<string | null>(null);
   const [editSub, setEditSub] = useState<string | null>(null); // hub plan key
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [assignPick, setAssignPick] = useState<string>(""); // selected business id in the assign dropdown
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -53,6 +62,7 @@ export default function AccountsPage() {
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setUsers(data.users);
+      setBusinesses(data.businesses ?? []);
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -130,6 +140,7 @@ export default function AccountsPage() {
                       onClick={() => {
                         setExpanded(expanded === u.id ? null : u.id);
                         setEditSub(null);
+                        setAssignPick("");
                       }}
                     >
                       <td className="px-4 py-3 text-[#0A2240] font-medium">{u.email}</td>
@@ -293,6 +304,63 @@ export default function AccountsPage() {
                               <p className="text-xs text-gray-400 mt-1.5">
                                 Controls access to the /business section, including the marina slip portal.
                               </p>
+
+                              {/* Marina assignment */}
+                              {(() => {
+                                const linked = businesses.find((b) => b.owner_user_id === u.id) ?? null;
+                                const assignable = businesses.filter(
+                                  (b) => b.owner_user_id === null || b.owner_user_id === u.id
+                                );
+                                return (
+                                  <div className="mt-3">
+                                    <p className="text-xs font-medium text-gray-500 mb-1">Linked marina</p>
+                                    {linked ? (
+                                      <div className="flex items-center gap-3">
+                                        <span className="inline-flex items-center gap-1 text-xs font-medium text-[#0A2240] bg-[#0A2240]/5 border border-[#0A2240]/10 px-2 py-1 rounded">
+                                          {linked.business_name}
+                                          {linked.is_verified && <span className="text-blue-500">✓</span>}
+                                        </span>
+                                        <button
+                                          onClick={() => { if (confirm("Unlink " + linked.business_name + " from " + u.email + "?")) doAction(u.id, "unassign_business", { businessId: linked.id }); }}
+                                          disabled={!!acting}
+                                          className="text-sm border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-100 disabled:opacity-50"
+                                        >
+                                          {busy(u.id, "unassign_business") ? "Unlinking…" : "Unlink"}
+                                        </button>
+                                      </div>
+                                    ) : assignable.length === 0 ? (
+                                      <p className="text-xs text-gray-400">
+                                        No unassigned businesses available. Create one in Businesses first.
+                                      </p>
+                                    ) : (
+                                      <div className="flex items-center gap-2">
+                                        <select
+                                          value={assignPick}
+                                          onChange={(e) => setAssignPick(e.target.value)}
+                                          className="text-sm border border-gray-300 rounded px-2 py-1.5 text-[#0A2240] focus:outline-none focus:ring-2 focus:ring-[#0A2240]/30"
+                                        >
+                                          <option value="">Select a business…</option>
+                                          {assignable.map((b) => (
+                                            <option key={b.id} value={b.id}>
+                                              {b.business_name}{b.is_verified ? " ✓" : ""}
+                                            </option>
+                                          ))}
+                                        </select>
+                                        <button
+                                          onClick={() => doAction(u.id, "assign_business", { businessId: assignPick })}
+                                          disabled={!!acting || !assignPick}
+                                          className="text-sm border border-teal-600/40 text-teal-700 px-3 py-1.5 rounded hover:bg-teal-50 disabled:opacity-50"
+                                        >
+                                          {busy(u.id, "assign_business") ? "Linking…" : "Link & grant"}
+                                        </button>
+                                      </div>
+                                    )}
+                                    <p className="text-xs text-gray-400 mt-1.5">
+                                      Linking a marina also grants business access automatically.
+                                    </p>
+                                  </div>
+                                );
+                              })()}
                             </div>
 
                             {/* Account actions */}

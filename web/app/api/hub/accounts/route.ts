@@ -39,5 +39,11 @@ export async function GET(request: NextRequest) {
   // Sort by created_at descending
   result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-  return NextResponse.json({ users: result });
+  // Businesses (for the per-user marina assignment control)
+  const { data: businesses } = await supabaseAdmin
+    .from("businesses")
+    .select("id, business_name, is_verified, owner_user_id")
+    .order("business_name", { ascending: true });
+
+  return NextResponse.json({ users: result, businesses: businesses ?? [] });
 }

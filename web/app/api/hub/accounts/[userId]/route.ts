@@ -87,6 +87,40 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json({ ok: true });
     }
 
+    case "assign_business": {
+      const { businessId } = body;
+      if (!businessId) return NextResponse.json({ error: "businessId required" }, { status: 400 });
+
+      // Link the business to this user and grant them access in one step.
+      const { error: bizErr } = await supabaseAdmin
+        .from("businesses")
+        .update({ owner_user_id: userId })
+        .eq("id", businessId);
+      if (bizErr) return NextResponse.json({ error: bizErr.message }, { status: 500 });
+
+      const { error: accErr } = await supabaseAdmin
+        .from("users")
+        .update({ business_access: true })
+        .eq("id", userId);
+      if (accErr) return NextResponse.json({ error: accErr.message }, { status: 500 });
+
+      return NextResponse.json({ ok: true });
+    }
+
+    case "unassign_business": {
+      const { businessId } = body;
+      if (!businessId) return NextResponse.json({ error: "businessId required" }, { status: 400 });
+
+      // Only unlink if this user currently owns it (avoid clobbering another owner).
+      const { error } = await supabaseAdmin
+        .from("businesses")
+        .update({ owner_user_id: null })
+        .eq("id", businessId)
+        .eq("owner_user_id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ ok: true });
+    }
+
     case "suspend": {
       const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
         ban_duration: "87600h",
