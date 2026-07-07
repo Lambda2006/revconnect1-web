@@ -58,14 +58,47 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Marina slip portal — requires a session. Verified-business check is
-  // enforced by RLS and the page's own gate; here we only require auth.
-  const isSlipPortal =
-    pathname === "/business/slips" || pathname.startsWith("/business/slips/");
-  if (isSlipPortal && !user) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/login";
-    return NextResponse.redirect(loginUrl);
+  // /business gate — the entire /business section (marketing + marina portal)
+  // requires an admin-granted "business access" flag, admin status, or
+  // ownership of a verified business. Controlled from the hub accounts page.
+  const isBusinessRoute =
+    pathname === "/business" || pathname.startsWith("/business/");
+
+  if (isBusinessRoute) {
+    // Not signed in -> send to login
+    if (!user) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Signed in -> check the grant with the service role (bypasses RLS).
+    // Fail-closed only when we can actually evaluate access; if the service
+    // key is missing we let the page's own gate handle it.
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const accessClient = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY,
+        { auth: { persistSession: false } }
+      );
+
+      const [{ data: profile }, { data: adminRow }, { data: ownedBiz }] = await Promise.all([
+        accessClient.from("users").select("business_access").eq("id", user.id).maybeSingle(),
+        accessClient.from("admin_users").select("user_id").eq("user_id", user.id).maybeSingle(),
+        accessClient.from("businesses").select("id").eq("owner_user_id", user.id).eq("is_verified", true).limit(1),
+      ]);
+
+      const allowed =
+        !!adminRow ||
+        profile?.business_access === true ||
+        ((ownedBiz?.length ?? 0) > 0);
+
+      if (!allowed) {
+        const discoverUrl = request.nextUrl.clone();
+        discoverUrl.pathname = "/discover";
+        return NextResponse.redirect(discoverUrl);
+      }
+    }
   }
 
   // Redirect authenticated users away from auth pages to /discover

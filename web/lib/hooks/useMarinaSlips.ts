@@ -45,17 +45,23 @@ export function useMarinaSlips(userId: string | null): State {
     setLoading(true);
     const supabase = createClient();
 
-    // Find a verified business owned by this user
-    const { data: bizRows } = await supabase
-      .from("businesses")
-      .select("id, business_name, is_verified, phone")
-      .eq("owner_user_id", userId)
-      .eq("is_verified", true)
-      .limit(1);
+    // Access is granted either by the admin-controlled `business_access` flag
+    // or by owning a verified business. Fetch both, plus any business the user
+    // owns (verified first) so they have something to manage.
+    const [{ data: profileRow }, { data: bizRows }] = await Promise.all([
+      supabase.from("users").select("business_access").eq("id", userId).maybeSingle(),
+      supabase
+        .from("businesses")
+        .select("id, business_name, is_verified, phone")
+        .eq("owner_user_id", userId)
+        .order("is_verified", { ascending: false })
+        .limit(1),
+    ]);
 
+    const hasFlag = (profileRow as { business_access?: boolean } | null)?.business_access === true;
     const biz = (bizRows as OwnedBusiness[] | null)?.[0] ?? null;
     setBusiness(biz);
-    setAuthorized(!!biz);
+    setAuthorized(hasFlag || (!!biz && biz.is_verified));
 
     if (biz) {
       const { data } = await supabase

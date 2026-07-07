@@ -17,6 +17,14 @@ export async function GET(request: NextRequest) {
   const { data: admins } = await supabaseAdmin.from("admin_users").select("user_id");
   const adminSet = new Set((admins ?? []).map((a: any) => a.user_id));
 
+  // Business access grant flag (users table)
+  const { data: profiles } = await supabaseAdmin
+    .from("users")
+    .select("id, business_access");
+  const businessAccessSet = new Set(
+    (profiles ?? []).filter((p: any) => p.business_access).map((p: any) => p.id)
+  );
+
   const result = users.map((u) => ({
     id: u.id,
     email: u.email ?? "",
@@ -25,6 +33,7 @@ export async function GET(request: NextRequest) {
     banned: u.banned_until ? new Date(u.banned_until as string) > new Date() : false,
     subscription: subMap.get(u.id) ?? null,
     is_admin: adminSet.has(u.id),
+    business_access: businessAccessSet.has(u.id),
   }));
 
   // Sort by created_at descending

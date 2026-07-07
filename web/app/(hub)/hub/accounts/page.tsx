@@ -16,6 +16,7 @@ type User = {
   banned: boolean;
   subscription: Subscription | null;
   is_admin: boolean;
+  business_access: boolean;
 };
 
 /** Maps raw status+plan to the hub-facing label and display colour. */
@@ -147,6 +148,11 @@ export default function AccountsPage() {
                               Admin
                             </span>
                           )}
+                          {u.business_access && (
+                            <span className="text-xs bg-teal-100 text-teal-700 px-2 py-0.5 rounded font-medium">
+                              Business
+                            </span>
+                          )}
                           {u.banned && (
                             <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded font-medium">
                               Suspended
@@ -249,6 +255,44 @@ export default function AccountsPage() {
                                   </button>
                                 )}
                               </div>
+                            </div>
+
+                            {/* Business access */}
+                            <div>
+                              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                                Business Access
+                              </p>
+                              <div className="flex items-center gap-3">
+                                <span
+                                  className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                                    u.business_access
+                                      ? "bg-teal-100 text-teal-700"
+                                      : "bg-gray-100 text-gray-500"
+                                  }`}
+                                >
+                                  {u.business_access ? "Granted" : "No access"}
+                                </span>
+                                {u.business_access ? (
+                                  <button
+                                    onClick={() => { if (confirm("Revoke /business access for " + u.email + "?")) doAction(u.id, "revoke_business"); }}
+                                    disabled={!!acting}
+                                    className="text-sm border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-100 disabled:opacity-50"
+                                  >
+                                    {busy(u.id, "revoke_business") ? "Revoking…" : "Revoke Access"}
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => doAction(u.id, "grant_business")}
+                                    disabled={!!acting}
+                                    className="text-sm border border-teal-600/40 text-teal-700 px-3 py-1.5 rounded hover:bg-teal-50 disabled:opacity-50"
+                                  >
+                                    {busy(u.id, "grant_business") ? "Granting…" : "Grant Access"}
+                                  </button>
+                                )}
+                              </div>
+                              <p className="text-xs text-gray-400 mt-1.5">
+                                Controls access to the /business section, including the marina slip portal.
+                              </p>
                             </div>
 
                             {/* Account actions */}

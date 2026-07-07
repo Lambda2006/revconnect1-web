@@ -76,6 +76,17 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json({ ok: true });
     }
 
+    case "grant_business":
+    case "revoke_business": {
+      const grant = action === "grant_business";
+      const { error } = await supabaseAdmin
+        .from("users")
+        .update({ business_access: grant })
+        .eq("id", userId);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      return NextResponse.json({ ok: true });
+    }
+
     case "suspend": {
       const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
         ban_duration: "87600h",

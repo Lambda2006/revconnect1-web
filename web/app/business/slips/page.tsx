@@ -64,9 +64,20 @@ export default function MarinaSlipsPortal() {
   if (!authorized) {
     return (
       <Gate
-        title="Verified business account required"
-        body="The marina slip portal is available to verified business accounts. If you manage a marina, list your business and request verification first."
+        title="Business access required"
+        body="The marina slip portal is available to approved business accounts. If you manage a marina, list your business and request access from our team."
         cta={<Link href="/business" className="text-[#0F766E] font-semibold underline">Learn about business listings</Link>}
+      />
+    );
+  }
+
+  // Access granted, but no business is linked to this account yet.
+  if (!business) {
+    return (
+      <Gate
+        title="No business linked yet"
+        body="Your account has business access, but it isn't linked to a business listing yet. Our team needs to connect your account to your marina before you can add slips."
+        cta={<Link href="/discover" className="text-[#0F766E] font-semibold underline">Back to app</Link>}
       />
     );
   }
