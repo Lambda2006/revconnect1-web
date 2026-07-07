@@ -3,6 +3,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import type { Meetup } from "@/lib/hooks/useMeetups";
+import type { SlipListing } from "@/lib/hooks/useSlips";
 
 const MapViewInner = dynamic(() => import("./MapViewInner"), {
   ssr: false,
@@ -16,6 +17,8 @@ const MapViewInner = dynamic(() => import("./MapViewInner"), {
 interface MapViewProps {
   meetups: Meetup[];
   onMeetupPress?: (meetupId: string) => void;
+  slips?: SlipListing[];
+  onSlipPress?: (slipId: string) => void;
   centerLat?: number;
   centerLng?: number;
   zoom?: number;
@@ -24,6 +27,8 @@ interface MapViewProps {
 export function MapView({
   meetups,
   onMeetupPress,
+  slips = [],
+  onSlipPress,
   centerLat = 25.0,
   centerLng = -80.0,
   zoom = 8,
@@ -42,6 +47,8 @@ export function MapView({
     <MapViewInner
       meetups={meetups}
       onMeetupPress={onMeetupPress}
+      slips={slips}
+      onSlipPress={onSlipPress}
       centerLat={centerLat}
       centerLng={centerLng}
       zoom={zoom}

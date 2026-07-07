@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VictoryRevConnect Boaters — Animated Feature Demos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:linear-gradient(135deg,#0a1628 0%,#0d2240 50%,#0a1628 100%);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100vh;
+  padding:50px 30px 60px;
+}
+h1{
+  text-align:center;color:#fff;font-size:20px;font-weight:700;
+  margin-bottom:6px;letter-spacing:-0.3px;
+}
+.subtitle{text-align:center;color:rgba(255,255,255,0.45);font-size:12px;margin-bottom:48px}
+
+.stage{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;align-items:flex-start}
+
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.phone-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;
+  color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.08);
+  padding:4px 14px;border-radius:20px;
+}
+
+/* ── Phone Shell ── */
+.phone{
+  width:260px;height:520px;
+  background:#fff;border-radius:40px;
+  box-shadow:0 40px 100px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.06),inset 0 0 0 1px rgba(0,0,0,0.1);
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.statusbar{
+  height:38px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 20px;flex-shrink:0;
+  font-size:13px;font-weight:700;
+}
+.sb-icons{display:flex;gap:4px;align-items:center}
+.navbar{
+  height:46px;display:flex;align-items:center;
+  padding:0 14px;gap:8px;flex-shrink:0;
+}
+.nav-title{font-size:15px;font-weight:700;flex:1}
+
+/* ══════════════════════════════
+   SCREEN 1 — MAP
+══════════════════════════════ */
+#map-phone .statusbar{background:#0A2240;color:#fff}
+#map-phone .navbar{background:#0A2240;color:#fff}
+.map-body{flex:1;position:relative;overflow:hidden;background:#c8dde8}
+.map-bg{
+  position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,0.1) 0,transparent 1px,transparent 55px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,0.1) 0,transparent 1px,transparent 55px),
+    linear-gradient(155deg,#c4dae7 0%,#b2ccd9 40%,#bfd8e6 100%);
+}
+.water{position:absolute;background:#7ab3c8;opacity:.75}
+.road-h{position:absolute;height:5px;background:rgba(255,255,255,.55);border-radius:3px;left:0;right:0}
+.road-v{position:absolute;width:5px;background:rgba(255,255,255,.55);border-radius:3px;top:0;bottom:0}
+/* Pins */
+.mpin{
+  position:absolute;width:32px;height:32px;
+  background:#C8102E;border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg) scale(0);
+  box-shadow:0 3px 10px rgba(200,16,46,.45);
+  border:2px solid #fff;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.mpin::after{content:'⚓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:rotate(45deg);font-size:13px}
+.mpin.sm{width:22px;height:22px;background:#0A2240}
+.mpin.sm::after{font-size:10px}
+.mpin.show{transform:rotate(-45deg) scale(1)}
+/* Location dot */
+.loc-dot{
+  position:absolute;width:12px;height:12px;
+  background:#fff;border-radius:50%;
+  border:3px solid #0A2240;
+  box-shadow:0 0 0 6px rgba(10,34,64,.15);
+  opacity:0;transition:opacity .5s;
+}
+.loc-dot.show{opacity:1}
+/* Bottom sheet */
+.map-sheet{
+  position:absolute;bottom:0;left:0;right:0;
+  background:#fff;border-radius:18px 18px 0 0;
+  padding:12px 14px 16px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.12);
+  transform:translateY(100%);
+  transition:transform .5s cubic-bezier(.32,.72,0,1);
+}
+.map-sheet.show{transform:translateY(0)}
+.sheet-handle{width:32px;height:4px;background:#e5e7eb;border-radius:2px;margin:0 auto 12px}
+.s-badge{display:inline-block;background:#C8102E;color:#fff;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:10px;margin-bottom:5px}
+.s-title{font-size:13px;font-weight:700;color:#0A2240;margin-bottom:3px}
+.s-meta{font-size:10px;color:#6b7280;margin-bottom:10px;display:flex;gap:8px}
+.s-avatars{display:flex;margin-bottom:10px;align-items:center}
+.av{width:24px;height:24px;border-radius:50%;border:2px solid #fff;margin-right:-7px;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+.s-rsvp{
+  background:#C8102E;color:#fff;border:none;border-radius:10px;
+  width:100%;padding:9px;font-size:12px;font-weight:700;cursor:pointer;
+  transform:scale(1);transition:transform .15s;
+}
+.s-rsvp.pulse{animation:rsvp-pulse 1s ease-in-out 2}
+@keyframes rsvp-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04);box-shadow:0 4px 20px rgba(200,16,46,.4)}}
+
+/* ══════════════════════════════
+   SCREEN 2 — QUESTIONNAIRE
+══════════════════════════════ */
+#q-phone .statusbar{background:#fff;color:#0A2240;border-bottom:1px solid #f3f4f6}
+#q-phone .navbar{background:#fff;color:#0A2240;border-bottom:1px solid #f3f4f6}
+.q-body{flex:1;overflow:hidden;padding:16px 14px;background:#fff;display:flex;flex-direction:column;gap:12px}
+.q-prog-track{height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;flex-shrink:0}
+.q-prog-fill{height:100%;background:linear-gradient(90deg,#C8102E,#e63952);border-radius:2px;width:0%;transition:width .8s ease}
+.q-step-lbl{font-size:10px;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:.05em;opacity:0;transition:opacity .4s}
+.q-question{font-size:15px;font-weight:700;color:#0A2240;line-height:1.35;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+.q-opts{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+.q-opt{
+  border:1.5px solid #e5e7eb;border-radius:10px;
+  padding:10px 12px;font-size:12px;font-weight:500;color:#374151;
+  display:flex;align-items:center;gap:8px;
+  opacity:0;transform:translateX(-8px);
+  transition:opacity .35s,transform .35s,border-color .3s,background .3s,color .3s;
+}
+.q-opt.visible{opacity:1;transform:translateX(0)}
+.q-opt.selected{border-color:#C8102E;background:#fff5f6;color:#C8102E;font-weight:600}
+.opt-dot{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.opt-dot::after{content:'';width:6px;height:6px;background:#C8102E;border-radius:50%;display:block;opacity:0;transform:scale(0);transition:opacity .2s,transform .2s}
+.q-opt.selected .opt-dot::after{opacity:1;transform:scale(1)}
+.q-ctx{
+  background:#f0f4f8;border-radius:10px;padding:10px 11px;
+  font-size:11px;color:#4b5563;line-height:1.5;
+  display:flex;gap:7px;margin-top:auto;
+  opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;
+}
+.q-next{
+  background:#0A2240;color:#fff;border:none;border-radius:12px;
+  padding:11px;font-size:12px;font-weight:700;width:100%;cursor:pointer;
+  opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;
+}
+.q-send{
+  background:#C8102E;color:#fff;border:none;border-radius:12px;
+  padding:11px;font-size:11px;font-weight:700;width:100%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;
+}
+.q-next.show,.q-send.show{opacity:1;transform:translateY(0)}
+.q-send.glow{animation:send-glow 1.2s ease-in-out 2}
+@keyframes send-glow{0%,100%{box-shadow:0 0 0 0 rgba(200,16,46,0)}50%{box-shadow:0 0 0 6px rgba(200,16,46,.25)}}
+
+/* ══════════════════════════════
+   SCREEN 3 — AGENT CHAT
+══════════════════════════════ */
+#agent-phone .statusbar{background:#0A2240;color:#fff}
+#agent-phone .navbar{background:#0A2240;color:#fff}
+.agent-body{flex:1;background:#f8f9fb;overflow:hidden;padding:10px;display:flex;flex-direction:column;gap:8px}
+.ctx-banner{
+  background:#e8f0e8;border:1px solid #b7d7b7;border-radius:9px;
+  padding:7px 9px;font-size:10px;color:#2d6a2d;font-weight:500;
+  display:flex;gap:5px;align-items:center;
+  opacity:0;transform:translateY(-6px);transition:opacity .4s,transform .4s;
+}
+.ctx-banner.show{opacity:1;transform:translateY(0)}
+.msg{display:flex}
+.msg.user{justify-content:flex-end}
+.bubble{
+  max-width:84%;padding:8px 11px;border-radius:14px;
+  font-size:11px;line-height:1.45;
+  opacity:0;transition:opacity .4s,transform .4s;
+}
+.bubble.user{
+  background:#0A2240;color:#fff;border-bottom-right-radius:3px;
+  transform:translateX(12px);
+}
+.bubble.agent-b{
+  background:#fff;color:#1f2937;border-bottom-left-radius:3px;
+  box-shadow:0 1px 4px rgba(0,0,0,.08);
+  transform:translateX(-12px);
+  max-width:95%;
+}
+.bubble.show{opacity:1;transform:translateX(0)}
+.ag-header{display:flex;align-items:center;gap:5px;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid #f0f0f0}
+.ag-dot{width:20px;height:20px;background:#C8102E;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.ag-name{font-size:10px;font-weight:700;color:#C8102E}
+.ag-intro{font-size:11px;color:#374151;margin-bottom:8px;font-weight:500}
+.steps{list-style:none;display:flex;flex-direction:column;gap:6px}
+.step{display:flex;gap:7px;align-items:flex-start;opacity:0;transform:translateY(5px);transition:opacity .35s,transform .35s}
+.step.show{opacity:1;transform:translateY(0)}
+.snum{width:16px;height:16px;background:#0A2240;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.stxt{font-size:10px;color:#374151;line-height:1.4}
+/* Typing indicator */
+.typing{display:flex;gap:4px;padding:10px 12px;align-items:center;opacity:0;transition:opacity .3s}
+.typing.show{opacity:1}
+.dot-t{width:6px;height:6px;background:#9ca3af;border-radius:50%;animation:bounce .9s infinite ease-in-out}
+.dot-t:nth-child(2){animation-delay:.15s}
+.dot-t:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+.chat-bar{height:48px;background:#fff;border-top:1px solid #e5e7eb;display:flex;align-items:center;padding:0 10px;gap:6px;flex-shrink:0}
+.chat-field{flex:1;background:#f3f4f6;border-radius:16px;height:30px;display:flex;align-items:center;padding:0 12px;font-size:11px;color:#9ca3af}
+.cbtn{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;background:#f3f4f6;flex-shrink:0}
+.csend{background:#C8102E;color:#fff;font-weight:700;font-size:12px}
+
+/* ══════════════════════════════
+   SCREEN 4 — KNOWLEDGE BASE
+══════════════════════════════ */
+#kb-phone .statusbar{background:#fff;color:#0A2240}
+#kb-phone .navbar{background:#fff;color:#0A2240;border-bottom:1px solid #f3f4f6}
+.kb-body{flex:1;overflow:hidden;background:#f8f9fb;padding:12px 10px;display:flex;flex-direction:column;gap:10px}
+.kb-boat{
+  background:#0A2240;border-radius:14px;padding:12px 14px;
+  color:#fff;display:flex;justify-content:space-between;align-items:center;
+  opacity:0;transform:translateY(-10px);transition:opacity .45s,transform .45s;
+}
+.kb-boat.show{opacity:1;transform:translateY(0)}
+.kb-bname{font-size:13px;font-weight:700}
+.kb-bsub{font-size:10px;color:rgba(255,255,255,.55);margin-top:2px}
+.kb-offline{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
+  border-radius:16px;padding:4px 9px;font-size:9px;font-weight:700;color:#fff;
+  display:flex;align-items:center;gap:3px;
+}
+.kb-offline.pulse{animation:offline-pulse 1.5s ease-in-out 3}
+@keyframes offline-pulse{0%,100%{background:rgba(255,255,255,.12)}50%{background:rgba(255,255,255,.28)}}
+.kb-sec{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;opacity:0;transition:opacity .4s}
+.kb-sec.show{opacity:1}
+.kb-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kb-card{
+  background:#fff;border-radius:12px;padding:12px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+  display:flex;flex-direction:column;gap:4px;
+  opacity:0;transform:scale(.92);
+  transition:opacity .35s,transform .35s;
+}
+.kb-card.show{opacity:1;transform:scale(1)}
+.kb-card.highlight{animation:card-hl .6s ease forwards}
+@keyframes card-hl{0%{background:#fff}50%{background:#fff5f6;border:1.5px solid #C8102E}100%{background:#fff}}
+.kb-icon{font-size:20px}
+.kb-ctitle{font-size:11px;font-weight:700;color:#0A2240}
+.kb-ccount{font-size:10px;color:#9ca3af}
+.kb-recent-wrap{
+  background:#fff;border-radius:12px;padding:10px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+  opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s;
+}
+.kb-recent-wrap.show{opacity:1;transform:translateY(0)}
+.kb-ri{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 0;border-bottom:1px solid #f3f4f6;
+  font-size:10px;color:#374151;
+  opacity:0;transition:opacity .35s;
+}
+.kb-ri:last-child{border-bottom:none}
+.kb-ri.show{opacity:1}
+.ri-dot{width:5px;height:5px;background:#C8102E;border-radius:50%;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<h1>VictoryRevConnect Boaters</h1>
+<p class="subtitle">Animated Feature Demos · Marketing Video Reference · Colors: #0A2240 · #C8102E</p>
+
+<div class="stage">
+
+  <!-- ── PHONE 1: MAP ── -->
+  <div class="phone-wrap">
+    <div class="phone" id="map-phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <div class="sb-icons">
+          <svg width="14" height="10" viewBox="0 0 16 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="12" height="10" viewBox="0 0 13 22" fill="white"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="white" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="white"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <span style="font-size:16px">🗺️</span>
+        <span class="nav-title">Discover</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <div class="map-body">
+        <div class="map-bg"></div>
+        <div class="water" style="width:160px;height:100px;top:30px;left:-15px;border-radius:50% 40% 45% 35%"></div>
+        <div class="water" style="width:90px;height:70px;top:65px;left:125px;border-radius:40% 60% 40% 60%;opacity:.55"></div>
+        <div class="road-h" style="top:88px"></div>
+        <div class="road-h" style="top:148px"></div>
+        <div class="road-h" style="top:208px"></div>
+        <div class="road-v" style="left:68px"></div>
+        <div class="road-v" style="left:170px"></div>
+        <div class="mpin" id="pin1" style="top:98px;left:120px"></div>
+        <div class="mpin sm" id="pin2" style="top:163px;left:50px"></div>
+        <div class="mpin sm" id="pin3" style="top:62px;left:178px"></div>
+        <div class="loc-dot" id="locdot" style="top:152px;left:143px"></div>
+        <div class="map-sheet" id="map-sheet">
+          <div class="sheet-handle"></div>
+          <span class="s-badge">Wake Surfing · 3 spots left</span>
+          <div class="s-title">Lake Lanier Morning Session</div>
+          <div class="s-meta"><span>📍 0.4 mi away</span><span>⏱ Today, 8:00 AM</span></div>
+          <div class="s-avatars">
+            <div class="av" style="background:#0A2240">JR</div>
+            <div class="av" style="background:#C8102E">KM</div>
+            <div class="av" style="background:#374151">AL</div>
+            <div class="av" style="background:#6b7280;font-size:9px">+4</div>
+            <span style="font-size:10px;color:#6b7280;margin-left:12px;align-self:center">7 attending</span>
+          </div>
+          <button class="s-rsvp" id="rsvp-btn">RSVP &amp; Join Chat →</button>
+        </div>
+      </div>
+    </div>
+    <span class="phone-label">Meetup Discovery</span>
+  </div>
+
+  <!-- ── PHONE 2: QUESTIONNAIRE ── -->
+  <div class="phone-wrap">
+    <div class="phone" id="q-phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <div class="sb-icons">
+          <svg width="14" height="10" viewBox="0 0 16 12" fill="#0A2240"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="12" height="10" viewBox="0 0 13 22" fill="#0A2240"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="#0A2240" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="#0A2240"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0A2240" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        <span class="nav-title" style="color:#0A2240">Diagnostics</span>
+      </div>
+      <div class="q-body">
+        <div class="q-prog-track"><div class="q-prog-fill" id="q-prog"></div></div>
+        <div class="q-step-lbl" id="q-step">Step 2 of 5</div>
+        <div class="q-question" id="q-question">When does the issue occur?</div>
+        <div class="q-opts">
+          <div class="q-opt" id="qo1"><div class="opt-dot"></div>Only at startup / cold start</div>
+          <div class="q-opt" id="qo2"><div class="opt-dot"></div>At idle, not under load</div>
+          <div class="q-opt" id="qo3"><div class="opt-dot"></div>Under load / high RPM</div>
+          <div class="q-opt" id="qo4"><div class="opt-dot"></div>Intermittently / unpredictably</div>
+        </div>
+        <div class="q-ctx" id="q-ctx">
+          <span>💡</span>
+          <span>Your answers so far: <strong>Engine vibration</strong> on a <strong>MasterCraft X24</strong>.</span>
+        </div>
+        <button class="q-next" id="q-next">Continue →</button>
+        <button class="q-send" id="q-send">🔧 Send to Agent with Full Context</button>
+      </div>
+    </div>
+    <span class="phone-label">Diagnostic Questionnaire</span>
+  </div>
+
+  <!-- ── PHONE 3: AGENT ── -->
+  <div class="phone-wrap">
+    <div class="phone" id="agent-phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <div class="sb-icons">
+          <svg width="14" height="10" viewBox="0 0 16 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="12" height="10" viewBox="0 0 13 22" fill="white"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="white" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="white"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700">AI Mechanic</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.55)">MasterCraft X24 · Context loaded</div>
+        </div>
+        <span style="font-size:15px">🎙️</span>
+      </div>
+      <div class="agent-body">
+        <div class="ctx-banner" id="ctx-banner">✅ Questionnaire context loaded — engine vibration at idle.</div>
+        <div class="msg user"><div class="bubble user" id="umsg">What's causing the vibration?</div></div>
+        <div class="msg"><div class="typing" id="typing"><div class="dot-t"></div><div class="dot-t"></div><div class="dot-t"></div></div></div>
+        <div class="msg" style="display:none" id="agent-msg-row">
+          <div class="bubble agent-b" id="amsg">
+            <div class="ag-header"><div class="ag-dot">🔧</div><span class="ag-name">Mechanic Agent</span></div>
+            <div class="ag-intro">Likely a <strong>fouled spark plug</strong> or <strong>intake air leak</strong>. Here's how to diagnose:</div>
+            <ul class="steps">
+              <li class="step" id="st1"><div class="snum">1</div><div class="stxt">Inspect spark plugs for carbon fouling or oil deposits. Replace any dark or wet plugs.</div></li>
+              <li class="step" id="st2"><div class="snum">2</div><div class="stxt">Spray carb cleaner around intake manifold gaskets — RPM rise signals an air leak.</div></li>
+              <li class="step" id="st3"><div class="snum">3</div><div class="stxt">Verify idle RPM reads 650–750 in neutral on the X24's 6.2L engine.</div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="chat-bar">
+        <div class="cbtn">📷</div>
+        <div class="chat-field">Ask a follow-up…</div>
+        <div class="cbtn">🎙️</div>
+        <div class="cbtn csend">↑</div>
+      </div>
+    </div>
+    <span class="phone-label">AI Mechanic Agent</span>
+  </div>
+
+  <!-- ── PHONE 4: KNOWLEDGE BASE ── -->
+  <div class="phone-wrap">
+    <div class="phone" id="kb-phone">
+      <div class="statusbar">
+        <span>9:41</span>
+        <div class="sb-icons">
+          <svg width="14" height="10" viewBox="0 0 16 12" fill="#0A2240"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="12" height="10" viewBox="0 0 13 22" fill="#0A2240"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="#0A2240" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="#0A2240"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <span style="font-size:16px">📖</span>
+        <span class="nav-title" style="color:#0A2240">Knowledge Base</span>
+      </div>
+      <div class="kb-body">
+        <div class="kb-boat" id="kb-boat">
+          <div>
+            <div class="kb-bname">MasterCraft X24</div>
+            <div class="kb-bsub">2022 · 6.2L Indmar · Jun 2026</div>
+          </div>
+          <div class="kb-offline" id="kb-offline">⭐ Offline</div>
+        </div>
+        <div class="kb-sec" id="kb-sec1">Categories</div>
+        <div class="kb-grid">
+          <div class="kb-card" id="kbc1"><div class="kb-icon">🔧</div><div class="kb-ctitle">Maintenance</div><div class="kb-ccount">12 topics</div></div>
+          <div class="kb-card" id="kbc2"><div class="kb-icon">⚖️</div><div class="kb-ctitle">Safety &amp; Legal</div><div class="kb-ccount">8 topics</div></div>
+          <div class="kb-card" id="kbc3"><div class="kb-icon">⚙️</div><div class="kb-ctitle">Engine</div><div class="kb-ccount">10 topics</div></div>
+          <div class="kb-card" id="kbc4"><div class="kb-icon">🚤</div><div class="kb-ctitle">Boat Info</div><div class="kb-ccount">6 topics</div></div>
+        </div>
+        <div class="kb-sec" id="kb-sec2">Recently Viewed</div>
+        <div class="kb-recent-wrap" id="kb-rec">
+          <div class="kb-ri" id="kri1"><div class="ri-dot"></div>Oil change interval — 6.2L Indmar</div>
+          <div class="kb-ri" id="kri2"><div class="ri-dot"></div>Required safety equipment — Georgia</div>
+          <div class="kb-ri" id="kri3"><div class="ri-dot"></div>Winterization checklist</div>
+        </div>
+      </div>
+    </div>
+    <span class="phone-label">Knowledge Base</span>
+  </div>
+
+</div>
+
+<script>
+// ── Utility ──────────────────────────────────────
+function after(ms){ return new Promise(r => setTimeout(r, ms)) }
+function show(el, cls='show'){ el && el.classList.add(cls) }
+function hide(el, cls='show'){ el && el.classList.remove(cls) }
+function reset(el, ...classes){ el && classes.forEach(c => el.classList.remove(c)) }
+
+// ══════════════════════════════════════════
+// SCREEN 1 — MAP
+// ══════════════════════════════════════════
+async function runMap(){
+  const pin1=document.getElementById('pin1')
+  const pin2=document.getElementById('pin2')
+  const pin3=document.getElementById('pin3')
+  const locdot=document.getElementById('locdot')
+  const sheet=document.getElementById('map-sheet')
+  const rsvp=document.getElementById('rsvp-btn')
+
+  // reset
+  ;[pin1,pin2,pin3].forEach(p=>p.classList.remove('show'))
+  locdot.classList.remove('show')
+  sheet.classList.remove('show')
+  rsvp.classList.remove('pulse')
+
+  await after(600)
+  show(locdot)
+  await after(500)
+  show(pin1)
+  await after(300)
+  show(pin2)
+  await after(250)
+  show(pin3)
+  await after(800)
+  show(sheet)
+  await after(1400)
+  show(rsvp,'pulse')
+  await after(2400)
+  // pause at end before loop
+  await after(1800)
+}
+
+// ══════════════════════════════════════════
+// SCREEN 2 — QUESTIONNAIRE
+// ══════════════════════════════════════════
+async function runQ(){
+  const prog=document.getElementById('q-prog')
+  const step=document.getElementById('q-step')
+  const question=document.getElementById('q-question')
+  const opts=[document.getElementById('qo1'),document.getElementById('qo2'),document.getElementById('qo3'),document.getElementById('qo4')]
+  const ctx=document.getElementById('q-ctx')
+  const next=document.getElementById('q-next')
+  const send=document.getElementById('q-send')
+
+  // reset
+  prog.style.width='0%'
+  step.style.opacity='0'
+  question.style.opacity='0'; question.style.transform='translateY(8px)'
+  opts.forEach(o=>{ o.classList.remove('visible','selected') })
+  ctx.style.opacity='0'; ctx.style.transform='translateY(6px)'
+  next.classList.remove('show')
+  send.classList.remove('show','glow')
+
+  await after(500)
+  step.style.opacity='1'
+  await after(300)
+  prog.style.width='40%'
+  await after(500)
+  question.style.opacity='1'; question.style.transform='translateY(0)'
+  await after(500)
+  for(let i=0;i<opts.length;i++){
+    opts[i].classList.add('visible')
+    await after(180)
+  }
+  await after(700)
+  // user selects option 2
+  opts[1].classList.add('selected')
+  await after(800)
+  ctx.style.opacity='1'; ctx.style.transform='translateY(0)'
+  await after(600)
+  next.classList.add('show')
+  await after(250)
+  send.classList.add('show')
+  await after(1000)
+  send.classList.add('glow')
+  await after(2600)
+}
+
+// ══════════════════════════════════════════
+// SCREEN 3 — AGENT
+// ══════════════════════════════════════════
+async function runAgent(){
+  const banner=document.getElementById('ctx-banner')
+  const umsg=document.getElementById('umsg')
+  const typing=document.getElementById('typing')
+  const agentRow=document.getElementById('agent-msg-row')
+  const amsg=document.getElementById('amsg')
+  const st1=document.getElementById('st1')
+  const st2=document.getElementById('st2')
+  const st3=document.getElementById('st3')
+
+  // reset
+  banner.classList.remove('show')
+  umsg.classList.remove('show')
+  typing.classList.remove('show')
+  agentRow.style.display='none'
+  amsg.classList.remove('show')
+  ;[st1,st2,st3].forEach(s=>s.classList.remove('show'))
+
+  await after(500)
+  show(banner)
+  await after(900)
+  show(umsg)
+  await after(900)
+  show(typing)
+  await after(2000)
+  hide(typing)
+  await after(200)
+  agentRow.style.display='flex'
+  await after(50)
+  show(amsg)
+  await after(500)
+  show(st1)
+  await after(700)
+  show(st2)
+  await after(700)
+  show(st3)
+  await after(2500)
+}
+
+// ══════════════════════════════════════════
+// SCREEN 4 — KNOWLEDGE BASE
+// ══════════════════════════════════════════
+async function runKB(){
+  const boat=document.getElementById('kb-boat')
+  const offline=document.getElementById('kb-offline')
+  const sec1=document.getElementById('kb-sec1')
+  const cards=[document.getElementById('kbc1'),document.getElementById('kbc2'),document.getElementById('kbc3'),document.getElementById('kbc4')]
+  const sec2=document.getElementById('kb-sec2')
+  const rec=document.getElementById('kb-rec')
+  const ris=[document.getElementById('kri1'),document.getElementById('kri2'),document.getElementById('kri3')]
+
+  // reset
+  boat.classList.remove('show')
+  offline.classList.remove('pulse')
+  sec1.classList.remove('show')
+  cards.forEach(c=>c.classList.remove('show','highlight'))
+  sec2.classList.remove('show')
+  rec.classList.remove('show')
+  ris.forEach(r=>r.classList.remove('show'))
+
+  await after(400)
+  show(boat)
+  await after(700)
+  show(offline,'pulse')
+  await after(600)
+  show(sec1)
+  await after(300)
+  for(let c of cards){ show(c); await after(180) }
+  await after(600)
+  show(sec2)
+  await after(300)
+  show(rec)
+  await after(400)
+  for(let r of ris){ show(r); await after(250) }
+  await after(800)
+  // highlight maintenance card
+  cards[0].classList.add('highlight')
+  await after(1800)
+}
+
+// ══════════════════════════════════════════
+// LOOP RUNNER — all 4 play in parallel
+// ══════════════════════════════════════════
+async function loopScreen(fn, baseDelay, gapMs){
+  await after(baseDelay)
+  while(true){
+    await fn()
+    await after(gapMs)
+  }
+}
+
+// Stagger starting offsets so screens feel independent
+loopScreen(runMap,    200,  800)
+loopScreen(runQ,      600, 1000)
+loopScreen(runAgent, 1000,  800)
+loopScreen(runKB,     400,  900)
+</script>
+</body>
+</html>

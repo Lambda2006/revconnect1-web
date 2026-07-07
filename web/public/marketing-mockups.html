@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VictoryRevConnect Boaters — Feature Mockups</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 60px 40px;
+  }
+  h1 {
+    text-align: center;
+    color: #0A2240;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 56px;
+  }
+  .row {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .screen-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .screen-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0A2240;
+    background: #e8edf3;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  /* Phone shell */
+  .phone {
+    width: 320px;
+    height: 640px;
+    background: #fff;
+    border-radius: 44px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.08);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Status bar */
+  .statusbar {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .statusbar .time { font-size: 15px; font-weight: 700; }
+  .statusbar .icons { display: flex; gap: 5px; align-items: center; }
+
+  /* Nav bar */
+  .navbar {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .navbar .nav-title {
+    font-size: 17px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  /* ── SCREEN 1: MAP ── */
+  .map-screen .statusbar { background: #0A2240; color: #fff; }
+  .map-screen .navbar { background: #0A2240; color: #fff; }
+  .map-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #d4e4f0;
+  }
+  /* Fake map tiles */
+  .map-grid {
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0px, transparent 1px, transparent 60px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.15) 0px, transparent 1px, transparent 60px),
+      linear-gradient(160deg, #c8dde8 0%, #b8d0df 40%, #c4dae7 100%);
+  }
+  /* Roads */
+  .map-road-h {
+    position: absolute;
+    height: 6px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 3px;
+    left: 0; right: 0;
+  }
+  .map-road-v {
+    position: absolute;
+    width: 6px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 3px;
+    top: 0; bottom: 0;
+  }
+  /* Water */
+  .map-water {
+    position: absolute;
+    background: #7ab3c8;
+    border-radius: 60% 40% 50% 30%;
+  }
+  /* Meetup pin */
+  .map-pin {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    background: #C8102E;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 3px 10px rgba(200,16,46,0.45);
+    border: 2px solid #fff;
+    cursor: pointer;
+  }
+  .map-pin::after {
+    content: '⚓';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(45deg);
+    font-size: 14px;
+  }
+  .map-pin-sm {
+    width: 26px;
+    height: 26px;
+    background: #0A2240;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    position: absolute;
+    box-shadow: 0 2px 6px rgba(10,34,64,0.4);
+    border: 2px solid #fff;
+  }
+  /* Bottom sheet */
+  .map-sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 16px 16px 20px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+  }
+  .sheet-handle {
+    width: 36px; height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
+    margin: 0 auto 14px;
+  }
+  .sheet-badge {
+    display: inline-block;
+    background: #C8102E;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+  }
+  .sheet-title { font-size: 15px; font-weight: 700; color: #0A2240; margin-bottom: 4px; }
+  .sheet-meta { font-size: 12px; color: #6b7280; margin-bottom: 12px; display: flex; gap: 10px; }
+  .sheet-meta span::before { margin-right: 4px; }
+  .sheet-avatars { display: flex; margin-bottom: 12px; }
+  .avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    margin-right: -8px;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: #fff;
+  }
+  .sheet-rsvp {
+    background: #C8102E;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  /* Map tabs */
+  .map-tabs {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 56px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+  }
+  .map-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #9ca3af;
+  }
+  .map-tab.active { color: #C8102E; }
+  .map-tab .tab-icon { font-size: 18px; }
+
+  /* ── SCREEN 2: QUESTIONNAIRE ── */
+  .q-screen .statusbar { background: #fff; color: #0A2240; border-bottom: 1px solid #f3f4f6; }
+  .q-screen .navbar { background: #fff; color: #0A2240; border-bottom: 1px solid #f3f4f6; }
+  .q-content {
+    flex: 1;
+    overflow: hidden;
+    padding: 20px 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .q-progress-bar {
+    height: 4px;
+    background: #f3f4f6;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .q-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #C8102E, #e63952);
+    border-radius: 2px;
+    width: 40%;
+    transition: width 0.3s;
+  }
+  .q-step { font-size: 11px; color: #9ca3af; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .q-question { font-size: 17px; font-weight: 700; color: #0A2240; line-height: 1.35; }
+  .q-options { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .q-option {
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .q-option.selected {
+    border-color: #C8102E;
+    background: #fff5f6;
+    color: #C8102E;
+    font-weight: 600;
+  }
+  .q-option .opt-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-option.selected .opt-dot::after {
+    content: '';
+    width: 8px; height: 8px;
+    background: #C8102E;
+    border-radius: 50%;
+    display: block;
+  }
+  .q-context-box {
+    background: #f0f4f8;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 12px;
+    color: #4b5563;
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .q-next-btn {
+    background: #0A2240;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .q-send-btn {
+    background: #C8102E;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 13px;
+    font-size: 13px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  /* ── SCREEN 3: AGENT CHAT ── */
+  .agent-screen .statusbar { background: #0A2240; color: #fff; }
+  .agent-screen .navbar { background: #0A2240; color: #fff; padding: 0 16px; }
+  .agent-content {
+    flex: 1;
+    background: #f8f9fb;
+    overflow: hidden;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .chat-context-banner {
+    background: #e8f0e8;
+    border: 1px solid #b7d7b7;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #2d6a2d;
+    font-weight: 500;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .msg-row { display: flex; }
+  .msg-row.user { justify-content: flex-end; }
+  .bubble {
+    max-width: 82%;
+    padding: 10px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .bubble.user {
+    background: #0A2240;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.agent {
+    background: #fff;
+    color: #1f2937;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .bubble.agent .agent-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .agent-dot {
+    width: 22px; height: 22px;
+    background: #C8102E;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .agent-name { font-size: 11px; font-weight: 700; color: #C8102E; }
+  .step-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .step-item { display: flex; gap: 8px; align-items: flex-start; }
+  .step-num {
+    width: 18px; height: 18px;
+    background: #0A2240;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text { font-size: 12px; color: #374151; line-height: 1.4; }
+  .chat-input-bar {
+    height: 56px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .chat-input-field {
+    flex: 1;
+    background: #f3f4f6;
+    border-radius: 20px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 13px;
+    color: #9ca3af;
+  }
+  .chat-btn {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    background: #f3f4f6;
+    flex-shrink: 0;
+  }
+  .chat-send {
+    background: #C8102E;
+    color: #fff;
+  }
+
+  /* ── SCREEN 4: KNOWLEDGE BASE ── */
+  .kb-screen .statusbar { background: #fff; color: #0A2240; }
+  .kb-screen .navbar { background: #fff; color: #0A2240; border-bottom: 1px solid #f3f4f6; }
+  .kb-content {
+    flex: 1;
+    overflow: hidden;
+    background: #f8f9fb;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .kb-boat-card {
+    background: #0A2240;
+    border-radius: 16px;
+    padding: 14px 16px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .kb-boat-name { font-size: 15px; font-weight: 700; }
+  .kb-boat-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .kb-offline-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kb-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .kb-card-icon { font-size: 22px; }
+  .kb-card-title { font-size: 13px; font-weight: 700; color: #0A2240; }
+  .kb-card-count { font-size: 11px; color: #9ca3af; }
+  .kb-card.active .kb-card-title { color: #C8102E; }
+  .kb-section-title { font-size: 12px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.06em; }
+  .kb-recent { background: #fff; border-radius: 14px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .kb-recent-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 12px;
+    color: #374151;
+  }
+  .kb-recent-item:last-child { border-bottom: none; }
+  .kb-recent-dot { width: 6px; height: 6px; background: #C8102E; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h1>VictoryRevConnect Boaters — Feature Mockups</h1>
+<p class="subtitle">Brand colors: Navy #0A2240 · Red #C8102E · For use in marketing video production</p>
+
+<div class="row">
+
+  <!-- ── SCREEN 1: MEETUP MAP ── -->
+  <div class="screen-wrap">
+    <div class="phone map-screen">
+      <div class="statusbar">
+        <span class="time">9:41</span>
+        <div class="icons">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 24 12" fill="white"><ellipse cx="12" cy="6" rx="10" ry="6" stroke="white" stroke-width="1.5" fill="none"/><ellipse cx="12" cy="6" rx="7" ry="4" fill="white" opacity="0.5"/><ellipse cx="12" cy="6" rx="4" ry="2" fill="white"/></svg>
+          <svg width="13" height="12" viewBox="0 0 13 22" fill="white"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="white" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="white"/><rect x="4" y="20" width="5" height="1" rx="0.5" fill="white"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <span style="font-size:18px">🗺️</span>
+        <span class="nav-title">Discover</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+
+      <!-- Map -->
+      <div class="map-content">
+        <div class="map-grid"></div>
+        <!-- Water body -->
+        <div class="map-water" style="width:180px;height:120px;top:40px;left:-20px;background:#7ab3c8;opacity:0.7;"></div>
+        <div class="map-water" style="width:100px;height:80px;top:80px;left:140px;background:#7ab3c8;opacity:0.5;border-radius:40% 60% 40% 60%;"></div>
+        <!-- Roads -->
+        <div class="map-road-h" style="top:100px;"></div>
+        <div class="map-road-h" style="top:170px;"></div>
+        <div class="map-road-h" style="top:240px;"></div>
+        <div class="map-road-v" style="left:80px;"></div>
+        <div class="map-road-v" style="left:200px;"></div>
+        <!-- Main pin (active meetup) -->
+        <div class="map-pin" style="top:115px;left:150px;"></div>
+        <!-- Secondary pins -->
+        <div class="map-pin-sm" style="top:200px;left:60px;"></div>
+        <div class="map-pin-sm" style="top:80px;left:220px;"></div>
+        <!-- My location dot -->
+        <div style="position:absolute;top:185px;left:175px;width:14px;height:14px;background:#fff;border-radius:50%;border:3px solid #0A2240;box-shadow:0 0 0 4px rgba(10,34,64,0.15);"></div>
+        <!-- Bottom sheet -->
+        <div class="map-sheet">
+          <div class="sheet-handle"></div>
+          <span class="sheet-badge">Wake Surfing · 3 spots left</span>
+          <div class="sheet-title">Lake Lanier Morning Session</div>
+          <div class="sheet-meta">
+            <span>📍 0.4 mi away</span>
+            <span>⏱ Today, 8:00 AM</span>
+          </div>
+          <div class="sheet-avatars">
+            <div class="avatar" style="background:#0A2240;">JR</div>
+            <div class="avatar" style="background:#C8102E;">KM</div>
+            <div class="avatar" style="background:#374151;">AL</div>
+            <div class="avatar" style="background:#6b7280;font-size:10px;width:28px;height:28px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;margin-right:0;">+4</div>
+            <span style="font-size:12px;color:#6b7280;margin-left:14px;align-self:center;">7 attending</span>
+          </div>
+          <button class="sheet-rsvp">RSVP & Join Chat →</button>
+        </div>
+      </div>
+    </div>
+    <span class="screen-label">Meetup Discovery</span>
+  </div>
+
+  <!-- ── SCREEN 2: QUESTIONNAIRE ── -->
+  <div class="screen-wrap">
+    <div class="phone q-screen">
+      <div class="statusbar">
+        <span class="time">9:41</span>
+        <div class="icons" style="color:#0A2240;">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="#0A2240"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="13" height="12" viewBox="0 0 13 22" fill="#0A2240"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="#0A2240" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="#0A2240"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A2240" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        <span class="nav-title" style="color:#0A2240;">Diagnostics</span>
+      </div>
+
+      <div class="q-content">
+        <div class="q-progress-bar"><div class="q-progress-fill"></div></div>
+        <div class="q-step">Step 2 of 5</div>
+        <div class="q-question">When does the issue occur?</div>
+
+        <div class="q-options">
+          <div class="q-option">
+            <div class="opt-dot"></div>
+            Only at startup / cold start
+          </div>
+          <div class="q-option selected">
+            <div class="opt-dot"></div>
+            At idle, not under load
+          </div>
+          <div class="q-option">
+            <div class="opt-dot"></div>
+            Under load / high RPM
+          </div>
+          <div class="q-option">
+            <div class="opt-dot"></div>
+            Intermittently / unpredictably
+          </div>
+        </div>
+
+        <div class="q-context-box">
+          <span>💡</span>
+          <span>Your previous answers: <strong>Engine vibration</strong>, occurring in a <strong>MasterCraft X24</strong>.</span>
+        </div>
+
+        <button class="q-next-btn">Continue →</button>
+        <button class="q-send-btn">🔧 Send to Agent with Full Context</button>
+      </div>
+    </div>
+    <span class="screen-label">Diagnostic Questionnaire</span>
+  </div>
+
+  <!-- ── SCREEN 3: AGENT CHAT ── -->
+  <div class="screen-wrap">
+    <div class="phone agent-screen">
+      <div class="statusbar">
+        <span class="time">9:41</span>
+        <div class="icons">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="13" height="12" viewBox="0 0 13 22" fill="white"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="white" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="white"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;">AI Mechanic</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.6);">MasterCraft X24 · Context loaded</div>
+        </div>
+        <span style="font-size:18px;">🎙️</span>
+      </div>
+
+      <div class="agent-content">
+        <!-- Context banner -->
+        <div class="chat-context-banner">
+          <span>✅</span>
+          Questionnaire context loaded — engine vibration at idle, cold start ruled out.
+        </div>
+
+        <!-- User message -->
+        <div class="msg-row user">
+          <div class="bubble user">What's causing the vibration and how do I fix it?</div>
+        </div>
+
+        <!-- Agent response -->
+        <div class="msg-row">
+          <div class="bubble agent" style="max-width:95%;">
+            <div class="agent-header">
+              <div class="agent-dot">🔧</div>
+              <span class="agent-name">Mechanic Agent</span>
+            </div>
+            <div style="font-size:12px;color:#374151;margin-bottom:10px;font-weight:500;">Based on your symptoms, most likely cause is a <strong>fouled spark plug</strong> or <strong>intake air leak</strong> at idle. Here's how to diagnose:</div>
+            <ul class="step-list">
+              <li class="step-item"><div class="step-num">1</div><div class="step-text">With engine off, inspect spark plugs for carbon fouling or oil deposits. Replace any that look dark or wet.</div></li>
+              <li class="step-item"><div class="step-num">2</div><div class="step-text">Start engine and spray carb cleaner around intake manifold gaskets. RPM rise indicates an air leak.</div></li>
+              <li class="step-item"><div class="step-num">3</div><div class="step-text">Check idle RPM setting — should read 650–750 RPM in neutral on the X24's 6.2L engine.</div></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-bar">
+        <div class="chat-btn">📷</div>
+        <div class="chat-input-field">Ask a follow-up…</div>
+        <div class="chat-btn">🎙️</div>
+        <div class="chat-btn chat-send">↑</div>
+      </div>
+    </div>
+    <span class="screen-label">AI Mechanic Agent</span>
+  </div>
+
+  <!-- ── SCREEN 4: KNOWLEDGE BASE ── -->
+  <div class="screen-wrap">
+    <div class="phone kb-screen">
+      <div class="statusbar">
+        <span class="time">9:41</span>
+        <div class="icons">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="#0A2240"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1"/></svg>
+          <svg width="13" height="12" viewBox="0 0 13 22" fill="#0A2240"><rect x="0" y="0" width="13" height="22" rx="3" fill="none" stroke="#0A2240" stroke-width="1.5"/><rect x="2" y="2" width="9" height="13" rx="1.5" fill="#0A2240"/></svg>
+        </div>
+      </div>
+      <div class="navbar">
+        <span style="font-size:18px;">📖</span>
+        <span class="nav-title" style="color:#0A2240;">Knowledge Base</span>
+      </div>
+
+      <div class="kb-content">
+        <!-- Boat card -->
+        <div class="kb-boat-card">
+          <div>
+            <div class="kb-boat-name">MasterCraft X24</div>
+            <div class="kb-boat-sub">2022 · 6.2L Indmar · Last updated Jun 2026</div>
+          </div>
+          <div class="kb-offline-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Offline
+          </div>
+        </div>
+
+        <!-- Category grid -->
+        <div class="kb-section-title">Categories</div>
+        <div class="kb-grid">
+          <div class="kb-card active">
+            <div class="kb-card-icon">🔧</div>
+            <div class="kb-card-title" style="color:#C8102E;">Maintenance</div>
+            <div class="kb-card-count">12 topics</div>
+          </div>
+          <div class="kb-card">
+            <div class="kb-card-icon">⚖️</div>
+            <div class="kb-card-title">Safety & Legal</div>
+            <div class="kb-card-count">8 topics</div>
+          </div>
+          <div class="kb-card">
+            <div class="kb-card-icon">⚙️</div>
+            <div class="kb-card-title">Engine</div>
+            <div class="kb-card-count">10 topics</div>
+          </div>
+          <div class="kb-card">
+            <div class="kb-card-icon">🚤</div>
+            <div class="kb-card-title">Boat Info</div>
+            <div class="kb-card-count">6 topics</div>
+          </div>
+        </div>
+
+        <!-- Recent -->
+        <div class="kb-section-title">Recently Viewed</div>
+        <div class="kb-recent">
+          <div class="kb-recent-item">
+            <div class="kb-recent-dot"></div>
+            Oil change interval — 6.2L Indmar engine
+          </div>
+          <div class="kb-recent-item">
+            <div class="kb-recent-dot"></div>
+            Required safety equipment — Georgia
+          </div>
+          <div class="kb-recent-item">
+            <div class="kb-recent-dot"></div>
+            Winterization checklist
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="screen-label">Knowledge Base</span>
+  </div>
+
+</div>
+
+</body>
+</html>

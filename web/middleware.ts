@@ -58,6 +58,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  // Marina slip portal — requires a session. Verified-business check is
+  // enforced by RLS and the page's own gate; here we only require auth.
+  const isSlipPortal =
+    pathname === "/business/slips" || pathname.startsWith("/business/slips/");
+  if (isSlipPortal && !user) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/login";
+    return NextResponse.redirect(loginUrl);
+  }
+
   // Redirect authenticated users away from auth pages to /discover
   const authRoutes = ["/login", "/signup"];
   if (authRoutes.includes(pathname) && user) {
