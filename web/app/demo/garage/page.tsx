@@ -15,7 +15,11 @@ export default function DemoGaragePage() {
       <div className="rounded-2xl bg-white border border-gray-200 shadow-sm overflow-hidden">
         <div className="bg-gradient-to-b from-[#dcefff] to-[#a9d6f5]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={boat.photo} alt={`${boat.make} ${boat.model}`} className="w-full h-56 object-cover" />
+          <img
+            src={boat.photo}
+            alt={`${boat.year} ${boat.make} ${boat.model}`}
+            className="w-full h-64 md:h-72 object-cover object-center"
+          />
         </div>
         <div className="p-5">
           <div className="flex items-start justify-between gap-4 flex-wrap">
