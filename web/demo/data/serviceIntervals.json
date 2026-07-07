@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "vessel": "2021 Boston Whaler 270 Dauntless — Twin Mercury Verado 300",
+    "note": "Knowledge-base service intervals with the associated MarineMax part for each item."
+  },
+  "intervals": [
+    {
+      "item": "Engine oil & filter change (each engine)",
+      "intervalHours": 100,
+      "intervalMonths": 12,
+      "priority": "high",
+      "notes": "FC-W certified 25W-40 marine oil. Change both engines together.",
+      "partId": "mm-oil-filter"
+    },
+    {
+      "item": "Lower unit gear lube change (each engine)",
+      "intervalHours": 100,
+      "intervalMonths": 12,
+      "priority": "high",
+      "notes": "Milky/gray fluid signals a failed seal. Change both engines together.",
+      "partId": "mm-gear-lube"
+    },
+    {
+      "item": "Fuel/water separator filter replacement (each engine)",
+      "intervalHours": 100,
+      "intervalMonths": 12,
+      "priority": "high",
+      "notes": "Primary water-separation barrier. Inspect bowl monthly.",
+      "partId": "mm-fuel-filter"
+    },
+    {
+      "item": "Water pump impeller replacement (each engine)",
+      "intervalHours": 300,
+      "intervalMonths": 36,
+      "priority": "high",
+      "notes": "Critical cooling component. Failure causes overheating and weak tell-tale.",
+      "partId": "mm-impeller-kit"
+    },
+    {
+      "item": "Spark plug replacement (each engine)",
+      "intervalHours": 300,
+      "intervalMonths": 24,
+      "priority": "medium",
+      "notes": "Iridium plugs per Verado spec. Eight plugs per engine.",
+      "partId": "mm-spark-plugs"
+    },
+    {
+      "item": "Steering cable / hydraulic steering fluid check",
+      "intervalMonths": 12,
+      "priority": "medium",
+      "notes": "Check SeaStar hydraulic fluid annually; bleed if spongy.",
+      "partId": "mm-steering-fluid"
+    },
+    {
+      "item": "Battery inspection & terminal cleaning",
+      "intervalMonths": 6,
+      "priority": "medium",
+      "notes": "Dual-battery system. Clean terminals; apply dielectric grease.",
+      "partId": "mm-battery-terminal-kit"
+    },
+    {
+      "item": "Zincs / anodes inspection & replacement",
+      "intervalMonths": 6,
+      "priority": "high",
+      "notes": "Replace when 50% depleted. Critical in saltwater and brackish water.",
+      "partId": "mm-anode-kit"
+    },
+    {
+      "item": "Propeller inspection (each engine)",
+      "intervalMonths": 6,
+      "priority": "medium",
+      "notes": "Inspect both props. Stainless dings can be repaired.",
+      "partId": "mm-prop-nut-kit"
+    },
+    {
+      "item": "Trailer inspection (bunks, lights, wheel bearings)",
+      "intervalMonths": 6,
+      "priority": "medium",
+      "notes": "Wheel bearings are the most common trailer failure.",
+      "partId": "mm-trailer-bearing-kit"
+    }
+  ]
+}

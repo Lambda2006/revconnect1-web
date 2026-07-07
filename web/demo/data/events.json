@@ -1,0 +1,42 @@
+{
+  "_meta": {
+    "brand": "MarineMax",
+    "note": "Two upcoming MarineMax events surfaced on the discover map for the partnership demo."
+  },
+  "events": [
+    {
+      "id": "mm-event-getaway",
+      "title": "MarineMax Getaways! — Boca Grande Rendezvous",
+      "type": "promotional",
+      "host": "MarineMax",
+      "verified": true,
+      "date": "2026-08-15",
+      "endDate": "2026-08-17",
+      "location": "Boca Grande, FL",
+      "lat": 26.7481,
+      "lng": -82.2617,
+      "venue": "The Gasparilla Inn & Club docks",
+      "priceLabel": "Owners event — complimentary for MarineMax customers",
+      "description": "A signature MarineMax Getaways! weekend rendezvous. Guided cruise from Sarasota and Naples, dockside dinners, and factory reps on hand. Bring your 270 Dauntless and meet other owners.",
+      "cta": "Reserve your spot",
+      "featured": true
+    },
+    {
+      "id": "mm-event-demo-day",
+      "title": "MarineMax Demo Day & Service Clinic — Fort Lauderdale",
+      "type": "promotional",
+      "host": "MarineMax",
+      "verified": true,
+      "date": "2026-07-26",
+      "endDate": "2026-07-26",
+      "location": "Fort Lauderdale, FL",
+      "lat": 26.0977,
+      "lng": -80.1183,
+      "venue": "MarineMax Fort Lauderdale",
+      "priceLabel": "Free to attend",
+      "description": "On-water demos of the latest models plus a free Mercury Verado maintenance clinic. Certified techs walk through impeller service, cooling checks and winterization. Parts specialists on site.",
+      "cta": "RSVP for the clinic",
+      "featured": false
+    }
+  ]
+}

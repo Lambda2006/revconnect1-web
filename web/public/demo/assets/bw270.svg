@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Boston Whaler 270 Dauntless">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dcefff"/>
+      <stop offset="1" stop-color="#a9d6f5"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b7bb5"/>
+      <stop offset="1" stop-color="#0a4d7a"/>
+    </linearGradient>
+    <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e6ebf0"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#sky)"/>
+  <rect y="210" width="640" height="150" fill="url(#water)"/>
+  <g opacity="0.25" fill="#ffffff">
+    <ellipse cx="120" cy="250" rx="60" ry="6"/>
+    <ellipse cx="420" cy="270" rx="80" ry="7"/>
+    <ellipse cx="540" cy="300" rx="70" ry="6"/>
+  </g>
+  <!-- hull -->
+  <path d="M120 210 L520 210 L470 268 Q450 285 420 285 L180 285 Q150 285 138 262 Z" fill="url(#hull)" stroke="#0A2240" stroke-width="3"/>
+  <path d="M120 210 L520 210 L512 224 L128 224 Z" fill="#0A2240"/>
+  <rect x="120" y="224" width="392" height="4" fill="#C8102E"/>
+  <!-- console -->
+  <path d="M300 150 Q305 145 320 145 L360 145 Q372 145 374 160 L378 210 L288 210 L296 165 Q297 152 300 150 Z" fill="#dfe6ee" stroke="#0A2240" stroke-width="2.5"/>
+  <rect x="308" y="158" width="52" height="26" rx="3" fill="#0A2240"/>
+  <!-- t-top -->
+  <rect x="292" y="96" width="96" height="8" rx="4" fill="#0A2240"/>
+  <rect x="300" y="104" width="6" height="46" fill="#8a97a5"/>
+  <rect x="374" y="104" width="6" height="46" fill="#8a97a5"/>
+  <!-- twin outboards -->
+  <g stroke="#0A2240" stroke-width="2.5">
+    <rect x="486" y="196" width="20" height="46" rx="4" fill="#111827"/>
+    <rect x="508" y="196" width="20" height="46" rx="4" fill="#1f2937"/>
+  </g>
+  <!-- bow rail -->
+  <path d="M138 205 Q135 190 150 188" fill="none" stroke="#8a97a5" stroke-width="3"/>
+  <text x="200" y="252" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#0A2240" letter-spacing="1">SECOND WIND</text>
+</svg>

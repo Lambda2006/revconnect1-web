@@ -1,0 +1,152 @@
+{
+  "_meta": {
+    "brand": "MarineMax",
+    "note": "Four MarineMax marina locations in Florida with seeded slip listings. Coordinates approximate; data illustrative for the partnership demo."
+  },
+  "marinas": [
+    {
+      "id": "mm-marina-clearwater",
+      "name": "MarineMax Clearwater",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "1450 S Missouri Ave, Clearwater, FL 33756",
+      "lat": 27.9506,
+      "lng": -82.8001,
+      "phone": "(727) 216-1958",
+      "amenities": ["Fuel dock", "Pump-out", "Ship store", "Service center on site", "Floating docks", "30/50 amp power"],
+      "slips": [
+        {
+          "id": "slip-cw-1",
+          "title": "Covered Slip C-14 — 30 ft",
+          "lengthFt": 30,
+          "beamFt": 11,
+          "draftFt": 4,
+          "powerAmps": "30/50A",
+          "covered": true,
+          "monthlyPrice": 640,
+          "available": true,
+          "availableFrom": "2026-07-15",
+          "description": "Covered floating slip ideal for a 270 Dauntless. Steps from the ship store and service center."
+        },
+        {
+          "id": "slip-cw-2",
+          "title": "Open Slip D-07 — 32 ft",
+          "lengthFt": 32,
+          "beamFt": 12,
+          "draftFt": 4,
+          "powerAmps": "50A",
+          "covered": false,
+          "monthlyPrice": 520,
+          "available": true,
+          "availableFrom": "2026-08-01",
+          "description": "Open floating slip with easy channel access and deep water at all tides."
+        }
+      ]
+    },
+    {
+      "id": "mm-marina-ftlauderdale",
+      "name": "MarineMax Fort Lauderdale",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "2300 SE 46th St, Fort Lauderdale, FL 33316",
+      "lat": 26.0977,
+      "lng": -80.1183,
+      "phone": "(954) 597-0700",
+      "amenities": ["Fuel dock", "Pump-out", "Concierge", "Service center on site", "Transient slips", "Wi-Fi"],
+      "slips": [
+        {
+          "id": "slip-ftl-1",
+          "title": "Premium Slip A-02 — 34 ft",
+          "lengthFt": 34,
+          "beamFt": 12,
+          "draftFt": 4,
+          "powerAmps": "50A",
+          "covered": false,
+          "monthlyPrice": 890,
+          "available": true,
+          "availableFrom": "2026-07-20",
+          "description": "Deep-water slip minutes from Port Everglades inlet. Concierge fueling and detailing available."
+        },
+        {
+          "id": "slip-ftl-2",
+          "title": "Transient Slip T-11 — 40 ft",
+          "lengthFt": 40,
+          "beamFt": 14,
+          "draftFt": 5,
+          "powerAmps": "50/100A",
+          "covered": false,
+          "monthlyPrice": null,
+          "nightlyPrice": 95,
+          "available": true,
+          "availableFrom": "2026-07-08",
+          "description": "Nightly transient slip for visiting boaters. Walk to dining and the service center."
+        }
+      ]
+    },
+    {
+      "id": "mm-marina-naples",
+      "name": "MarineMax Naples",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "1146 6th Ave S, Naples, FL 34102",
+      "lat": 26.1327,
+      "lng": -81.7948,
+      "phone": "(239) 262-1000",
+      "amenities": ["Fuel dock", "Ship store", "Floating docks", "Ice & bait", "30/50 amp power"],
+      "slips": [
+        {
+          "id": "slip-nap-1",
+          "title": "Floating Slip F-05 — 28 ft",
+          "lengthFt": 28,
+          "beamFt": 10,
+          "draftFt": 3.5,
+          "powerAmps": "30A",
+          "covered": false,
+          "monthlyPrice": 575,
+          "available": true,
+          "availableFrom": "2026-09-01",
+          "description": "Sheltered floating slip in Naples Bay with quick Gulf access via Gordon Pass."
+        }
+      ]
+    },
+    {
+      "id": "mm-marina-sarasota",
+      "name": "MarineMax Sarasota",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "1601 Ken Thompson Pkwy, Sarasota, FL 34236",
+      "lat": 27.3315,
+      "lng": -82.5779,
+      "phone": "(941) 388-4411",
+      "amenities": ["Fuel dock", "Pump-out", "Ship store", "Service center on site", "Dry storage", "50 amp power"],
+      "slips": [
+        {
+          "id": "slip-sar-1",
+          "title": "Wet Slip W-09 — 30 ft",
+          "lengthFt": 30,
+          "beamFt": 11,
+          "draftFt": 4,
+          "powerAmps": "30/50A",
+          "covered": false,
+          "monthlyPrice": 610,
+          "available": true,
+          "availableFrom": "2026-07-25",
+          "description": "New Pass access slip near City Island. Perfect home berth for a 270 Dauntless."
+        },
+        {
+          "id": "slip-sar-2",
+          "title": "Dry Storage Rack R-118 — up to 30 ft",
+          "lengthFt": 30,
+          "beamFt": 11,
+          "draftFt": 4,
+          "powerAmps": "N/A (dry rack)",
+          "covered": true,
+          "monthlyPrice": 430,
+          "available": false,
+          "availableFrom": "2026-10-01",
+          "description": "Covered high-and-dry rack storage with launch-on-request. Waitlist only."
+        }
+      ]
+    }
+  ]
+}

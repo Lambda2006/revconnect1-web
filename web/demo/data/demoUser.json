@@ -1,0 +1,32 @@
+{
+  "_meta": {
+    "note": "Mock demo session and garage. No real auth or database — this drives the self-contained MarineMax demo."
+  },
+  "user": {
+    "id": "demo-user-marinemax",
+    "name": "Alex Rivera",
+    "email": "demo@victoryrevconnect.com",
+    "homePort": "Clearwater, FL",
+    "plan": "app_plus_agent",
+    "memberSince": "2025-04-01"
+  },
+  "garage": [
+    {
+      "id": "demo-boat-bw270",
+      "year": 2021,
+      "make": "Boston Whaler",
+      "model": "270 Dauntless",
+      "nickname": "Second Wind",
+      "engineType": "Twin Mercury Verado 300 (V8 4.6L)",
+      "engineHours": 214,
+      "hullId": "BWCE2721J021",
+      "lengthFt": 27,
+      "beamFt": 8.83,
+      "homePort": "MarineMax Clearwater",
+      "knowledgeModelKey": "boston-whaler-270-dauntless",
+      "photo": "/demo/assets/bw270.svg",
+      "lastService": "2026-03-12",
+      "nextServiceDue": "Water pump impeller — due within 40 engine hours"
+    }
+  ]
+}

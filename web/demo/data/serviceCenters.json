@@ -1,0 +1,56 @@
+{
+  "_meta": {
+    "brand": "MarineMax",
+    "note": "Three MarineMax service center locations with a Book Service prompt for the partnership demo."
+  },
+  "serviceCenters": [
+    {
+      "id": "mm-service-clearwater",
+      "name": "MarineMax Clearwater Service Center",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "1450 S Missouri Ave, Clearwater, FL 33756",
+      "lat": 27.9506,
+      "lng": -82.8001,
+      "phone": "(727) 216-1958",
+      "certifications": ["Mercury Certified", "Mercury Verado Specialist", "Yamaha Certified"],
+      "services": ["Impeller & cooling service", "100/300-hour maintenance", "Winterization", "Warranty repair", "Rigging"],
+      "hours": "Mon–Sat 8:00 AM – 5:00 PM",
+      "nextAvailable": "2026-07-10",
+      "bookingCta": "Book service",
+      "availablePartIds": ["mm-impeller-kit", "mm-impeller-only", "mm-thermostat-kit", "mm-oil-filter", "mm-100hr-kit", "mm-water-intake-screen"]
+    },
+    {
+      "id": "mm-service-ftlauderdale",
+      "name": "MarineMax Fort Lauderdale Service Center",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "2300 SE 46th St, Fort Lauderdale, FL 33316",
+      "lat": 26.0977,
+      "lng": -80.1183,
+      "phone": "(954) 597-0700",
+      "certifications": ["Mercury Certified", "Mercury Verado Specialist", "Factory Warranty Center"],
+      "services": ["Repower", "Cooling system diagnostics", "Electronics & rigging", "Haul-out & bottom paint", "Warranty repair"],
+      "hours": "Mon–Fri 8:00 AM – 6:00 PM, Sat 9:00 AM – 3:00 PM",
+      "nextAvailable": "2026-07-09",
+      "bookingCta": "Book service",
+      "availablePartIds": ["mm-thermostat-kit", "mm-anode-kit", "mm-300hr-kit", "mm-lower-seal-kit", "mm-tell-tale-kit", "mm-corrosion-x"]
+    },
+    {
+      "id": "mm-service-sarasota",
+      "name": "MarineMax Sarasota Service Center",
+      "operator": "MarineMax",
+      "verified": true,
+      "address": "1601 Ken Thompson Pkwy, Sarasota, FL 34236",
+      "lat": 27.3315,
+      "lng": -82.5779,
+      "phone": "(941) 388-4411",
+      "certifications": ["Mercury Certified", "Mercury Verado Specialist"],
+      "services": ["Impeller & cooling service", "Propeller service", "Trailer service", "Fuel system service", "Detailing"],
+      "hours": "Mon–Sat 8:00 AM – 5:00 PM",
+      "nextAvailable": "2026-07-11",
+      "bookingCta": "Book service",
+      "availablePartIds": ["mm-impeller-kit", "mm-fuel-filter", "mm-prop-nut-kit", "mm-trailer-bearing-kit", "mm-fuel-filter-bracket"]
+    }
+  ]
+}

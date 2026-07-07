@@ -3,6 +3,22 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 
 export async function middleware(request: NextRequest) {
+  // ── MarineMax partnership demo host ────────────────────────────────────────
+  // When served from the demo subdomain (e.g. demo.victoryrevconnect.com), map
+  // the host root to the self-contained /demo route tree. This is host-scoped,
+  // so the primary app domain is completely unaffected.
+  const host = request.headers.get("host") || "";
+  const demoHost = process.env.NEXT_PUBLIC_DEMO_HOST || "demo.victoryrevconnect.com";
+  if (host === demoHost || host.startsWith("demo.")) {
+    const { pathname } = request.nextUrl;
+    if (!pathname.startsWith("/demo")) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/demo${pathname === "/" ? "" : pathname}`;
+      return NextResponse.rewrite(url);
+    }
+    return NextResponse.next({ request });
+  }
+
   // If env vars are missing (e.g. misconfigured deployment), pass through rather than crashing every route.
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return NextResponse.next({ request });
