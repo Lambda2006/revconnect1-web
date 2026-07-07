@@ -3,9 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "@/lib/hooks/useSession";
-import { useSubscription } from "@/lib/hooks/useSubscription";
 import { useGarage } from "@/lib/hooks/useGarage";
-import { SubscriptionGate } from "@/components/ui/SubscriptionGate";
 import {
   SYSTEM_LABELS,
   SYSTEM_ICONS,
@@ -139,7 +137,6 @@ export default function DiagnosePage() {
   const { boatId } = useParams<{ boatId: string }>();
   const router = useRouter();
   const { user } = useSession();
-  const sub = useSubscription(user?.id ?? null);
   const { boats } = useGarage(user?.id ?? null);
   const boat = boats.find((b) => b.id === boatId);
 
@@ -247,15 +244,6 @@ export default function DiagnosePage() {
   }, []);
 
   // ─── Render ─────────────────────────────────────────────────────────────────
-
-  // Subscription gate — must come after all hooks
-  if (!sub.agentAccess && !sub.loading) {
-    return (
-      <SubscriptionGate hasAccess={false} message="Guided Diagnosis requires the App + Agent plan.">
-        {null}
-      </SubscriptionGate>
-    );
-  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">

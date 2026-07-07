@@ -124,8 +124,8 @@ export default function GaragePage() {
           </Link>
         </div>
 
-        {/* Guided Diagnosis — primary subscriber feature */}
-        {sub.agentAccess && boats.length > 0 && (() => {
+        {/* Guided Diagnosis — available to all users */}
+        {boats.length > 0 && (() => {
           const primaryBoat = boats.find((b) => b.is_primary) ?? boats[0];
           return (
             <Link

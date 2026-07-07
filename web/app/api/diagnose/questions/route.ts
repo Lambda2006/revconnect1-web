@@ -41,17 +41,7 @@ export async function POST(request: NextRequest) {
     }
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    // Subscription check
-    const { data: sub } = await supabaseAdmin
-      .from("subscriptions")
-      .select("status, plan")
-      .eq("user_id", user.id)
-      .single() as { data: { status: string; plan: string } | null };
-
-    const hasAccess =
-      sub?.status === "trialing" ||
-      (sub?.status === "active" && sub?.plan === "app_and_agent");
-    if (!hasAccess) return NextResponse.json({ error: "Agent subscription required" }, { status: 403 });
+    // Guided Diagnosis is available to all authenticated users (no subscription required).
 
     // Parse body
     const body = await request.json();
