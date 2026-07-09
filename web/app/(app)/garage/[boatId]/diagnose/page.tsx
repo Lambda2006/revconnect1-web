@@ -16,6 +16,7 @@ import type {
   RankedCause,
 } from "@/lib/diagnose/types";
 import { STAGE2_QUESTIONS } from "@/lib/diagnose/stage2Questions";
+import { insertLogbookEntry } from "@/lib/hooks/useLogbook";
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -221,15 +222,43 @@ export default function DiagnosePage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? `Error ${res.status}`);
-      setDiagnosis(data as DiagnosisResult);
+      const result = data as DiagnosisResult;
+      setDiagnosis(result);
       setExpandedCause(0);
       setStage("results");
+
+      // Auto-log the completed diagnosis to the boat's logbook.
+      if (user && boat) {
+        const topCause = result.rankedCauses?.[0];
+        const systemLabel = SYSTEM_LABELS[system];
+        void insertLogbookEntry(user.id, {
+          boat_id: boat.id,
+          type: "diagnosis",
+          title: topCause
+            ? `${systemLabel} diagnosed — ${topCause.cause}`
+            : `${systemLabel} diagnosis completed`,
+          detail: [
+            result.summary,
+            topCause ? `Most likely cause (${topCause.likelihood} likelihood): ${topCause.cause}.` : null,
+            result.recommendProfessional ? "Professional service recommended." : null,
+          ]
+            .filter(Boolean)
+            .join("\n\n"),
+          source: "diagnosis",
+          meta: {
+            system,
+            safetyFlag: result.safetyFlag,
+            recommendProfessional: result.recommendProfessional,
+            topLikelihood: topCause?.likelihood ?? null,
+          },
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate diagnosis. Please try again.");
     } finally {
       setLoading(false);
     }
-  }, [system, boat, stage2Answers, stage3Answers, stage3Questions]);
+  }, [system, boat, user, stage2Answers, stage3Answers, stage3Questions]);
 
   // ── Reset ───────────────────────────────────────────────────────────────────
   const restart = useCallback(() => {

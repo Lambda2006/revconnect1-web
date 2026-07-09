@@ -13,7 +13,7 @@ const NAV = [
 export function CoBrandHeader() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200">
+    <header className="relative z-30 bg-white border-b border-gray-200">
       <div className="mx-auto max-w-6xl px-4 h-14 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           <Link href="/demo/garage" className="flex items-center gap-2 shrink-0">

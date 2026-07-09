@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="Boat on the water">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eaf6ff"/>
+      <stop offset="1" stop-color="#cfeafb"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a95cf"/>
+      <stop offset="1" stop-color="#1e6da3"/>
+    </linearGradient>
+    <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e9eef3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="800" height="250" fill="url(#sky)"/>
+  <circle cx="660" cy="80" r="46" fill="#fff4d6" opacity="0.9"/>
+
+  <!-- water -->
+  <rect y="250" width="800" height="150" fill="url(#water)"/>
+  <g stroke="#ffffff" stroke-linecap="round" opacity="0.18">
+    <line x1="90" y1="300" x2="200" y2="300" stroke-width="4"/>
+    <line x1="560" y1="330" x2="700" y2="330" stroke-width="4"/>
+    <line x1="300" y1="360" x2="430" y2="360" stroke-width="4"/>
+  </g>
+
+  <!-- reflection -->
+  <ellipse cx="400" cy="278" rx="230" ry="14" fill="#ffffff" opacity="0.12"/>
+
+  <!-- hull -->
+  <path d="M210 250 L610 250 L560 300 Q545 312 520 312 L270 312 Q240 312 226 288 Z"
+        fill="url(#hull)" stroke="#0A2240" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M210 250 L610 250 L603 264 L218 264 Z" fill="#0A2240"/>
+  <rect x="218" y="264" width="385" height="5" fill="#2f7fb8"/>
+
+  <!-- console + windshield -->
+  <path d="M372 176 Q378 170 396 170 L446 170 Q460 170 463 188 L468 250 L356 250 L366 192 Q368 178 372 176 Z"
+        fill="#eef2f6" stroke="#0A2240" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M398 178 L452 178 L456 206 L394 206 Z" fill="#bcd6ea" stroke="#0A2240" stroke-width="2.5"/>
+
+  <!-- T-top -->
+  <rect x="360" y="118" width="120" height="10" rx="5" fill="#0A2240"/>
+  <rect x="370" y="128" width="7" height="52" rx="3" fill="#8a97a5"/>
+  <rect x="463" y="128" width="7" height="52" rx="3" fill="#8a97a5"/>
+
+  <!-- bow rail -->
+  <path d="M226 244 Q222 224 244 222" fill="none" stroke="#9aa6b2" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- outboard -->
+  <rect x="586" y="236" width="26" height="58" rx="6" fill="#1b2733" stroke="#0A2240" stroke-width="3"/>
+  <rect x="592" y="246" width="14" height="16" rx="3" fill="#324150"/>
+</svg>
