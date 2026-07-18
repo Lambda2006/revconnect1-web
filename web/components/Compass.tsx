@@ -6,9 +6,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 /**
  * 3D compass for the marketing hero.
- * Loads /compass.glb, auto-orients it to face the viewer, and tilts it toward
- * the user's cursor as they move around the page. A subtle idle drift keeps it
- * feeling alive. Sized to be noticeable but not dominating.
+ * The compass body stays fixed, facing the viewer. Only the needle swings so
+ * that NORTH points toward the user's cursor, wherever it is on the page.
+ * Sized to be noticeable but not dominating.
  */
 export default function Compass() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -16,10 +16,6 @@ export default function Compass() {
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
-
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // --- Scene ---
     const scene = new THREE.Scene();
@@ -36,7 +32,7 @@ export default function Compass() {
     mount.appendChild(renderer.domElement);
 
     // --- Lights (warm key + cool fill so navy + red both read well) ---
-    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 
     const key = new THREE.DirectionalLight(0xffffff, 2.4);
     key.position.set(3, 5, 4);
@@ -50,23 +46,26 @@ export default function Compass() {
     rim.position.set(0, 3, -5);
     scene.add(rim);
 
-    // Group we rotate toward the cursor
-    const pivot = new THREE.Group();
-    scene.add(pivot);
+    // Static body holder (never rotates)
+    const body = new THREE.Group();
+    scene.add(body);
 
-    // --- Cursor tracking ---
-    const targetRot = { x: 0, y: 0 };
-    const currentRot = { x: 0, y: 0 };
+    // --- Cursor tracking: NORTH points at the cursor ---
+    // Needle rotation about the dial-normal axis. Derived so that:
+    //   cursor above centre -> north up; cursor right -> north right; etc.
+    let needleTarget = 0; // desired angle (radians)
+    let needleAngle = 0; // smoothed current angle
     const onMove = (e: MouseEvent) => {
-      const nx = (e.clientX / window.innerWidth) * 2 - 1; // -1..1
-      const ny = (e.clientY / window.innerHeight) * 2 - 1; // -1..1
-      targetRot.x = ny * 0.45; // pitch toward cursor
-      targetRot.y = nx * 0.6; // yaw toward cursor
+      const rect = renderer.domElement.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      needleTarget = Math.atan2(-dx, -dy);
     };
-    if (!prefersReduced) window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove);
 
     // --- Load model ---
     let root: THREE.Object3D | null = null;
+    let needlePivot: THREE.Group | null = null;
     const loader = new GLTFLoader();
     loader.load(
       "/compass.glb",
@@ -87,27 +86,45 @@ export default function Compass() {
           }
         });
 
-        // Recenter
-        const box = new THREE.Box3().setFromObject(obj);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        obj.position.sub(center);
-
-        // Auto-orient: turn the dial face toward the camera (+Z)
+        // Orient so the dial faces the camera (thinnest axis toward +Z)
+        const size = new THREE.Box3().setFromObject(obj).getSize(new THREE.Vector3());
         if (size.y <= size.x && size.y <= size.z) {
           obj.rotation.x = Math.PI / 2; // lying flat, dial up -> face camera
         } else if (size.x <= size.y && size.x <= size.z) {
-          obj.rotation.y = -Math.PI / 2; // facing sideways -> face camera
-        } // else thin axis already ~Z: leave as-is
+          obj.rotation.y = -Math.PI / 2;
+        }
+        obj.updateWorldMatrix(true, true);
 
-        // Scale to fit the viewport with margin
+        // Recenter on the housing (the visible dial), not the bail/foot,
+        // so the compass sits centred in the frame.
+        let housing: THREE.Object3D | null = null;
+        obj.traverse((c) => {
+          if (!housing && /housing|bezel|dial/i.test(c.name) && (c as THREE.Mesh).isMesh) {
+            housing = c;
+          }
+        });
+        const centerBox = new THREE.Box3().setFromObject(housing ?? obj);
+        obj.position.sub(centerBox.getCenter(new THREE.Vector3()));
+        obj.updateWorldMatrix(true, true);
+
+        // Reparent the needle meshes under a pivot at the compass axis so we
+        // can spin them independently of the fixed body.
+        needlePivot = new THREE.Group();
+        obj.add(needlePivot);
+        const needles: THREE.Object3D[] = [];
+        obj.traverse((c) => {
+          if (c !== needlePivot && /^needle/i.test(c.name)) needles.push(c);
+        });
+        needles.forEach((n) => needlePivot!.attach(n));
+
+        // Scale whole thing to fit with margin
         const maxDim = Math.max(size.x, size.y, size.z);
         const wrap = new THREE.Group();
         wrap.add(obj);
         wrap.scale.setScalar(2.2 / maxDim);
 
         root = wrap;
-        pivot.add(wrap);
+        body.add(wrap);
       },
       undefined,
       (err) => console.error("Compass model failed to load:", err)
@@ -115,18 +132,18 @@ export default function Compass() {
 
     // --- Render loop ---
     let raf = 0;
-    const clock = new THREE.Clock();
     const animate = () => {
       raf = requestAnimationFrame(animate);
-      const t = clock.getElapsedTime();
 
-      currentRot.x += (targetRot.x - currentRot.x) * 0.06;
-      currentRot.y += (targetRot.y - currentRot.y) * 0.06;
-
-      // gentle idle drift so it feels alive even when the cursor is still
-      const idle = prefersReduced ? 0 : 1;
-      pivot.rotation.x = currentRot.x + Math.sin(t * 0.6) * 0.05 * idle;
-      pivot.rotation.y = currentRot.y + Math.sin(t * 0.4) * 0.12 * idle;
+      if (needlePivot) {
+        // ease along the shortest arc to the target angle
+        const diff = Math.atan2(
+          Math.sin(needleTarget - needleAngle),
+          Math.cos(needleTarget - needleAngle)
+        );
+        needleAngle += diff * 0.12;
+        needlePivot.rotation.y = needleAngle;
+      }
 
       renderer.render(scene, camera);
     };
