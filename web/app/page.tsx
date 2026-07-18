@@ -2,7 +2,10 @@
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/client";
+
+const Compass = dynamic(() => import("@/components/Compass"), { ssr: false });
 
 const SUPPORTED_BOATS = [
   { make: "MasterCraft", models: ["X24", "NXT22", "XT23"] },
@@ -63,6 +66,7 @@ export default function Home() {
       {/* Hero */}
       <section className="bg-[#0A2240] text-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+          <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-8 items-center">
           <div className="max-w-3xl">
             <p className="text-[#C8102E] font-semibold text-sm uppercase tracking-widest mb-4">
               For Serious Boat Owners
@@ -101,6 +105,19 @@ export default function Home() {
             <p className="text-gray-400 text-sm mt-4">
               Card required. You won&apos;t be charged until day 8.
             </p>
+          </div>
+
+            {/* 3D compass — follows the cursor */}
+            <div className="relative hidden lg:flex items-center justify-center h-[420px]">
+              <div
+                className="absolute inset-0 rounded-full opacity-40 blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 45%, rgba(200,16,46,0.35), rgba(10,34,64,0) 60%)",
+                }}
+              />
+              <Compass />
+            </div>
           </div>
         </div>
       </section>
