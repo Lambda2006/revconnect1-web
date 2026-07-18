@@ -54,7 +54,15 @@ export default function Compass() {
     // Needle rotation about the dial-normal axis. Derived so that:
     //   cursor above centre -> north up; cursor right -> north right; etc.
     let needleTarget = 0; // desired angle (radians)
-    let needleAngle = 0; // smoothed current angle
+    let needleAngle = 0; // current angle
+    let needleVel = 0; // angular velocity (rad/s)
+
+    // Spring-damper feel of a real compass needle.
+    //  omega  -> how quick/comfortable the swing is (higher = snappier)
+    //  zeta   -> damping ratio; < 1 is underdamped, so it overshoots & bounces
+    const OMEGA = 9;
+    const ZETA = 0.28;
+
     const onMove = (e: MouseEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       const dx = e.clientX - (rect.left + rect.width / 2);
@@ -132,16 +140,21 @@ export default function Compass() {
 
     // --- Render loop ---
     let raf = 0;
+    const clock = new THREE.Clock();
     const animate = () => {
       raf = requestAnimationFrame(animate);
 
       if (needlePivot) {
-        // ease along the shortest arc to the target angle
-        const diff = Math.atan2(
+        const dt = Math.min(clock.getDelta(), 1 / 30); // clamp for stability
+        // shortest signed arc from current angle to the cursor target
+        const error = Math.atan2(
           Math.sin(needleTarget - needleAngle),
           Math.cos(needleTarget - needleAngle)
         );
-        needleAngle += diff * 0.12;
+        // damped spring: a = w^2*error - 2*zeta*w*velocity
+        const accel = OMEGA * OMEGA * error - 2 * ZETA * OMEGA * needleVel;
+        needleVel += accel * dt;
+        needleAngle += needleVel * dt;
         needlePivot.rotation.y = needleAngle;
       }
 
