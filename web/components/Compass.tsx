@@ -93,18 +93,18 @@ export default function Compass() {
         const size = box.getSize(new THREE.Vector3());
         obj.position.sub(center);
 
-        // Auto-orient: put the model's thinnest axis (its depth) toward the camera (+Z)
+        // Auto-orient: turn the dial face toward the camera (+Z)
         if (size.y <= size.x && size.y <= size.z) {
-          obj.rotation.x = -Math.PI / 2; // lying flat, dial up
+          obj.rotation.x = Math.PI / 2; // lying flat, dial up -> face camera
         } else if (size.x <= size.y && size.x <= size.z) {
-          obj.rotation.y = Math.PI / 2; // facing sideways
+          obj.rotation.y = -Math.PI / 2; // facing sideways -> face camera
         } // else thin axis already ~Z: leave as-is
 
-        // Scale to fit the viewport nicely
+        // Scale to fit the viewport with margin
         const maxDim = Math.max(size.x, size.y, size.z);
         const wrap = new THREE.Group();
         wrap.add(obj);
-        wrap.scale.setScalar(2.7 / maxDim);
+        wrap.scale.setScalar(2.2 / maxDim);
 
         root = wrap;
         pivot.add(wrap);
