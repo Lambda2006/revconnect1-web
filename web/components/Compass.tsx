@@ -56,12 +56,13 @@ export default function Compass() {
     let needleTarget = 0; // desired angle (radians)
     let needleAngle = 0; // current angle
     let needleVel = 0; // angular velocity (rad/s)
+    let elapsed = 0; // accumulated time for the wobble
 
-    // Spring-damper feel of a real compass needle.
-    //  omega  -> how quick/comfortable the swing is (higher = snappier)
-    //  zeta   -> damping ratio; < 1 is underdamped, so it overshoots & bounces
-    const OMEGA = 9;
-    const ZETA = 0.28;
+    // Compass needle physics (from the Claude Design).
+    const STIFFNESS = 34; // how eagerly the needle turns toward the cursor
+    const DAMPING = 5.2; // how quickly the wobble settles (lower = more overshoot)
+    const WOBBLE_AMPLITUDE = 0.035; // idle sway, scaled by angular velocity
+    const WOBBLE_FREQ = 11; // sway oscillation rate
 
     const onMove = (e: MouseEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
@@ -146,16 +147,20 @@ export default function Compass() {
 
       if (needlePivot) {
         const dt = Math.min(clock.getDelta(), 1 / 30); // clamp for stability
+        elapsed += dt;
         // shortest signed arc from current angle to the cursor target
         const error = Math.atan2(
           Math.sin(needleTarget - needleAngle),
           Math.cos(needleTarget - needleAngle)
         );
-        // damped spring: a = w^2*error - 2*zeta*w*velocity
-        const accel = OMEGA * OMEGA * error - 2 * ZETA * OMEGA * needleVel;
+        // damped spring: a = stiffness*error - damping*velocity
+        const accel = STIFFNESS * error - DAMPING * needleVel;
         needleVel += accel * dt;
         needleAngle += needleVel * dt;
-        needlePivot.rotation.y = needleAngle;
+        // subtle sway that grows with how fast the needle is moving
+        const wobble =
+          WOBBLE_AMPLITUDE * needleVel * Math.sin(elapsed * WOBBLE_FREQ);
+        needlePivot.rotation.y = needleAngle + wobble;
       }
 
       renderer.render(scene, camera);
